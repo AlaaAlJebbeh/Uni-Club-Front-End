@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Font Linking-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+
+    <!--Style Linking-->
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+<body>
+    <header>
+        <div>
+            <a href="#" class="logo"><img src="About Us\public\images\logo.png" alt="Logo" class="logo-image"></a>
+        </div> 
+        <input type="checkbox" id="nav_check" hidden>
+        <nav class="navbar">
+            <ul>
+                <li>
+                    <a href="" class="active">Home</a>
+                </li>
+                <li>
+                    <a href="">Clubs</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="icons">
+            <div class="icons">
+                <i class="fas fa-search " id="search-btn"></i>
+                <i class="fas fa-user" id="log-btn"></i>
+            </div>
+    
+            <form action="" class="search-bar-container">
+                <input type="search" id="search-bar" placeholder = "search here...">
+                <label for="search-bar" class="fas fa-search"></label>
+            </form>
+            
+        </div>
+
+        <label for="nav_check" class="sideBar icons">
+            <div></div>
+            <div></div>
+            <div></div>
+        </label>
+
+        
+
+    </header>
+<!--Font Linking-->
+<script>
+    let searchBtn = document.querySelector('#search-btn');
+    let searchBar = document.querySelector('.search-bar-container');
+
+    searchBtn.addEventListener('click', ()=>{
+        searchBtn.classList.toggle('fa-times');
+        searchBar.classList.toggle('active');
+    });
+</script>
+  
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--Font Linking-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    
+
+    <!--Style Linking-->
+    <link rel="stylesheet" href="Header/css/header.css" />
+    <link rel="stylesheet" href="Footer/footer.css" />
+    <link rel="stylesheet" href="myclubpage.css" />
+    <link rel="stylesheet" href="status.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  </head>
+  <body>
+    <!--Header-->
+    <header>
+      <div>
+        <a href="#" class="logo"
+          ><img src="Header/images\logo.png" alt="Logo" class="logo-image"
+        /></a>
+      </div>
+      <input type="checkbox" id="nav_check" hidden />
+      <nav class="navbar">
+        <ul>
+          <li>
+            <a href="">Home</a>
+          </li>
+          <li>
+            <a href="">Clubs</a>
+          </li>
+          <li>
+            <a href="" class="active">My Club</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="icons">
+        <div class="icons">
+          <i class="fas fa-search" id="search-btn"></i>
+          <i class="fas fa-user" id="log-btn"></i>
+        </div>
+
+        <form action="" class="search-bar-container">
+          <input type="search" id="search-bar" placeholder="search here..." />
+          <label for="search-bar" class="fas fa-search"></label>
+        </form>
+      </div>
+
+      <label for="nav_check" class="sideBar icons">
+        <div></div>
+        <div></div>
+        <div></div>
+      </label>
+    </header>
+    <!--My Club Header Part-->
+    <div class="container">
+      <div class="sidebar">
+        <div class="above-container">
+          <div class="items">
+            <div class="icon">
+              <img src="./MyClubAssests/images/Event2.png" />
+            </div>
+            <a href="#" id="my-events-link">My Events</a>
+          </div>
+          <div class="items" >
+            <div class="icon">
+              <img src="./MyClubAssests/images/post2.png" />
+            </div>
+            <a href="#" id="my-posts-link">My Posts</a>
+          </div>
+          <div class="items" id="status-item">
+            <div class="icon">
+              <img src="./MyClubAssests/images/status.png" />
+            </div>
+            <a href="#" id="my-status-link">Status Manager</a>
+          </div>
+          <div class="items">
+            <div class="icon">
+              <img src="./MyClubAssests/images/notification.png" />
+            </div>
+            <a href="#" id="my-notification-link">Club Notifications</a>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="header-club">
+          <div class="cnt1">
+            <div class="logo-side">
+              <img src="./MyClubAssests/images/clublogo.png" />
+            </div>
+            <button>Upload</button>
+          </div>
+          <div class="cnt2">
+            <h1>Club Name</h1>
+            <h2>Club manager</h2>
+            <h2>Category</h2>
+          </div>
+          <div class="cnt3">
+            <h2>BIO:</h2>
+            <div class="bio-textbox" placeholder="Enter your bio here"></div>
+          </div>
+          <div class="cnt4">
+            <h2>Social Media / Contact Info</h2>
+            <div class="contact-info">
+              <div class="social-media">
+                <i class='far fa-envelope' style='font-size:36px'></i>
+              </div>
+              <div class="Email">example@example.com</div>
+            </div>
+            <div class="social-media">
+              <a href="https://www.facebook.com/uskudarsks/" target="_blank" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="https://www.instagram.com/uskudarsks/?hl=en" target="_blank"class="icon"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://www.youtube.com/channel/UCBKDuZsuc4et2e3IE_hYsBw" target="_blank" class="icon"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="header-body">
+          <div
+            id="my-events-content"
+            class="content-section"
+            style="display: none"
+          >
+            CONTENT SECTION
+            <!-- Content for My Events -->
+          </div>
+          <div
+            id="my-posts-content"
+            class="content-section"
+            style="display: none"
+          >
+            POSTS SECTION
+            <!-- Content for My Events -->
+          </div>
+          <div
+            id="my-status-content"
+            class="content-section"
+            style="display: none"
+          >
+            <main class="table" id="customers_table">
+              <section class="table__header">
+                <h1>Event Requests</h1>
+                <div class="input-group">
+                  <input type="search" placeholder="Search Request..." class="search_Text" />
+                  <img src="/images/search.png" alt="" class="search_icon" />
+                </div>
+              </section>
+              <section class="table__body">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Request <span class="icon-arrow">&UpArrow;</span></th>
+                      <th>
+                        Request Date <span class="icon-arrow">&UpArrow;</span>
+                      </th>
+                      <th>Status <span class="icon-arrow">&UpArrow;</span></th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <img src="images/Zinzu Chan Lee.jpg" alt="" />Zinzu Chan
+                        Lee
+                      </td>
+                      <td>17 Dec, 2022</td>
+                      <td>
+                        <p class="status approved">Approved</p>
+                      </td>
+                      <td><button>Share</button></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <img src="images/Sonal Gharti.jpg" alt="" /> Sonal
+                        Gharti
+                      </td>
+                      <td>14 Mar, 2023</td>
+                      <td>
+                        <p class="status pending">Pending</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><img src="images/Alson GC.jpg" alt="" /> Alson GC</td>
+                      <td>25 May, 2023</td>
+                      <td>
+                        <p class="status approved">Approved</p>
+                      </td>
+                      <td><button>Share</button></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <img src="images/Sarita Limbu.jpg" alt="" /> Sarita
+                        Limbu
+                      </td>
+                      <td>23 Apr, 2023</td>
+                      <td>
+                        <p class="status pending">Pending</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <img src="images/Alex Gonley.jpg" alt="" /> Alex Gonley
+                      </td>
+                      <td>23 Apr, 2023</td>
+                      <td>
+                        <p class="status rejected">Rejected</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <img src="images/Alson GC.jpg" alt="" /> Jeet Saru
+                      </td>
+                      <td>20 May, 2023</td>
+                      <td>
+                        <p class="status approved">Approved</p>
+                      </td>
+                      <td><button>Share</button></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <img src="images/Sarita Limbu.jpg" alt="" /> Aayat Ali
+                        Khan
+                      </td>
+                      <td>30 Feb, 2023</td>
+                      <td>
+                        <p class="status pending">Pending</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <img src="images/Alex Gonley.jpg" alt="" /> Alson GC
+                      </td>
+                      <td>22 Dec, 2023</td>
+                      <td>
+                        <p class="status rejected">Rejected</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <img src="images/Alex Gonley.jpg" alt="" /> Alson GC
+                      </td>
+                      <td>22 Dec, 2023</td>
+                      <td>
+                        <p class="status rejected">Rejected</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <img src="images/Alex Gonley.jpg" alt="" /> Alson GC
+                      </td>
+                      <td>22 Dec, 2023</td>
+                      <td>
+                        <p class="status approved">Approved</p>
+                      </td>
+                      <td><button>Share</button></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <img src="images/Alex Gonley.jpg" alt="" /> Alson GC
+                      </td>
+                      <td>22 Dec, 2023</td>
+                      <td>
+                        <p class="status rejected">Rejected</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <img src="images/Alex Gonley.jpg" alt="" /> Alson GC
+                      </td>
+                      <td>22 Dec, 2023</td>
+                      <td>
+                        <p class="status pending">Pending</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </main>
+            <script src="script.js"></script>
+          </div>
+          <div
+            id="my-notification-content"
+            class="content-section"
+            style="display: none"
+          >
+            <!-- Notification Popup Modal -->
+            <div id="notificationModal" class="modal">
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Notifications</h2>
+                <ul id="notificationList">
+                  <!-- Notification items will be added here dynamically -->
+                </ul>
+              </div>
+            </div>
+            <script src="clubs.js"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Footer-->
+    <div class="footer">
+      <div class="footerContainer">
+        <div class="socialIcons">
+          <a href=""><i class="fa-brands fa-facebook"></i></a>
+          <a href=""><i class="fa-brands fa-instagram"></i></a>
+          <a href=""><i class="fa-brands fa-twitter"></i></a>
+          <a href=""><i class="fa-brands fa-linkedin"></i></a>
+          <a href=""><i class="fa-brands fa-youtube"></i></a>
+        </div>
+        <div class="footerNav">
+          <ul>
+            <li><a href="">Home</a></li>
+            <li><a href="">Uskudar University</a></li>
+            <li><a href="">About SKS</a></li>
+            <li><a href="">@sks.uskudar.edu.tr</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footerBottom">
+        <p>Copyright &copy;2024</p>
+      </div>
+    </div>
+
+    <!--Font Linking-->
+    <script>
+      let searchBtn = document.querySelector("#search-btn");
+      let searchBar = document.querySelector(".search-bar-container");
+
+      searchBtn.addEventListener("click", () => {
+        searchBtn.classList.toggle("fa-times");
+        searchBar.classList.toggle("active");
+      });
+    </script>
+    <script src="clubs.js"></script>
+  </body>
+</html>

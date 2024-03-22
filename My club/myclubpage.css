@@ -1,0 +1,259 @@
+/*
+Color Pallete
+#193635  -> Dark green
+#0AB3AD  -> Light green 
+#7BD3D1  -> Tiffany Blue
+#FFD700  -> Gold
+#000000  -> Black
+#FFFFFF  -> White
+*/
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+h1 {
+    color: #193635;
+}
+h2{
+    margin: 0;
+}
+a{
+    color: #000000;
+    text-decoration: none;
+}
+a:active {
+    color: #0AB3AD;
+    cursor: grabbing;
+}
+.sidebar {
+    /* Positioning */
+    max-width: 350px;
+    width: 80%;
+    
+    /* Styling */
+    background-color: gainsboro;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    padding-top: 10vh;
+}
+
+.items {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    box-shadow: 4px 17px 27px -18px rgba(0,0,0,0.81);
+    height: 75px;
+    align-items: center;
+    font-size: 2.0rem;
+    padding-left: 30px;
+    background: #193635;
+    color: #FFFFFF;
+}
+
+
+.items:hover{
+    cursor: pointer;
+    height: 80px;
+    font-size: 2.35rem;
+}
+
+.icon img{
+    max-width: 50px;
+}
+
+.logo-side img{
+    max-width: 150px;
+}
+
+.logo-side{
+    display: flex;
+    margin-top: 30px;
+
+}
+.container{
+    flex: 1;
+    display: flex;
+}
+.body{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.header-club {
+    width: 100%; /* Set width to 100% */
+    max-height: 40%; /* You may adjust the height as needed */
+    display: flex;
+    justify-content: space-around;
+    align-items: center; /* Align items vertically */
+    max-width: 100%; /* Set max-width to 100% */
+    height: 100%;
+    border-bottom: 2px solid #193635;
+    
+}
+
+.cnt1 img {
+    max-width: 100px;
+}
+
+.cnt1 button {
+    width: 100px;
+    height: 40px;
+    padding: 5px;
+    border-radius: 10px;
+    margin-top: 5px;
+    size: 5px;
+    background-color: #193635;
+}
+.cnt1 button:hover{
+    cursor: pointer;
+}
+.cnt2 {
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: baseline;
+    justify-content: center;
+    font-size: 1.2rem;
+    max-width: 300px;
+    margin-top: 20px;
+
+}
+.cnt3 {
+    display: flex;
+    font-size: 1.2rem;
+    align-items: baseline;
+    flex-direction: column;
+    justify-content: center;
+}
+.bio-textbox {
+    height: 150px; /* Adjust height as needed */
+    padding: 10px; /* Adjust padding as needed */
+    font-size: 16px; /* Adjust font size as needed */
+    border: 1px solid #ccc; /* Add border for visual clarity */
+    border-radius: 5px; /* Add border radius for rounded corners */
+    margin-top: 10px; /* Add margin to create space */
+    width: 300px;
+}
+
+.cnt4{
+    display: flex;
+    flex-direction: column;
+    font-size: 1.75rem;
+    gap: 10px
+    ;
+}
+.contact-info{
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+}
+.contact-info img {
+    height: 35px;
+    margin-right: 5px;
+}
+.contact-info div {
+    padding: 5px;
+}
+.socialmedia-links img{
+    height: 35px;
+    margin-right: 20px;
+}
+.header-body {
+    max-height: 70%;
+    height: 90%;
+    background-color:#FFFFFF;
+}
+
+/* CSS for the modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    transform: translate(-50%,-50%);
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.table .table__header{
+    flex: 1;
+    display: flex;
+    width: 100%;
+    max-height: 70vh; /* Adjust as needed */
+    overflow: hidden; /* Ensure no overflow */
+    
+}
+
+.sidebar {
+    max-width: 350px;
+    width: 20%; /* Adjust width as needed */
+    background-color: gainsboro;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    padding-top: 10vh;
+    overflow-y: auto; /* Allow sidebar to scroll if content exceeds height */
+    
+}
+
+.body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 80%; /* Adjust width as needed */
+    overflow-y: auto; /* Allow body content to scroll if it exceeds height */
+    margin-bottom: 70px;
+}
+
+.social-media{
+    margin: 20px 0;
+}
+
+.social-media a{
+    border: 1px solid #ccc;
+    border-radius: 20%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 3px;
+    width: 40px;
+    height: 40px;
+}
+
+.sidebar a:hover{
+    color:var(--yellow);
+}
+
+
+
+

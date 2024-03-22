@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Font Linking-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+
+    <!--Style Linking-->
+    <link rel="stylesheet" href="./header.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+
+</head>
+<body>
+    <header>
+        <div>
+            <a href="#" class="logo"><img src="./images/logo.png" alt="Logo" class="logo-image"></a>
+        </div> 
+        <input type="checkbox" id="nav_check" hidden>
+        <nav class="navbar">
+            <ul>
+                <li>
+                    <a href="" class="active">Home</a>
+                </li>
+                <li>
+                    <a href="">Clubs</a>
+                </li>
+
+                <li>
+                    <a href="">My Club</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="icons">
+            <div class="icons">
+                <i class="fas fa-search " id="search-btn"></i>
+                <i class="fas fa-user" id="log-btn"></i>
+            </div>
+    
+            <form action="" class="search-bar-container">
+                <input type="search" id="search-bar" placeholder = "search here...">
+                <label for="search-bar" class="fas fa-search"></label>
+            </form>
+            
+        </div>
+
+        <div class="mainContainer">
+            <div class="popup">
+                <div class="container" id="container">
+                    <div class="form-container sign-up">
+                        <form>
+                            <h1>Welcome to Your Activity Guide in Uskudar University </h1>
+                            <div class="social-icons">
+                                <a href="https://www.facebook.com/uskudarsks/" target="_blank" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                                <a href="https://www.instagram.com/uskudarsks/?hl=en" target="_blank"class="icon"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="https://www.youtube.com/channel/UCBKDuZsuc4et2e3IE_hYsBw" target="_blank" class="icon"><i class="fa-brands fa-youtube"></i></a>
+                            </div>
+                            <span>visit us on social media</span>
+                            <a><button>Home</button></a>
+                        </form>
+                    </div>
+                    <div class="form-container sign-in">
+                        <form>
+                            <h1>Sign In</h1>
+                            <input type="email" placeholder="Email">
+                            <input type="password" placeholder="Password">
+                            <a href="#">Forget Your Password?</a>
+                            <button>Sign In</button>
+                        </form>
+                    </div>
+                    <div class="toggle-container">
+                        <div class="toggle">
+                            <div class="toggle-panel toggle-left">
+                                <h1>Welcome Back!</h1>
+                                <p>We are excited to see you again</p>
+                                <button class="hidden" id="login">Sign In</button>
+                            </div>
+                            <div class="toggle-panel toggle-right">
+                                <h1>Hello, Friend!</h1>
+                                <p>Welcome to your gateway to enjoyable learning experiences!</p>
+                                <button class="hidden" id="register">Learn more</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+
+
+        <label for="nav_check" class="sideBar icons">
+            <div></div>
+            <div></div>
+            <div></div>
+        </label>
+
+    </header>
+    <!--Font Linking-->
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!---Coding By CodingLab | www.codinglabweb.com--->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Registration Form in HTML CSS</title>
+    <!---Custom CSS File--->
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+  </head>
+  <body>
+    <section class="container">
+      <header>Event Registration Form</header>
+      <form action="#" class="form">
+        <div class="input-box">
+          <label>Event Name</label>
+          <input type="text" placeholder="Enter Event Name" required />
+        </div>
+
+        <div class="input-box">
+          <label>Guest Name</label>
+          <input type="text" placeholder="Enter Guest Name" />
+        </div>
+
+        <div class="column">
+          <div class="input-box">
+            <label>Date</label>
+            <input type="date" placeholder="Enter Event Date" required />
+          </div>
+          <div class="input-box">
+            <label for="meeting-time">Event Time</label>
+            <input type="time" id="meeting-time" name="meeting-time" required>
+          </div>
+        </div>
+        <div class="language-box">
+          <h3>Language</h3>
+          <div class="language-option">
+            <div class="language">
+              <input type="radio" id="check-male" name="language" checked />
+              <label for="check-male">English</label>
+            </div>
+            <div class="language">
+              <input type="radio" id="check-female" name="language" />
+              <label for="check-female">Turkish</label>
+            </div>
+            <div class="language">
+              <input type="radio" id="check-other" name="language" />
+              <label for="check-other">Arabic</label>
+            </div>
+          </div>
+        </div>
+        <div class="input-box address">
+          <label>Location</label>
+          <input type="text" placeholder="Location" required />
+          <div class="column">
+            <div class="select-box">
+              <select>
+                <option hidden>Category</option>
+                <option>Fun</option>
+                <option>Computer Sciene</option>
+                <option>Psycology</option>
+                <option>Math</option>
+                <option>Language</option>
+                <option>Medicin</option>
+                <option>Chemisty</option>
+              </select>
+            </div>
+            <input type="number" placeholder="Capacity"/>
+          </div>
+          <div class="column">
+            <input type="text" placeholder="Desctiptions" required />
+            <input type="text" placeholder="Notes" />
+          </div>
+          <div class="wrapper">
+            <header>Upload Event Image </header>
+            <form action="#">
+              <input class="file-input" type="file" name="file" hidden>
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>Browse File to Upload</p>
+            </form>
+            <section class="progress-area"></section>
+            <section class="uploaded-area"></section>
+          </div>
+        </div> 
+        <button>Submit</button> 
+      </form>
+    </section>
+    <script src="script.js"></script>
+  </body>
+</html>

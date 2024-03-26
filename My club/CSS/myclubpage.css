@@ -28,7 +28,7 @@ a:active {
     color: #0AB3AD;
     cursor: grabbing;
 }
-.sidebar {
+.sidebarClub {
     /* Positioning */
     max-width: 350px;
     width: 80%;
@@ -73,11 +73,11 @@ a:active {
     margin-top: 30px;
 
 }
-.container{
+.ClubContainer{
     flex: 1;
     display: flex;
 }
-.body{
+.ClubBody{
     display: flex;
     flex-direction: column;
     width: 100%;

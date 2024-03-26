@@ -12,41 +12,197 @@
       href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap"
       rel="stylesheet"
     />
-    
 
     <!--Style Linking-->
-    <link rel="stylesheet" href="Header/css/header.css" />
-    <link rel="stylesheet" href="Footer/footer.css" />
-    <link rel="stylesheet" href="myclubpage.css" />
-    <link rel="stylesheet" href="status.css" />
+    <link rel="stylesheet" href="CSS/header.css" />
+    <link rel="stylesheet" href="CSS/footer.css" />
+    <link rel="stylesheet" href="CSS/myclubpage.css" />
+    <link rel="stylesheet" href="../Status/style.css" />
+    <link rel="stylesheet" href="../Notifications/notifications.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
   </head>
   <body>
     <!--Header-->
     <header>
       <div>
         <a href="#" class="logo"
-          ><img src="Header/images\logo.png" alt="Logo" class="logo-image"
+          ><img src="./images/logo.png" alt="Logo" class="logo-image"
         /></a>
       </div>
       <input type="checkbox" id="nav_check" hidden />
       <nav class="navbar">
         <ul>
-          <li>
-            <a href="">Home</a>
-          </li>
+          <li><a href="https://www.youtube.com/">Home</a>></li>
           <li>
             <a href="">Clubs</a>
           </li>
+
           <li>
-            <a href="" class="active">My Club</a>
+            <a href="">My Club</a>
           </li>
         </ul>
       </nav>
+
+      <div class="wrapper">
+        <div class="navbar">
+          <div class="navbar_left"></div>
+          <div class="navbar_right">
+            <div class="notifications">
+              <div class="icon_wrap"><i class="far fa-bell"></i></div>
+              <div class="notification_dd">
+                <ul class="notification_ul">
+                  <li class="starbucks success">
+                    <div class="notify_icon"></div>
+                    <div class="notify_data">
+                      <div class="title">Event Request Approved</div>
+                      <div class="sub_title">share your event card</div>
+                    </div>
+                    <div class="notify_status">
+                      <p>Approved</p>
+                    </div>
+                  </li>
+                  <li class="baskin_robbins failed">
+                    <div class="notify_icon"></div>
+                    <div class="notify_data">
+                      <div class="title">Update Image rejected</div>
+                      <div class="sub_title">choose different image.</div>
+                    </div>
+                    <div class="notify_status">
+                      <p>Rejected</p>
+                    </div>
+                  </li>
+                  <li class="starbucks success">
+                    <div class="notify_icon"></div>
+                    <div class="notify_data">
+                      <div class="title">Event Request Approved</div>
+                      <div class="sub_title">share your event card</div>
+                    </div>
+                    <div class="notify_status">
+                      <p>Approved</p>
+                    </div>
+                  </li>
+                  <li class="baskin_robbins failed">
+                    <div class="notify_icon"></div>
+                    <div class="notify_data">
+                      <div class="title">Update Image rejected</div>
+                      <div class="sub_title">choose different image.</div>
+                    </div>
+                    <div class="notify_status">
+                      <p>Rejected</p>
+                    </div>
+                  </li>
+                  <li class="show_all">
+                    <p class="link">Show All Activities</p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="popupN">
+          <div class="shadow"></div>
+          <div class="inner_popup">
+            <div class="notification_dd">
+              <ul class="notification_ul">
+                <li class="title">
+                  <p>All Notifications</p>
+                  <p class="close">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                  </p>
+                </li>
+                <li class="starbucks success">
+                  <div class="notify_icon"></div>
+                  <div class="notify_data">
+                    <div class="title">Event Request Approved</div>
+                    <div class="sub_title">share your event card</div>
+                  </div>
+                  <div class="notify_status">
+                    <p>Approved</p>
+                  </div>
+                </li>
+                <li class="baskin_robbins failed">
+                  <div class="notify_icon"></div>
+                  <div class="notify_data">
+                    <div class="title">Update Image rejected</div>
+                    <div class="sub_title">choose different image.</div>
+                  </div>
+                  <div class="notify_status">
+                    <p>Rejected</p>
+                  </div>
+                </li>
+                <li class="starbucks success">
+                  <div class="notify_icon"></div>
+                  <div class="notify_data">
+                    <div class="title">Event Request Approved</div>
+                    <div class="sub_title">share your event card</div>
+                  </div>
+                  <div class="notify_status">
+                    <p>Approved</p>
+                  </div>
+                </li>
+                <li class="baskin_robbins failed">
+                  <div class="notify_icon"></div>
+                  <div class="notify_data">
+                    <div class="title">Update Image rejected</div>
+                    <div class="sub_title">choose different image.</div>
+                  </div>
+                  <div class="notify_status">
+                    <p>Rejected</p>
+                  </div>
+                </li>
+                <li class="starbucks success">
+                  <div class="notify_icon"></div>
+                  <div class="notify_data">
+                    <div class="title">Event Request Approved</div>
+                    <div class="sub_title">share your event card</div>
+                  </div>
+                  <div class="notify_status">
+                    <p>Approved</p>
+                  </div>
+                </li>
+                <li class="baskin_robbins failed">
+                  <div class="notify_icon"></div>
+                  <div class="notify_data">
+                    <div class="title">Update Image rejected</div>
+                    <div class="sub_title">choose different image.</div>
+                  </div>
+                  <div class="notify_status">
+                    <p>Rejected</p>
+                  </div>
+                </li>
+                <li class="starbucks success">
+                  <div class="notify_icon"></div>
+                  <div class="notify_data">
+                    <div class="title">Event Request Approved</div>
+                    <div class="sub_title">share your event card</div>
+                  </div>
+                  <div class="notify_status">
+                    <p>Approved</p>
+                  </div>
+                </li>
+                <li class="baskin_robbins failed">
+                  <div class="notify_icon"></div>
+                  <div class="notify_data">
+                    <div class="title">Update Image rejected</div>
+                    <div class="sub_title">choose different image.</div>
+                  </div>
+                  <div class="notify_status">
+                    <p>Rejected</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="icons">
         <div class="icons">
@@ -60,15 +216,75 @@
         </form>
       </div>
 
+      <div class="mainContainer">
+        <div class="popup">
+          <div class="container" id="container">
+            <div class="form-container sign-up">
+              <form>
+                <h1>Welcome to Your Activity Guide in Uskudar University</h1>
+                <div class="social-icons">
+                  <a
+                    href="https://www.facebook.com/uskudarsks/"
+                    target="_blank"
+                    class="icon"
+                    ><i class="fa-brands fa-facebook-f"></i
+                  ></a>
+                  <a
+                    href="https://www.instagram.com/uskudarsks/?hl=en"
+                    target="_blank"
+                    class="icon"
+                    ><i class="fa-brands fa-instagram"></i
+                  ></a>
+                  <a
+                    href="https://www.youtube.com/channel/UCBKDuZsuc4et2e3IE_hYsBw"
+                    target="_blank"
+                    class="icon"
+                    ><i class="fa-brands fa-youtube"></i
+                  ></a>
+                </div>
+                <span>visit us on social media</span>
+                <a><button>Home</button></a>
+              </form>
+            </div>
+            <div class="form-container sign-in">
+              <form>
+                <h1>Sign In</h1>
+                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" />
+                <a href="#">Forget Your Password?</a>
+                <button>Sign In</button>
+              </form>
+            </div>
+            <div class="toggle-container">
+              <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                  <h1>Welcome Back!</h1>
+                  <p>We are excited to see you again</p>
+                  <button class="hidden" id="login">Sign In</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                  <h1>Hello, Friend!</h1>
+                  <p>
+                    Welcome to your gateway to enjoyable learning experiences!
+                  </p>
+                  <button class="hidden" id="learnMore">Learn more</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <label for="nav_check" class="sideBar icons">
         <div></div>
         <div></div>
         <div></div>
       </label>
+      <script href="../Notifications/logInTest/script.js"></script>
     </header>
     <!--My Club Header Part-->
-    <div class="container">
-      <div class="sidebar">
+    <div class="ClubContainer">
+      <div class="sidebarClub">
         <div class="above-container">
           <div class="items">
             <div class="icon">
@@ -76,7 +292,7 @@
             </div>
             <a href="#" id="my-events-link">My Events</a>
           </div>
-          <div class="items" >
+          <div class="items">
             <div class="icon">
               <img src="./MyClubAssests/images/post2.png" />
             </div>
@@ -96,7 +312,7 @@
           </div>
         </div>
       </div>
-      <div class="body">
+      <div class="ClubBody">
         <div class="header-club">
           <div class="cnt1">
             <div class="logo-side">
@@ -117,14 +333,29 @@
             <h2>Social Media / Contact Info</h2>
             <div class="contact-info">
               <div class="social-media">
-                <i class='far fa-envelope' style='font-size:36px'></i>
+                <i class="far fa-envelope" style="font-size: 36px"></i>
               </div>
               <div class="Email">example@example.com</div>
             </div>
             <div class="social-media">
-              <a href="https://www.facebook.com/uskudarsks/" target="_blank" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/uskudarsks/?hl=en" target="_blank"class="icon"><i class="fa-brands fa-instagram"></i></a>
-              <a href="https://www.youtube.com/channel/UCBKDuZsuc4et2e3IE_hYsBw" target="_blank" class="icon"><i class="fa-brands fa-youtube"></i></a>
+              <a
+                href="https://www.facebook.com/uskudarsks/"
+                target="_blank"
+                class="icon"
+                ><i class="fa-brands fa-facebook-f"></i
+              ></a>
+              <a
+                href="https://www.instagram.com/uskudarsks/?hl=en"
+                target="_blank"
+                class="icon"
+                ><i class="fa-brands fa-instagram"></i
+              ></a>
+              <a
+                href="https://www.youtube.com/channel/UCBKDuZsuc4et2e3IE_hYsBw"
+                target="_blank"
+                class="icon"
+                ><i class="fa-brands fa-youtube"></i
+              ></a>
             </div>
           </div>
         </div>
@@ -150,12 +381,15 @@
             class="content-section"
             style="display: none"
           >
-
             <main class="table" id="customers_table">
               <section class="table__header">
                 <h1>Event Requests</h1>
                 <div class="input-group">
-                  <input type="search" placeholder="Search Request..." class="search_Text" />
+                  <input
+                    type="search"
+                    placeholder="Search Request..."
+                    class="search_Text"
+                  />
                   <img src="/images/search.png" alt="" class="search_icon" />
                 </div>
               </section>
@@ -307,7 +541,7 @@
                 </ul>
               </div>
             </div>
-            <script src="clubs.js"></script>
+            <script src="JS/clubs.js"></script>
           </div>
         </div>
       </div>
@@ -347,5 +581,6 @@
       });
     </script>
     <script src="clubs.js"></script>
+    <script src="../Notifications/logInTest/script.js"></script>
   </body>
 </html>

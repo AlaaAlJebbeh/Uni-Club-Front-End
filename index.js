@@ -75,5 +75,3 @@ app.get("/on_click_create_club", (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
-
-

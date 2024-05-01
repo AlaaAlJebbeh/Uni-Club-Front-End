@@ -634,5 +634,53 @@ footer{
         margin: 4px;
     }
 }
+.reject-card1{
+    display: flex;
+    position: absolute;
+    top: 65%;
+    left: 50%;   
+    justify-content: center;
+    align-items: center;
+    transform: translate(-50%, -50%); /* Center the popup */
+    z-index: 9999; 
+    width: 80%; 
+    max-width: 600px; 
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.reject-card1 {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.reject-card1 input[type="text"] {
+    width: 80%; /* Adjust width as needed */
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: whitesmoke;
+
+}
+
+#closeButton2 {
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: white;
+    background-color: rgb(214, 60, 60);
+}
+
+#sendButton {
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: white;
+    background-color: #289e46;
+}
+
+
 
 

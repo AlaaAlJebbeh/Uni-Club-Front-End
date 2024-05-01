@@ -1,0 +1,685 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+    font-family: "Roboto Slab", serif;
+    font-size: medium;
+    
+}
+@media print {
+    .table, .table__body {
+     overflow: visible;
+     height: auto !important;
+     width: auto !important;
+    }
+   }
+
+@page {
+    size: landscape;
+    margin: 0; 
+}
+
+h1{
+    font-size: 35px;
+}
+
+
+body {
+    min-height: 100vh;
+    background: whitesmoke;
+    display: flex;
+    flex-direction: column; /* Ensure flex items stack vertically */
+    justify-content: space-between; /* Push content to the top and footer to the bottom */   
+    padding-bottom: 30px; /* Space for footer */
+    margin: 0;
+}
+
+main.table {
+    width: 100%;
+    height: 100%;
+    background-color: whitesmoke;
+    padding: 15rem 1rem 0.8rem;
+
+
+    overflow: hidden;
+}
+
+.table__header {
+    width: 100%;
+    height: 8%;
+    background-color: #fff4;
+   
+
+    display: flex;
+    justify-content: space-evenly; /* Changed */
+    align-items: center;
+}
+
+.table__header .input-group {
+    width: 35%;
+    height: 100%;
+    background-color: #fff5;
+    padding: 0 .8rem;
+    border-radius: 2rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: .2s;
+}
+
+.table__header .input-group:hover {
+    width: 45%;
+    background-color: #fff8;
+    box-shadow: 0 .1rem .4rem #0002;
+}
+
+.table__header .input-group img {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.table__header .input-group input {
+    width: 100%;
+    padding: 0 .5rem 0 .3rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.table__body {
+    width: 95%;
+    max-height: calc(89% - 1.6rem);
+    background-color: #fffb;
+
+    margin: .8rem auto;
+    border-radius: .6rem;
+
+    overflow-y: auto;
+    overflow: overlay;
+    
+}
+
+
+.table__body::-webkit-scrollbar{
+    width: 0.5rem;
+    height: 0.5rem;
+}
+
+.table__body::-webkit-scrollbar-thumb{
+    border-radius: .5rem;
+    background-color: #0004;
+    visibility: hidden;
+}
+
+.table__body:hover::-webkit-scrollbar-thumb{ 
+    visibility: visible;
+}
+
+
+table {
+    width: 100%;
+}
+
+td img {
+    width: 36px;
+    height: 36px;
+    margin-right: .5rem;
+    border-radius: 50%;
+
+    vertical-align: middle;
+}
+
+table, th, td {
+    border-collapse: collapse;
+    padding: 1rem;
+    text-align: left;
+}
+
+thead th {
+    top: 0;
+    left: 0;
+    background-color: #193635;
+    cursor: pointer;
+    text-transform: capitalize;
+    color:white;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #0000000b;
+}
+
+tbody tr {
+    --delay: .1s;
+    transition: .5s ease-in-out var(--delay), background-color 0s;
+}
+
+tbody tr.hide {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+tbody tr:hover {
+    background-color: #fff6 !important;
+}
+
+tbody tr td,
+tbody tr td p,
+tbody tr td img {
+    transition: .2s ease-in-out;
+}
+
+tbody tr.hide td,
+tbody tr.hide td p {
+    padding: 0;
+    font: 0 / 0 sans-serif;
+    transition: .2s ease-in-out .5s;
+}
+
+tbody tr.hide td img {
+    width: 0;
+    height: 0;
+    transition: .2s ease-in-out .5s;
+}
+
+.status {
+    padding: .6rem 1rem; /* Adjust padding as needed */
+    border-radius: 2rem;
+    text-align: center;
+    display: inline-block; /* Ensure inline-block to set width */
+    width: 155px; /* Adjust width as needed */
+}
+
+.status.approved {
+    background-color: #289e46;
+    color: white;
+}
+
+.status.rejected {
+    background-color: rgb(214, 60, 60);;
+    color: white;
+}
+
+.status.pending {
+    background-color: #ebc474;
+    color: #000;
+}
+
+@media (max-width: 1000px) {
+    td:not(:first-of-type) {
+        min-width: 12.1rem;
+    }
+}
+
+thead th span.icon-arrow {
+    display: inline-block;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    border: 1.4px solid transparent;
+    
+    text-align: center;
+    font-size: 1rem;
+    
+    margin-left: .5rem;
+    transition: .2s ease-in-out;
+}
+
+thead th:hover span.icon-arrow{
+    border: 1.4px solid #ffd700;
+}
+
+thead th:hover {
+    color: #ffd700;
+}
+
+thead th.active span.icon-arrow{
+    background-color: #ffd700;
+    color: #fff;
+}
+
+thead th.asc span.icon-arrow{
+    transform: rotate(180deg);
+}
+
+thead th.active,tbody td.active {
+    color: #0ab3ad;
+}
+
+.export__file {
+    position: relative;
+}
+
+.export__file .export__file-btn {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background: #fff6 url(images/export.png) center / 80% no-repeat;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+}
+
+.export__file .export__file-btn:hover { 
+    background-color: #fff;
+    transform: scale(1.15);
+    cursor: pointer;
+}
+
+.export__file input {
+    display: none;
+}
+
+.export__file .export__file-options {
+    position: absolute;
+    right: 0;
+    
+    width: 12rem;
+    border-radius: .5rem;
+    overflow: hidden;
+    text-align: center;
+
+    opacity: 0;
+    transform: scale(.8);
+    transform-origin: top right;
+    
+    box-shadow: 0 .2rem .5rem #0004;
+    
+    transition: .2s;
+}
+
+.export__file input:checked + .export__file-options {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 100;
+}
+
+.export__file .export__file-options label{
+    display: block;
+    width: 100%;
+    padding: .6rem 0;
+    background-color: #f2f2f2;
+    
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    transition: .2s ease-in-out;
+}
+
+.export__file .export__file-options label:first-of-type{
+    padding: 1rem 0;
+    background-color: #86e49d !important;
+}
+
+.export__file .export__file-options label:hover{
+    transform: scale(1.05);
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.export__file .export__file-options img{
+    width: 2rem;
+    height: auto;
+}
+
+.approve-button {
+    height: 55px;
+    width: 43%;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 400;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #289e46;
+    text-align: center;
+    display: inline-block; /* Ensure inline-block to set width */
+    
+}
+.reject-button {
+    height: 55px;
+    width: 40%;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 400;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: rgb(214, 60, 60);
+    text-align: center;
+    display: inline-block; /* Ensure inline-block to set width */
+    
+}
+
+.details-button{
+    text-align: center;
+    width: 67px;
+    height: 60px;   
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    background-color: #0ab3ad
+    
+    
+    
+}
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+
+html{
+    font-size: 62.4%;
+    overflow-x: hidden;
+    scroll-padding-top: 6rem;
+    scroll-behavior: smooth;    
+}
+::selection{
+    background:var(--yellow);
+    color: #fff
+}
+
+:root{
+    --yellow: #FFD700;
+}
+
+* {
+    font-family: "Roboto Slab", serif;
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    text-transform: capitalize;
+    outline: none;
+    border: none;
+    transition: all .2s linear;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+header {
+    position: fixed;
+    height: 100px;
+    top:0; left:0; right:0;
+    background: #193635;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1%;
+}
+
+.logo-image {
+    width: 150px;
+    height: 150px;
+    margin-top: 80px;
+    margin-left:60px;
+}
+
+header .logo span{
+    color:var(--yellow);
+}
+
+header nav ul {
+    display: flex;
+}
+header nav ul li a {
+    display: inline-block;
+    color: #ffffff;
+    padding: 5px 0;
+    margin: 0 10px;
+    border: 3px solid transparent;
+    text-transform: uppercase;
+    transition: 0.2s;
+    font-size: 2rem; 
+    margin-right: 40px
+}
+
+header .navbar a:hover{
+    color:var(--yellow);
+}
+
+header nav ul li a.active {
+    border-bottom-color: var(--yellow);
+}
+
+header .icons i{
+    font-size: 2.5rem;
+    color:#fff;
+    cursor: pointer;
+    margin-right: 2rem;
+}
+
+
+header .icons i:hover{
+    color:var(--yellow);
+}
+
+header .search-bar-container{
+    position: absolute;
+    top: 90%; left:500; right:0;
+    padding: 1.5rem;
+    background: #193635;
+    border-top: .1rem solid rgba(25,54,53,.2);
+    display: flex;
+    align-items: center;
+    z-index: 1001;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    width:300px;
+    
+}
+
+header .search-bar-container.active{
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    
+}
+
+header .search-bar-container #search-bar{ 
+    width:100%;
+    padding: 1rem;
+    text-transform: none;
+    color: #333;
+    font-size: 1.7rem;
+    border-radius: .5rem;
+    
+}
+
+header .search-bar-container label{
+    color:#fff;
+    cursor: pointer;
+    font-size: 3rem;
+    margin-left: 1.5rem;
+}
+
+header .search-bar-container label:hover{
+    color:var(--yellow)
+}
+
+.sideBar {
+    cursor: pointer;
+    display: none;
+}
+.sideBar div {
+    width: 30px;
+    height: 3px;
+    margin: 5px 0;
+    background: #fbfbfb;
+}
+
+@media only screen and (max-width: 1300px) {
+    header {
+        padding: 0 30px;
+    }
+}
+@media only screen and (max-width: 900px) {
+    .sideBar {
+        display: block;
+    }
+    header nav {
+        position: absolute;
+        width: 100%;
+        left: -100%;
+        top: 70px;
+        width: 100%;
+        background: #193635;
+        padding: 30px;
+        transition: 0.3s;
+    }
+    header #nav_check:checked ~ nav {
+        left: 0;
+    }
+    header nav ul {
+        display: block;
+    }
+    header nav ul li a {
+        margin: 5px 0;
+    }
+
+    header .icons i#search-btn {
+        position: absolute;
+        top: 37px;
+        right: 120px;    
+    }
+
+    header .icons i#log-btn {
+        position: absolute;
+        top: 37px;
+        right: 70px;    
+    }
+
+}
+ /*FOOTER*/
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+footer{
+    background-color: #193635;
+    
+}
+.footerContainer{
+    padding: 20px 30px 10px ;
+}
+.socialIcons{
+    display: flex;
+    justify-content: center;
+}
+.socialIcons a{
+    text-decoration: none;
+    padding:  10px;
+    background-color: white;
+    margin: 10px;
+    border-radius: 50%;
+}
+.socialIcons a i{
+    font-size: 2em;
+    color: #193635;
+    opacity: 0,9;
+}
+/* Hover affect on social media icon */
+.socialIcons a:hover{
+    background-color: #7BD3D1;
+    transition: 0.5s;
+}
+.socialIcons a:hover i{
+    color: white;
+    transition: 0.5s;
+}
+.footerNav{
+    margin: 30px 0;
+}
+.footerNav ul{
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+}
+.footerNav ul li a{
+    color:white;
+    margin: 20px;
+    text-decoration: none;
+    font-size: 1.3em;
+    opacity: 0.7;
+    transition: 0.5s;
+
+}
+.footerNav ul li a:hover{
+    opacity: 1;
+    color:#FFD700;
+}
+.footerBottom{
+    background-color: #000;
+    padding: 10px;
+    text-align: center;
+}
+.footerBottom p{
+    color: rgb(255, 255, 255);
+}
+
+@media (max-width: 900px){
+    .footerNav ul{
+        flex-direction: column;
+    } 
+    .footerNav ul li{
+        width:100%;
+        text-align: center;
+        margin: 10px;
+    }
+    .socialIcons a{
+        padding: 8px;
+        margin: 4px;
+    }
+}
+
+.reject-card1{
+    display: none;
+    position: absolute;
+    top: 65%;
+    left: 50%;   
+    justify-content: center;
+    align-items: center;
+    transform: translate(-50%, -50%); /* Center the popup */
+    z-index: 9999; 
+    width: 80%; 
+    max-width: 600px; 
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.reject-card1 {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.reject-card1 input[type="text"] {
+    width: 80%; /* Adjust width as needed */
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: whitesmoke;
+
+}
+
+#closeButton2 {
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: white;
+    background-color: rgb(214, 60, 60);
+}
+
+#sendButton {
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: white;
+    background-color: #289e46;
+}
+
+

@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+/**{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+body{
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: whitesmoke;
+}*/
+.wrapper{
+  position: relative;
+  height: 330px;
+  width: 620px;
+  perspective: 1000px;
+}
+.wrapper .flip-card{
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background: #221705;
+  transform-style: preserve-3d;
+  /*transition: all 1s ease-in-out;*/
+}
+/*.wrapper:hover .flip-card{
+  transform: rotateY(180deg);
+}*/
+.flip-card .card{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background: whitesmoke;
+  border-top: 2px solid whitesmoke;
+  border-left: 2px solid whitesmoke;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  backface-visibility: hidden;
+  position: absolute;
+}
+/*.card span.circle,
+.card span.square{
+  height: 110px;
+  width: 110px;
+  border: 10px solid #4d2600;
+}
+.card span.circle{
+  border-radius: 50%;
+}
+.card span.triangle{
+  position: relative;
+  height: 0;
+  width: 0;
+  border-right: 60px solid transparent;
+  border-left: 60px solid transparent;
+  border-bottom: 110px solid #4d2600;
+  margin-right: 16px;
+}
+.card span.triangle::before{
+  content: "";
+  position: absolute;
+  height: 0;
+  width: 0;
+  left: -40px;
+  top: 20px;
+  border-right: 40px solid transparent;
+  border-left: 40px solid transparent;
+  border-bottom: 80px solid #D48600;
+}
+/*.back.card{
+  transform: rotateY(180deg);
+}
+.back.card .home-logo{
+  position: relative;
+  height: 65px;
+  width: 65px;
+  border: 5px solid #4d2600;
+  border-radius: 50%;
+  margin-right: 16px;
+}
+.home-logo .icon{
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateY(6px);
+  display: inline-block;
+  height: 15px;
+  width: 25px;
+  background: #4d2600;
+}
+.home-logo .icon::before{
+  content: "";
+  position: absolute;
+  top: -15px;
+  height: 25px;
+  width: 25px;
+  background: #4d2600;
+  transform: rotate(45deg);
+}
+.back.card .num{
+  font-size: 25px;
+  font-weight: 600;
+  color: #4d2600;
+}*/
+
+.custom-table {
+    border-collapse: collapse; /* Merge cell borders */
+    width: fit-content; /* Set table width */
+  }
+  
+  .custom-table td {
+    border: 0px solid #000; /* Add border to table cells */
+    padding: 0px; /* Add padding to table cells */
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+  
+  .column1 {
+    width: 100%; /* Set width for the first column */
+    height: fit-content;
+    justify-content: center;
+  }
+ 
+#popup img {
+    max-width: 100%; 
+    max-height: 100%; 
+    display: block;
+    margin: auto; 
+  }
+
+  .popup-card {
+    display: flex; /* Use flexbox to center the content */
+    justify-content: center; 
+    align-items: center;
+    position: absolute; /* Position the popup absolutely */
+    top: 65%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); /* Center the popup */
+    z-index: 9999; 
+    width: 80%; 
+    max-width: 600px; 
+    padding: 20px;
+    border-radius: 10px;
+   
+    display: none; /* Hide by default */
+  }
+  
+#closeButton{
+  background-color: rgb(214, 60, 60);
+  color: white;
+  border-radius: 20%;
+  width: 60px;
+  height: 40px;
+  top: 50px;
+  transform: translate(550px);
+  
+}

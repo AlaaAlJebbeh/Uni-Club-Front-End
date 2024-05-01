@@ -191,6 +191,13 @@
         </div>
         <button id="closeButton" onclick="closePopup()">Close</button>
       </div>
+//the pop up for the rejection message
+      <div id="reject" class="reject-card1">
+             <input type="text" id="rejectionReason" placeholder="Enter rejection reason...">
+            <button id="sendButton">Send</button>
+            <button id="closeButton2" onclick="closePopup2()">Close</button>
+
+        </div>
 
       <script>
         // Function to show the popup card
@@ -209,6 +216,33 @@
           button.addEventListener("click", showPopup);
         });
       </script>
+
+//Script for the Send button and cancel button in the reject request pop up
+      <script>
+            function showPopup2() {
+                var popup = document.getElementById("reject");
+                popup.style.display = "block";
+            }
+            
+            function closePopup2() {
+                var popup = document.getElementById("reject");
+                popup.style.display = "none";
+            }
+            
+            var sendButton = document.getElementById("sendButton");
+            sendButton.addEventListener("click", function() {
+                var rejectionReason = document.getElementById("rejectionReason").value;
+                // Here you can handle what to do with the rejection reason, such as sending it to a server
+                console.log("Rejection Reason:", rejectionReason);
+            });
+            
+            var rejectButtons = document.querySelectorAll('.reject-button');
+            
+            rejectButtons.forEach(function(button) {
+                button.addEventListener('click', showPopup2);
+            });
+        </script>
+
     </main>
     <footer>
       <div class="footerContainer">

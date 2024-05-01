@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--Font Linking-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap"rel="stylesheet"/>
+    
+
+    <!--Style Linking-->
+    <link rel="stylesheet" href="./partials/header.ejs" />
+    <link rel="stylesheet" href="./partials/footer.ejs" />
+    <link rel="stylesheet" href="../public/styles/on_click_create_club.css" />
+  
+    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  </head>
+  <body>
+    <!--Header-->
+    <header>
+      <div>
+        <a href="#" class="logo"
+          ><img src="logo.png" alt="Logo" class="logo-image"
+        /></a>
+      </div>
+      <input type="checkbox" id="nav_check" hidden />
+      <nav class="navbar">
+        <ul>
+          <li>
+            <a href="" class="active">Home</a>
+          </li>
+          <li>
+            <a href="" >Clubs</a>
+          </li>
+          <li>
+            <a href="">Content Manager</a>
+          </li>
+          <li>
+            <a href="">Event Requests</a>
+          </li>
+          <li>
+            <a href="">Club Manager</a>
+          </li>
+
+        </ul>
+      </nav>
+
+      <div class="icons">
+        <div class="icons">
+          <i class="fas fa-search" id="search-btn"></i>
+          <i class="fas fa-user" id="log-btn"></i>
+        </div>
+
+        <form action="" class="search-bar-container">
+          <input type="search" id="search-bar" placeholder="search here..." />
+          <label for="search-bar" class="fas fa-search"></label>
+        </form>
+      </div>
+
+      <label for="nav_check" class="sideBar icons">
+        <div></div>
+        <div></div>
+        <div></div>
+      </label>
+    </header>
+    
+
+     
+<section class="container">
+    <header>Create Club</header>
+    <form action="#" class="form">
+      <div class="input-box">
+        <label style="font-size: medium;" >Club Name</label>
+        <input type="text" placeholder="Enter club name" required />
+      </div>
+  
+  
+      <div class="gender-box">
+        <h3 style="font-size: medium; font-weight: bold;">Category</h3>
+        <div class="gender-option">
+          <div class="gender">
+            
+            <label for="category" style="font-size: medium;" >
+              </label>
+              <select id="category" name="cars" required>
+                  <option value="entertainment">Choose</option>
+                  <option value="science">Science</option>
+                  <option value="engineering">Engineering</option>
+                  <option value="art">Art</option>
+              </select>
+            
+          </div>
+        </div>
+      </div>
+  
+      <div class="input-box address">
+        <label style="font-size: medium; ">Manager Info</label>
+        <input type="text" placeholder="Enter manager info" required />
+      </div>
+  
+        <div class="input-box">
+          <label style="font-size: medium;" >Manager ID</label>
+          <input type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Enter manager ID" required />
+          <span class="error-message" style="color: red; display: none;">Please enter only numbers.</span>
+        </div>
+  
+        <div class="input-box">
+          <label style="font-size: medium;" >Password</label>
+          <input type="password" placeholder="Enter password" required />
+        </div>
+  
+        <div class="input-box address">
+          <label style="font-size: medium;" >Name</label>
+          <input type="text" placeholder="Enter Manager Name" required />
+        </div>
+  
+        <div class="input-box">
+  <label style="font-size: medium;">Email Address</label>
+  <input type="text" id="email" placeholder="Enter email address" required />
+  <span class="error-message" style="color: red; display: none;">Please enter a valid email address.</span>
+  </div>
+  
+  
+      <button>Submit</button>
+      <button>Cancel</button>
+    </form>
+  </section>
+      
+
+
+    <!--Footer-->
+    <div class="footer">
+      <div class="footerContainer">
+        <div class="socialIcons">
+          <a href=""><i class="fa-brands fa-facebook"></i></a>
+          <a href=""><i class="fa-brands fa-instagram"></i></a>
+          <a href=""><i class="fa-brands fa-twitter"></i></a>
+          <a href=""><i class="fa-brands fa-linkedin"></i></a>
+          <a href=""><i class="fa-brands fa-youtube"></i></a>
+        </div>
+        <div class="footerNav">
+          <ul>
+            <li><a href="">Home</a></li>
+            <li><a href="">Uskudar University</a></li>
+            <li><a href="">About SKS</a></li>
+            <li><a href="">@sks.uskudar.edu.tr</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footerBottom">
+        <p>Copyright &copy;2024</p>
+      </div>
+    </div>
+
+    <!--Font Linking-->
+    <script>
+      let searchBtn = document.querySelector("#search-btn");
+      let searchBar = document.querySelector(".search-bar-container");
+
+      searchBtn.addEventListener("click", () => {
+        searchBtn.classList.toggle("fa-times");
+        searchBar.classList.toggle("active");
+      });
+      document.addEventListener('DOMContentLoaded', function() {
+    var formContainer = document.querySelector('.container');
+    var footer = document.querySelector('.footer');
+    var scrollPosition = window.scrollY;
+
+    // Calculate the bottom position of the form container
+    var formBottom = formContainer.offsetTop + formContainer.offsetHeight;
+
+    // Calculate the top position of the footer
+    var footerTop = footer.offsetTop;
+
+    // If the scroll position reaches the bottom of the form container
+    // but is still above the footer, move the form container behind the footer
+    if (scrollPosition + window.innerHeight >= formBottom && scrollPosition < footerTop) {
+        formContainer.style.zIndex = '1'; // Set a lower z-index to move it behind the footer
+    } else {
+        formContainer.style.zIndex = '999'; // Set the original z-index value
+    }
+});
+
+window.addEventListener('scroll', function() {
+    var formContainer = document.querySelector('.container');
+    var footer = document.querySelector('.footer');
+    var scrollPosition = window.scrollY;
+
+    // Calculate the bottom position of the form container
+    var formBottom = formContainer.offsetTop + formContainer.offsetHeight;
+
+    // Calculate the top position of the footer
+    var footerTop = footer.offsetTop;
+
+    // If the scroll position reaches the bottom of the form container
+    // but is still above the footer, move the form container behind the footer
+    if (scrollPosition + window.innerHeight >= formBottom && scrollPosition < footerTop) {
+        formContainer.style.zIndex = '1'; // Set a lower z-index to move it behind the footer
+    } else {
+        formContainer.style.zIndex = '999'; // Set the original z-index value
+    }
+});
+
+
+    </script>
+    <script src="clubs.js"></script>
+  </body>
+</html>

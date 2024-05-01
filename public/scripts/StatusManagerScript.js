@@ -203,3 +203,11 @@ const downloadFile = function (data, fileType, fileName = '') {
     a.remove();
 }
 
+
+let details = document.getElementById("details.button");
+
+details.addEventListener("click", (e) => {
+
+
+
+});

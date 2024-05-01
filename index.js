@@ -50,29 +50,24 @@ app.get("/createclub", (req, res) => {
 
 
 app.get("/comparing", (req, res) => {
+    let data = {}; // Initialize an empty data object
 
-    const data = {}; // Create an empty object
-
-
-
-
-
-    connection.query("select * from club where club_id = 5", (err, results) => {
-        if(err){
+    // Query to retrieve data from the 'TempEvents' table
+    connection.query("select * from TempClubEdit ", (err, tempResult) => {
+        if (err) {
             console.log(err.message);
+            return res.status(500).send("Internal Server Error2");
         }
-        data.clubResult = results;
-    });
-    connection.query("select * from TempEvents where event_id = 1", (err, results) => {
-        if(err){
-            console.log(err.message);
-        }
-        data.tempResult = results;
-    });
-    
-    res.render("StatusManager.ejs",data);
 
+        // Assign the 'tempResult' to the 'data' object
+        data.tempResult = tempResult;
+
+        // Render the 'StatusManager.ejs' template with the populated 'data' object
+        res.render("StatusManager.ejs", data);
+    });
 });
+
+
 app.get("/on_click_create_club", (req, res) => {
     res.render("on_click_create_club.ejs");
 });

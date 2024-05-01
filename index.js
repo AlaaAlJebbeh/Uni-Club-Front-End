@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import path  from "path";
 import mysql from "mysql";
 import { constrainedMemory } from "process";
+import { name } from "ejs";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
@@ -51,20 +52,44 @@ app.get("/createclub", (req, res) => {
 
 
 app.get("/comparing", (req, res) => {
-    let data = {}; // Initialize an empty data object
-
     // Query to retrieve data from the 'TempEvents' table
-    connection.query("select * from TempClubEdit ", (err, tempResult) => {
+    connection.query("SELECT * FROM TempClubEdit", (err, tempResult) => {
         if (err) {
             console.log(err.message);
             return res.status(500).send("Internal Server Error2");
         }
 
-        // Assign the 'tempResult' to the 'data' object
-        data.tempResult = tempResult;   
+        // Array to store promises for fetching club names
+        const promises = [];
 
-        // Render the 'StatusManager.ejs' template with the populated 'data' object
-        res.render("StatusManager.ejs", data);
+        // Iterate over each item in tempResult to fetch club names asynchronously
+        tempResult.forEach(item => {
+            // Create a promise for each query to fetch club name
+            const promise = new Promise((resolve, reject) => {
+                connection.query("SELECT club_name FROM club WHERE club_id = ?", item.club_id, (err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        // Resolve the promise with club name or null if not found
+                        resolve(result.length > 0 ? result[0].club_name : null);
+                    }
+                });
+            });
+            // Push the promise to the array of promises
+            promises.push(promise);
+        });
+
+        // Wait for all promises to resolve using Promise.all
+        Promise.all(promises)
+            .then(clubNames => {
+                // Render the 'StatusManager.ejs' template with the populated data
+                res.render("StatusManager.ejs", { tempResult, clubNames });
+            })
+            .catch(err => {
+                console.error(err);
+                // Handle error appropriately
+                return res.status(500).send("Internal Server Error");
+            });
     });
 });
 
@@ -76,4 +101,10 @@ app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 
+function clubname(id){
+    connection.query('select club_name from clubs where club_id =' + id, (err, res) => {
+            return res.club_name;
+        
+    });
+}
 

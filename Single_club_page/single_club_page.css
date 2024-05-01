@@ -1,0 +1,162 @@
+/*
+Color Pallete
+#193635  -> Dark green
+#0AB3AD  -> Light green 
+#7BD3D1  -> Tiffany Blue
+#FFD700  -> Gold
+#000000  -> Black
+#FFFFFF  -> White
+*/
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+h1 {
+    color: #193635;
+    font-size: 50px;
+}
+h2{
+    margin: 0;
+}
+a{
+    color: #000000;
+    text-decoration: none;
+}
+a:active {
+    color: #0AB3AD;
+    cursor: grabbing;
+}
+.container{
+    flex: 1;
+    display: flex;
+}
+.body{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.header-club {
+    width: 100%; /* Set width to 100% */
+    max-height: 40%; /* You may adjust the height as needed */
+    display: flex;
+    justify-content: space-around;
+    align-items: center; /* Align items vertically */
+    max-width: 100%; /* Set max-width to 100% */
+    height: 100%;
+    border-bottom: 2px solid #193635;
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    
+}
+
+.cnt1 img {
+    max-width: 600px;
+}
+.cnt2 h2{
+    font-size: large;
+}
+.cnt2 h2{
+    font-size: 22px;
+}
+.cnt3 p{
+    font-weight: 100px;
+    font-size: 20px;
+}
+
+.cnt2 {
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: baseline;
+    justify-content: center;
+    
+    max-width: 300px;
+    margin-top: 10px;
+
+}
+.cnt3 h2{
+    font-weight: bold;
+    font-size: 25px;
+}
+.cnt3 {
+    display: flex;
+    align-items: baseline;
+    flex-direction: column;
+    justify-content: center;
+    font-weight: bold;
+}
+.bio-textbox {
+    height: 150px; /* Adjust height as needed */
+    padding: 10px; /* Adjust padding as needed */
+    font-size: 16px; /* Adjust font size as needed */
+    border: 1px solid #ccc; /* Add border for visual clarity */
+    border-radius: 5px; /* Add border radius for rounded corners */
+    margin-top: 10px; /* Add margin to create space */
+    width: 300px;
+}
+
+.cnt4{
+    display: flex;
+    flex-direction: column;
+    font-size: 1.75rem;
+    gap: 10px
+    ;
+}
+#club-logo{
+    display: inline;
+    border-radius: 50% ;
+    height: 200px;
+    width: 250px;
+    margin-left: 150px;
+}
+.contact-info{
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+}
+.contact-info img {
+    height: 35px;
+    margin-right: 5px;
+}
+.contact-info div {
+    padding: 5px;
+}
+.socialmedia-links img{
+    height: 35px;
+    margin-right: 20px;
+}
+.header-body {
+    max-height: 70%;
+    height: 90%;
+    background-color:#FFFFFF;
+}
+
+
+.social-media{
+    margin: 20px 0;
+}
+
+.social-media a{
+    border: 1px solid #ccc;
+    border-radius: 20%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 3px;
+    width: 40px;
+    height: 40px;
+}
+
+.sidebar a:hover{
+    color:var(--yellow);
+}
+
+
+
+

@@ -1,0 +1,436 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+html{
+    font-size: 62.4%;
+    overflow-x: hidden;
+    scroll-padding-top: 6rem;
+    scroll-behavior: smooth;    
+
+}
+::selection{
+    background:var(--yellow);
+    color: #fff
+}
+
+:root{
+    --yellow: #FFD700;
+}
+
+* {
+    font-family: "Roboto Slab", serif;
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    text-transform: capitalize;
+    outline: none;
+    border: none;
+    transition: all .2s linear;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+header {
+    position: fixed;
+    height: 100px;
+    top:0; left:0; right:0;
+    background: #193635;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1%; /* Adjusted padding */
+   
+}
+
+.logo-image {
+    width: 90px;
+    height: 90px;
+    margin-top: 80px;
+    margin-left:60px;
+}
+
+header .logo span{
+    color:var(--yellow);
+}
+
+header nav ul {
+    display: flex;
+}
+header nav ul li a {
+    display: inline-block;
+    color: #ffffff;
+    padding: 5px 0;
+    margin: 0 10px;
+    border: 3px solid transparent;
+    text-transform: uppercase;
+    transition: 0.2s;
+    font-size: 2rem; 
+    margin-right: 40px
+}
+
+header .navbar a:hover{
+    color:var(--yellow);
+}
+
+header nav ul li a.active {
+    border-bottom-color: var(--yellow);
+}
+
+header .icons i{
+    font-size: 2.5rem;
+    color:#fff;
+    cursor: pointer;
+    margin-right: 2rem;
+}
+
+
+header .icons i:hover{
+    color:var(--yellow);
+}
+
+header .search-bar-container{
+    position: absolute;
+    top: 90%; left:500; right:0;
+    padding: 1.5rem;
+    background: #193635;
+    border-top: .1rem solid rgba(25,54,53,.2);
+    display: flex;
+    align-items: center;
+    z-index: 1001;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    width:300px;
+    
+}
+
+header .search-bar-container.active{
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    
+}
+
+header .search-bar-container #search-bar{ 
+    width:100%;
+    padding: 1rem;
+    text-transform: none;
+    color: #333;
+    font-size: 1.7rem;
+    border-radius: .5rem;
+    
+}
+
+header .search-bar-container label{
+    color:#fff;
+    cursor: pointer;
+    font-size: 3rem;
+    margin-left: 1.5rem;
+}
+
+header .search-bar-container label:hover{
+    color:var(--yellow)
+}
+
+.sideBar {
+    cursor: pointer;
+    display: none;
+}
+.sideBar div {
+    width: 30px;
+    height: 3px;
+    margin: 5px 0;
+    background: #fbfbfb;
+}
+
+@media only screen and (max-width: 1300px) {
+    header {
+        padding: 0 30px;
+    }
+}
+@media only screen and (max-width: 900px) {
+    .sideBar {
+        display: block;
+    }
+    header nav {
+        position: absolute;
+        width: 100%;
+        left: -100%;
+        top: 70px;
+        width: 100%;
+        background: #193635;
+        padding: 30px;
+        transition: 0.3s;
+    }
+    header #nav_check:checked ~ nav {
+        left: 0;
+    }
+    header nav ul {
+        display: block;
+    }
+    header nav ul li a {
+        margin: 5px 0;
+    }
+
+    header .icons i#search-btn {
+        position: absolute;
+        top: 37px;
+        right: 120px;    
+    }
+
+    header .icons i#log-btn {
+        position: absolute;
+        top: 37px;
+        right: 70px;    
+    }
+
+    
+}
+
+* {
+
+  box-sizing: border-box;
+  font-family: "Roboto Slab", serif;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin: 10px;
+  min-height: 600px;
+}
+.container {
+  position: relative;
+  max-width: 700px;
+  width: calc(100% - 40px); /* Adjusted width */
+  background: #0AB3AD;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+  font-weight: bold;
+  margin: 100px auto 200px;
+  z-index: 999;
+  overflow-y: auto;
+  max-height: calc(100vh - 230px);
+  margin-bottom: 300px;
+}
+.container header {
+  font-size: 25px;
+  color: #000000;
+  background-color: #0AB3AD;
+  font-weight: 700;
+  text-align: center;
+  position: relative; 
+  margin: -40px auto -30px;
+  left: 0;
+  right: 0;
+  width: fit-content;
+  
+}
+.container .form {
+  margin-top: 0;
+  padding-bottom: 10px; 
+
+}
+
+.form .input-box {
+  width: 100%;
+  margin-top: 20px;
+}
+.input-box label {
+  color: #000000;;
+}
+.form :where(.input-box input, .select-box) {
+  position: relative;
+  height: 50px;
+  width: 100%;
+  outline: none;
+  font-size: 1rem;
+  color: #707070;
+  margin-top: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0 15px;
+}
+.input-box input:focus {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+.form .column {
+  display: flex;
+  column-gap: 15px;
+}
+.form .gender-box {
+  margin-top: 20px;
+}
+.gender-box h3 {
+  color: #000000;;
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.form .gender {
+  column-gap: 5px;
+}
+
+.form :where(.gender input, .gender label) {
+  cursor: pointer;
+}
+.gender label {
+  color: #707070;
+}
+.address :where(input, .select-box) {
+  margin-top: 15px;
+}
+.select-box select {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  border: none;
+  color: #707070;
+  font-size: 1rem;
+}
+.form button {
+  height: 55px;
+  width: 100%;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 400;
+  margin-top: 30px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #193635;
+}
+.form button:hover {
+  background: #193635;
+}
+/*Responsive*/
+@media screen and (max-width: 500px) {
+  .form .column {
+    flex-wrap: wrap;
+  }
+  .form :where(.gender-option, .gender) {
+    row-gap: 15px;
+  }
+}
+  
+
+
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    
+}
+
+.footer {
+    background-color: #193635;
+    height: 200px; /* Set a fixed height for the footer */
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 600;
+}
+
+.footerContainer {
+    width: 100%;
+    height: 70%;
+}
+
+.socialIcons {
+    display: flex;
+    justify-content: center;
+}
+
+.socialIcons a {
+    text-decoration: none;
+    padding: 10px;
+    background-color: white;
+    margin: 10px;
+    border-radius: 50%;
+}
+
+.socialIcons a i {
+    font-size: 2em;
+    color: #193635;
+    opacity: 0.9;
+}
+
+/* Hover affect on social media icon */
+.socialIcons a:hover {
+    background-color: #7BD3D1;
+    transition: 0.5s;
+}
+
+.socialIcons a:hover i {
+    color: white;
+    transition: 0.5s;
+}
+
+.footerNav {
+    margin: 30px 0;
+}
+
+.footerNav ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+}
+
+.footerNav ul li a {
+    color: white;
+    margin: 20px;
+    text-decoration: none;
+    font-size: 1.3em;
+    opacity: 0.7;
+    transition: 0.5s;
+}
+
+.footerNav ul li a:hover {
+    opacity: 1;
+    color: #FFD700;
+}
+
+.footerBottom {
+    background-color: #000;
+    padding: 20px;
+    text-align: center;
+    height: 30%;
+}
+
+.footerBottom p {
+    color: white;
+}
+
+@media (max-width: 900px) {
+    .footerNav ul {
+        flex-direction: column;
+    }
+    .footerNav ul li {
+        width: 100%;
+        text-align: center;
+        margin: 10px;
+    }
+    .socialIcons a {
+        padding: 8px;
+        margin: 4px;
+    }
+}
+
+@media (max-height: 785px) {
+    .footer {
+        max-height: 100px;
+    }
+    
+}
+
+
+
+  
+ 
+  
+  

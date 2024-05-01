@@ -5,7 +5,7 @@ import pg from "pg";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
-const port = 3000;
+const port = 8000;
 
 
 
@@ -15,7 +15,10 @@ app.get("/", (req, res) => {
     res.render("home.ejs");
 });
 
+app.get("/myclubpage", (req, res) => {
 
+    res.render("myclubpage.ejs");
+});
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
   });

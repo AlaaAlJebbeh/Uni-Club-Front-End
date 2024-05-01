@@ -1,0 +1,256 @@
+/*
+Color Pallete
+#193635  -> Dark green
+#0AB3AD  -> Light green 
+#7BD3D1  -> Tiffany Blue
+#FFD700  -> Gold
+#000000  -> Black
+#FFFFFF  -> White
+*/
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+h1 {
+    color: #193635;
+}
+h2{
+    margin: 0;
+}
+a{
+    color: #FFFFFF;
+    text-decoration: none;
+}
+a:active {
+    color: #0AB3AD;
+    cursor: grabbing;
+}
+.sidebar {
+    /* Positioning */
+    max-width: 350px;
+    width: 80%;
+    
+    /* Styling */
+    background-color: gainsboro;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    padding-top: 10vh;
+}
+
+@media (max-width: 800px) { /* Adjust breakpoint as needed */
+    .sidebar {
+        display: none;
+    }
+}
+
+.items {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    box-shadow: 4px 17px 27px -18px rgba(0,0,0,0.81);
+    height: 75px;
+    align-items: center;
+    font-size: 2.0rem;
+    padding-left: 30px;
+    background: #193635;
+    color: #FFFFFF;
+}
+
+
+.items:hover{
+    cursor: pointer;
+    height: 80px;
+    font-size: 2.35rem;
+}
+
+.icon img{
+    max-width: 50px;
+}
+
+.logo-side img{
+    max-width: 150px;
+}
+
+.logo-side{
+    display: flex;
+    margin-top: 30px;
+
+}
+.container{
+    flex: 1;
+    display: flex;
+    height: calc(100% + 500px);
+}
+.body{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-club {
+    width: 100%; /* Set width to 100% */
+    max-height: 30%; /* You may adjust the height as needed */
+    display: flex;
+    justify-content: space-around;
+    align-items: center; /* Align items vertically */
+    max-width: 100%; /* Set max-width to 100% */
+    height: 100%;
+    border-bottom: 2px solid rgba(25,54,53,0.2);
+    flex: 1;
+    overflow: auto;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .header-club > div > h2 {
+        max-height: 20%; /* Adjust height as needed */
+        font-size: auto; /* Adjust font size as needed */
+    }
+}
+.header-body {
+    flex: 1;
+    max-height: 700px;
+    background-color:#FFFFFF;
+}
+
+.cnt1 img {
+    max-width: 100px;
+}
+
+.cnt1 button {
+    width: 100px;
+    height: 40px;
+    padding: 5px;
+    border-radius: 10px;
+    margin-top: 5px;
+    size: 5px;
+    background-color: #193635;
+    margin-bottom: 10px;
+}
+.cnt1 button:hover{
+    cursor: pointer;
+}
+.cnt2 {
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: baseline;
+    justify-content: center;
+    font-size: 1.2rem;
+    max-width: 300px;
+    margin-top: 20px;
+
+}
+.cnt3 {
+    display: flex;
+    font-size: 1.2rem;
+    align-items: top;
+    justify-content: center;
+}
+.cnt3 h2{
+    transform: translate(-50%,10%);
+}
+.bio-textbox {
+    max-height: 150px;
+    max-width: 300px;
+    height: 150px;
+    width: 300px;
+    padding: 10px; /* Adjust padding as needed */
+    font-size: 16px; /* Adjust font size as needed */
+    border: 1px solid #ccc; /* Add border for visual clarity */
+    border-radius: 5px; /* Add border radius for rounded corners */
+    margin-top: 10px; /* Add margin to create space */
+    overflow: scroll;
+}
+
+@media (max-width: 1230px) { /* Adjust breakpoint as needed */
+    .bio-textbox {
+        width: 100%; /* Set width to 100% when screen width is less than or equal to 600px */
+        max-width: none; /* Remove max-width constraint */
+        height: auto; /* Allow height to adjust based on content */
+    }
+}
+
+
+.cnt4{
+    display: flex;
+    flex-direction: column;
+    font-size: 1.75rem;
+    gap: 10px
+    ;
+}
+.contact-info{
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+}
+.contact-info img {
+    height: 35px;
+    margin-right: 5px;
+}
+.contact-info div {
+    background-color: lightgray;
+    padding: 5px;
+}
+.socialmedia-links img{
+    height: 35px;
+    margin-right: 20px;
+}
+
+.card-container {
+    display: flex;
+    align-items: start;
+    flex: 1;
+    margin-bottom: 20px;
+}
+
+
+/* CSS for the modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 11111;
+    left: 0;
+    top: 0;
+    transform: translate(-50%,-50%);
+    width: 100%;
+    height: 100%;
+    height: 900px;
+    width: 500px;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.content-section {
+    display: flex;
+    flex-direction: row;
+}

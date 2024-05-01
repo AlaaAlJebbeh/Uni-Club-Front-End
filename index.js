@@ -3,6 +3,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import path  from "path";
 import mysql from "mysql";
+import { constrainedMemory } from "process";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
@@ -60,7 +61,7 @@ app.get("/comparing", (req, res) => {
         }
 
         // Assign the 'tempResult' to the 'data' object
-        data.tempResult = tempResult;
+        data.tempResult = tempResult;   
 
         // Render the 'StatusManager.ejs' template with the populated 'data' object
         res.render("StatusManager.ejs", data);

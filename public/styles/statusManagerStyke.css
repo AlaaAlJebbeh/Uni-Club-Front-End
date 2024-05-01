@@ -635,7 +635,7 @@ footer{
     }
 }
 .reject-card1{
-    display: flex;
+    display: none;
     position: absolute;
     top: 65%;
     left: 50%;   

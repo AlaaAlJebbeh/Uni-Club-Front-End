@@ -16,6 +16,10 @@ app.get("/myclubpage", (req, res) => {
 
     res.render("myclubpage.ejs");
 });
+
+app.get("/on_click_create_club", (req, res) => {
+    res.render("on_click_create_club.ejs");
+});
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

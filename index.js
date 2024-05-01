@@ -73,6 +73,9 @@ app.get("/comparing", (req, res) => {
     res.render("StatusManager.ejs",data);
 
 });
+app.get("/on_click_create_club", (req, res) => {
+    res.render("on_click_create_club.ejs");
+});
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

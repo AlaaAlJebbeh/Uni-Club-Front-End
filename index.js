@@ -97,6 +97,11 @@ app.post("/createclub", function(req, res){
     });
 });
 
+//event request page starts here
+app.get("/eventrequest", (req, res) => {
+    res.render("eventRequest.ejs");
+});
+
 app.get("/comparing", (req, res) => {
     // Query to retrieve data from the 'TempEvents' table
     connection.query("SELECT * FROM TempClubEdit", (err, tempResult) => {
@@ -144,6 +149,7 @@ app.get("/on_click_create_club", (req, res) => {
     res.render("on_click_create_club.ejs");
 });
 
+
 function setUser(req, res, next) {
     const userEmail = req.body.email; // Assuming email is passed in the request body
     console.log('Received userEmail:', userEmail);
@@ -169,6 +175,10 @@ function setUser(req, res, next) {
         next();
     }
 }
+
+
+
+
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

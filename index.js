@@ -193,12 +193,49 @@ function setUser(req, res, next) {
     }
 }
 
+<<<<<<< HEAD
+app.get("/ezz", (req, res) => {
+    connection.query("select * from event where clm_id = 1", (err, result) => {
+        if(err){
+            console.log(err.message);
+        }
+        connection.query("select club_name from club where clm_id = 1", (err, clubname) => {
+            console.log(clubname);
+            res.render("showingezz.ejs", {result,clubname});
+        });
+    });
+   
+});
+app.get("/getOldPicture", (req, res) => {
+    const clubId = req.query.clubId;
+  
+    connection.query("SELECT old_picture_url FROM club WHERE club_id = ?", [clubId], (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+      }
+      
+      // Assuming result is an array with a single object containing the old picture URL
+      const oldPictureUrl = result.length > 0 ? result[0].old_picture_url : null;
+      
+      res.json({ oldPictureUrl });
+    });
+  });
+  
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
+
+=======
 function clubname(id){
     connection.query('select club_name from clubs where club_id =' + id, (err, res) => {
             return res.club_name;
         
     });
 }
+>>>>>>> b231fda76cb5f403f7be97d5ea3a74097d7d284b
 
 //listining to the port 
 app.listen(port, () => {

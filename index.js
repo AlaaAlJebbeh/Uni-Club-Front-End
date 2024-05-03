@@ -1,3 +1,4 @@
+//Importing libraries
 import express from "express";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -10,11 +11,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 import {ROLE} from "./data.js"
 import { authRole } from "./authontication.js";
 
+//Constants
 const app = express();
 const port = 8000;
 
+//Body barser use
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
+//Connection To Database
 const connection = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -30,17 +34,21 @@ connection.connect((err) => {
     console.log("connected successfully to the database");
 });
 
+//Uses public - views - json - serUser middleware
 app.use('/public', express.static(path.join(__dirname, '/public')));
 app.use(express.static("public"));
+app.use('/views', express.static(path.join(__dirname, '/views')));
+app.use(express.static("views"));
 // Apply middleware
 app.use(express.json()); // For parsing application/json
 app.use(setUser); // Apply setUser middleware before route handlers
 
-
+//Rout to home page
 app.get("/", (req, res) => {
     res.render("home.ejs"); 
 });
 
+//Rout Testing club role
 app.post("/clubRoleTest", authRole(ROLE.club), (req, res) => {
    
     const data = {
@@ -52,6 +60,7 @@ app.post("/clubRoleTest", authRole(ROLE.club), (req, res) => {
     res.render('clubRoleTest.ejs', data); 
 });
 
+//Rout my clubPage (club role)
 app.post("/myclubpage", authRole(ROLE.club), (req, res) => {
    
     const data = {
@@ -75,10 +84,12 @@ app.get("/myclubpage", authRole(ROLE.club), (req, res) => {
     res.render('myclubpage.ejs', data); 
 });
 
+//Route eventRequests 
+
 app.get("/eventRequests", (req, res) => {
    
     const data = {
-        pageTitle: 'My Club Page',
+        pageTitle: 'EventRequests',
         message: "dfdf"
         // Add more data as needed
     };
@@ -86,8 +97,7 @@ app.get("/eventRequests", (req, res) => {
     res.render('eventRequests.ejs', data); 
 });
 
-app.use('/views', express.static(path.join(__dirname, '/views')));
-app.use(express.static("views"));
+//Route createClub
 app.get("/createclub", (req, res) => {
 
     res.render("on_click_create_club.ejs");
@@ -108,11 +118,7 @@ app.post("/createclub", function(req, res){
     });
 });
 
-//event request page starts here
-app.get("/eventrequest", (req, res) => {
-    res.render("eventRequest.ejs");
-});
-
+//Route Comparing 
 app.get("/comparing", (req, res) => {
     // Query to retrieve data from the 'TempEvents' table
     connection.query("SELECT * FROM TempClubEdit", (err, tempResult) => {
@@ -155,7 +161,7 @@ app.get("/comparing", (req, res) => {
     });
 });
 
-
+//Route on click create club
 app.get("/on_click_create_club", (req, res) => {
     res.render("on_click_create_club.ejs");
 });
@@ -187,18 +193,17 @@ function setUser(req, res, next) {
     }
 }
 
-
-
-
-
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
-
 function clubname(id){
     connection.query('select club_name from clubs where club_id =' + id, (err, res) => {
             return res.club_name;
         
     });
 }
+
+//listining to the port 
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
+
+
 

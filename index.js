@@ -1,18 +1,24 @@
+//Importing libraries
 import express from "express";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import path  from "path";
 import mysql from "mysql";
+import bodyParser from "body-parser";
 import { constrainedMemory } from "process";
 import { name } from "ejs";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 import {ROLE} from "./data.js"
 import { authRole } from "./authontication.js";
 
+//Constants
 const app = express();
 const port = 8000;
 
+//Body barser use
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
+//Connection To Database
 const connection = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -28,17 +34,21 @@ connection.connect((err) => {
     console.log("connected successfully to the database");
 });
 
+//Uses public - views - json - serUser middleware
 app.use('/public', express.static(path.join(__dirname, '/public')));
 app.use(express.static("public"));
+app.use('/views', express.static(path.join(__dirname, '/views')));
+app.use(express.static("views"));
 // Apply middleware
 app.use(express.json()); // For parsing application/json
 app.use(setUser); // Apply setUser middleware before route handlers
 
-
+//Rout to home page
 app.get("/", (req, res) => {
     res.render("home.ejs"); 
 });
 
+//Rout Testing club role
 app.post("/clubRoleTest", authRole(ROLE.club), (req, res) => {
    
     const data = {
@@ -50,6 +60,7 @@ app.post("/clubRoleTest", authRole(ROLE.club), (req, res) => {
     res.render('clubRoleTest.ejs', data); 
 });
 
+//Rout my clubPage (club role)
 app.post("/myclubpage", authRole(ROLE.club), (req, res) => {
    
     const data = {
@@ -73,12 +84,41 @@ app.get("/myclubpage", authRole(ROLE.club), (req, res) => {
     res.render('myclubpage.ejs', data); 
 });
 
+//Route eventRequests 
+
+app.get("/eventRequests", (req, res) => {
+   
+    const data = {
+        pageTitle: 'EventRequests',
+        message: "dfdf"
+        // Add more data as needed
+    };
+
+    res.render('eventRequests.ejs', data); 
+});
+
+//Route createClub
 app.get("/createclub", (req, res) => {
 
     res.render("on_click_create_club.ejs");
 });
 
+app.post("/createclub", function(req, res){
 
+
+    var sql = "INSERT INTO club(club_id, club_name, category, bio, contact, social_media1, social_media2, social_media3, email) VALUES(null, '"+ req.body.name +"', '"+ req.body.cars +"','"+ req.body.bio +"','"+ req.body.contact +"','"+ req.body.media1 +"','"+ req.body.media2 +"','"+ req.body.media3 +"','"+ req.body.email +"')";
+    connection.query(sql, [req.body.name, req.body.cars, req.body.bio, req.body.contact, req.body.media1, req.body.media2, req.body.media3, req.body.email], function(error, result){
+        if(error) {
+            console.error("Error inserting club:", error);
+            res.status(500).send("Error creating club");
+            return;
+        }
+        console.log("Club successfully created");
+        res.send('Club successfully created');
+    });
+});
+
+//Route Comparing 
 app.get("/comparing", (req, res) => {
     // Query to retrieve data from the 'TempEvents' table
     connection.query("SELECT * FROM TempClubEdit", (err, tempResult) => {
@@ -121,10 +161,11 @@ app.get("/comparing", (req, res) => {
     });
 });
 
-
+//Route on click create club
 app.get("/on_click_create_club", (req, res) => {
     res.render("on_click_create_club.ejs");
 });
+
 
 function setUser(req, res, next) {
     const userEmail = req.body.email; // Assuming email is passed in the request body
@@ -152,6 +193,7 @@ function setUser(req, res, next) {
     }
 }
 
+<<<<<<< HEAD
 app.get("/ezz", (req, res) => {
     connection.query("select * from event where clm_id = 1", (err, result) => {
         if(err){
@@ -185,5 +227,20 @@ app.get("/getOldPicture", (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
+=======
+function clubname(id){
+    connection.query('select club_name from clubs where club_id =' + id, (err, res) => {
+            return res.club_name;
+        
+    });
+}
+>>>>>>> b231fda76cb5f403f7be97d5ea3a74097d7d284b
+
+//listining to the port 
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
+
 
 

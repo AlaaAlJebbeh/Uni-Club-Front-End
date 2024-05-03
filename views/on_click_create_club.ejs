@@ -76,10 +76,10 @@
      
 <section class="container">
     <header>Create Club</header>
-    <form action="#" class="form">
+    <form action="/createclub" class="form">
       <div class="input-box">
         <label style="font-size: medium;" >Club Name</label>
-        <input type="text" placeholder="Enter club name" required />
+        <input type="text" name="name" placeholder="Enter club name" required />
       </div>
   
   
@@ -102,26 +102,31 @@
       </div>
   
       <div class="input-box address">
-        <label style="font-size: medium; ">Manager Info</label>
-        <input type="text" placeholder="Enter manager info" required />
+        <label style="font-size: medium; ">BIO</label>
+        <input type="text" name="bio" placeholder="write your bio" required />
       </div>
   
         <div class="input-box">
-          <label style="font-size: medium;" >Manager ID</label>
-          <input type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Enter manager ID" required />
+          <label style="font-size: medium;" >Contact</label>
+          <input type="text" name="number" inputmode="numeric" pattern="[0-9]*" placeholder="Phone number" required />
           <span class="error-message" style="color: red; display: none;">Please enter only numbers.</span>
         </div>
   
         <div class="input-box">
-          <label style="font-size: medium;" >Password</label>
-          <input type="password" placeholder="Enter password" required />
+          <label style="font-size: medium;" >Social Media</label>
+          <input type="url" name="media1" placeholder="Social Media link" required />
         </div>
   
         <div class="input-box address">
-          <label style="font-size: medium;" >Name</label>
-          <input type="text" placeholder="Enter Manager Name" required />
+          <label style="font-size: medium;" >Social Media </label>
+          <input type="text" name="media2" placeholder="Social Media link" />
         </div>
   
+        <div class="input-box address">
+          <label style="font-size: medium;" >Social Media </label>
+          <input type="text" name="media3" placeholder="Social Media link" />
+        </div>
+
         <div class="input-box">
   <label style="font-size: medium;">Email Address</label>
   <input type="text" id="email" placeholder="Enter email address" required />
@@ -129,8 +134,8 @@
   </div>
   
   
-      <button>Submit</button>
-      <button>Cancel</button>
+      <button type="submit">Submit</button>
+      <button type="reset">Cancel</button>
     </form>
   </section>
       
@@ -211,6 +216,5 @@ window.addEventListener('scroll', function() {
 
 
     </script>
-    <script src="clubs.js"></script>
   </body>
 </html>

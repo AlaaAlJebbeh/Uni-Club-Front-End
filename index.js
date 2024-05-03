@@ -72,6 +72,17 @@ app.get("/myclubpage", authRole(ROLE.club), (req, res) => {
     res.render('myclubpage.ejs', data); 
 });
 
+app.get("/eventRequests", (req, res) => {
+   
+    const data = {
+        pageTitle: 'My Club Page',
+        message: "dfdf"
+        // Add more data as needed
+    };
+
+    res.render('eventRequests.ejs', data); 
+});
+
 app.get("/createclub", (req, res) => {
 
     res.render("on_click_create_club.ejs");

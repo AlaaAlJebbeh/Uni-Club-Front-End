@@ -10,10 +10,12 @@ import { name } from "ejs";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 import {ROLE} from "./data.js"
 import { authRole } from "./authontication.js";
+import bcrypt from "bcrypt";
 
 //Constants
 const app = express();
 const port = 8000;
+
 
 //Body barser use
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
@@ -42,6 +44,13 @@ app.use(express.static("views"));
 // Apply middleware
 app.use(express.json()); // For parsing application/json
 app.use(setUser); // Apply setUser middleware before route handlers
+app.use(express.urlencoded({extended: false}))
+// Set 'ejs' as the view engine
+app.set('view engine', 'ejs');
+
+// Set the views directory
+app.set('views', path.join(__dirname, 'views'));
+
 
 //Rout to home page
 app.get("/", (req, res) => {
@@ -57,8 +66,44 @@ app.get("/register", (req, res) => {
         // Add more data as needed
     };
 
-    res.render('register.ejs', data); 
+    res.render('register', data); 
 });
+
+app.post("/register", async (req,res) =>{
+
+    
+    try{
+        const { name, email, password, role } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10)
+        let tableName = '';
+        if (role === 'clubManager') {
+            tableName = 'club_manager';
+        } else if (role === 'sksAdmin') {
+            tableName = 'sks_admin';
+        } else {
+            return res.status(400).send('Invalid role specified');
+        }
+
+        connection.query(
+            `INSERT INTO ${tableName} (name, password, email ) VALUES (?, ?, ?)`,
+            [name, hashedPassword, email],
+            (error, results, fields) => {
+              if (error) {
+                console.error('Error inserting into database:', error);
+                return res.status(500).send('Failed to register');
+              }
+              res.status(200).send('Registration successful');
+            }
+          );
+
+        console.log("user registered sucssessfully");
+
+    } catch(e){
+        console.log(e);
+    }
+
+})
+
 
 //Route Testing club role
 app.post("/clubRoleTest", authRole(ROLE.club), (req, res) => {
@@ -116,7 +161,6 @@ app.get("/createclub", (req, res) => {
 });
 
 app.post("/createclub", function(req, res){
-
 
     var sql = "INSERT INTO club(club_id, club_name, category, bio, contact, social_media1, social_media2, social_media3, email) VALUES(null, '"+ req.body.name +"', '"+ req.body.cars +"','"+ req.body.bio +"','"+ req.body.contact +"','"+ req.body.media1 +"','"+ req.body.media2 +"','"+ req.body.media3 +"','"+ req.body.email +"')";
     connection.query(sql, [req.body.name, req.body.cars, req.body.bio, req.body.contact, req.body.media1, req.body.media2, req.body.media3, req.body.email], function(error, result){

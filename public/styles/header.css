@@ -6,6 +6,9 @@
     justify-content: center;
     z-index: 1001;
 }
+body{
+    padding-top: 100px;
+}
 
 html{
     font-size: 62.4%;
@@ -22,19 +25,6 @@ html{
     --yellow: #FFD700;
 }
 
-* {
-    font-family: "Roboto Slab", serif;
-    margin: 0;
-    padding:0;
-    box-sizing: border-box;
-    text-transform: capitalize;
-    outline: none;
-    border: none;
-    transition: all .2s linear;
-    text-decoration: none;
-    list-style: none;
-    box-sizing: border-box;
-}
 
 header {
     position: fixed;
@@ -165,24 +155,8 @@ header .search-bar-container label:hover{
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Roboto Slab", serif;;
-}
 
-body{
-    background-color: #7BD3D1;
-    background: linear-gradient(to right, #e2e2e2, #c0f9f8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    height: 100vh;
-}
-
-.container{
+.containerh{
     background-color: #7BD3D1;
     border-radius: 30px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
@@ -193,25 +167,25 @@ body{
     min-height: 480px;
 }
 
-.container p{
+.containerh p{
     font-size: 14px;
     line-height: 20px;
     letter-spacing: 0.3px;
     margin: 20px 0;
 }
 
-.container span{
+.containerh span{
     font-size: 12px;
 }
 
-.container a{
+.containerh a{
     color: #193635;
     font-size: 13px;
     text-decoration: none;
     margin: 15px 0 10px;
 }
 
-.container button{
+.containerh button{
     background-color: #ffd700;
     color: #fff;
     font-size: 12px;
@@ -225,12 +199,12 @@ body{
     cursor: pointer;
 }
 
-.container button.hidden{
+.containerh button.hidden{
     background-color: transparent;
     border-color: #fff;
 }
 
-.container form{
+.containerh form{
     background-color: #fff;
     display: flex;
     align-items: center;
@@ -240,7 +214,7 @@ body{
     height: 100%;
 }
 
-.container input{
+.containerh input{
     background-color: #eee;
     border: none;
     margin: 8px 0;
@@ -264,7 +238,7 @@ body{
     z-index: 2;
 }
 
-.container.active .sign-in{
+.containerh.active .sign-in{
     transform: translateX(100%);
 }
 
@@ -275,7 +249,7 @@ body{
     z-index: 1;
 }
 
-.container.active .sign-up{
+.containerh.active .sign-up{
     transform: translateX(100%);
     opacity: 1;
     z-index: 5;
@@ -320,7 +294,7 @@ body{
     z-index: 1000;
 }
 
-.container.active .toggle-container{
+.containerh.active .toggle-container{
     transform: translateX(-100%);
     border-radius: 0 150px 100px 0;
 }
@@ -338,7 +312,7 @@ body{
     transition: all 0.6s ease-in-out;
 }
 
-.container.active .toggle{
+.containerh.active .toggle{
     transform: translateX(50%);
 }
 
@@ -361,7 +335,7 @@ body{
     transform: translateX(-200%);
 }
 
-.container.active .toggle-left{
+.containerh.active .toggle-left{
     transform: translateX(0);
 }
 
@@ -370,7 +344,7 @@ body{
     transform: translateX(0);
 }
 
-.container.active .toggle-right{
+.containerh.active .toggle-right{
     transform: translateX(200%);
 }
 

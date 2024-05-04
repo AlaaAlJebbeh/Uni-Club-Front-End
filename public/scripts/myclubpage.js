@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
     addClickListener("my-events-link", "my-events-content");
     addClickListener("my-posts-link", "my-posts-content");
     addClickListener("my-status-link", "my-status-content");
+    addClickListener("my-profile-link", "my-profile-content");
 
     // Notification modal functionality
     const notificationLink = document.getElementById("club-notifications-link");

@@ -7,12 +7,15 @@ Color Pallete
 #000000  -> Black
 #FFFFFF  -> White
 */
-html, body {
+html,body {
     height: 100%;
+    min-height: 1000px;
 }
 body {
     display: flex;
     flex-direction: column;
+    margin: 0;
+    padding: 0;
 }
 h1 {
     color: #193635;
@@ -28,12 +31,8 @@ a:active {
     color: #0AB3AD;
     cursor: grabbing;
 }
-.sidebar {
-    /* Positioning */
-    max-width: 350px;
-    width: 80%;
-    
-    /* Styling */
+.sidebar1 {
+    width: 325px; /* Adjust sidebar width as needed */
     background-color: gainsboro;
     border-radius: 5px;
     font-size: 1.5rem;
@@ -41,7 +40,7 @@ a:active {
 }
 
 @media (max-width: 800px) { /* Adjust breakpoint as needed */
-    .sidebar {
+    .sidebar1 {
         display: none;
     }
 }
@@ -53,17 +52,18 @@ a:active {
     box-shadow: 4px 17px 27px -18px rgba(0,0,0,0.81);
     height: 75px;
     align-items: center;
-    font-size: 2.0rem;
+    font-size: 1.5rem;
     padding-left: 30px;
     background: #193635;
     color: #FFFFFF;
+    border-radius: 5px;
 }
 
 
 .items:hover{
     cursor: pointer;
     height: 80px;
-    font-size: 2.35rem;
+    font-size: 1.7rem;
 }
 
 .icon img{
@@ -79,31 +79,9 @@ a:active {
     margin-top: 30px;
 
 }
-.container{
-    flex: 1;
+.container1 {
     display: flex;
-    height: calc(100% + 500px);
-}
-.body{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
     height: 100%;
-    justify-content: center;
-    align-items: center;
-}
-
-.header-club {
-    width: 100%; /* Set width to 100% */
-    max-height: 30%; /* You may adjust the height as needed */
-    display: flex;
-    justify-content: space-around;
-    align-items: center; /* Align items vertically */
-    max-width: 100%; /* Set max-width to 100% */
-    height: 100%;
-    border-bottom: 2px solid rgba(25,54,53,0.2);
-    flex: 1;
-    overflow: auto;
 }
 
 /* Media query for smaller screens */
@@ -113,11 +91,21 @@ a:active {
         font-size: auto; /* Adjust font size as needed */
     }
 }
-.header-body {
+.ContentBody {
     flex: 1;
-    max-height: 700px;
-    background-color:#FFFFFF;
+    background-color: #FFFFFF;
+    padding: 20px; /* Add padding for spacing */
 }
+
+#my-profile-content {
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.5);
+    background-position: center;
+    height: 100%; /* Ensure it takes the full height of the ContentBody */
+    display: flex;
+}
+  
 
 .cnt1 img {
     max-width: 100px;
@@ -132,6 +120,7 @@ a:active {
     size: 5px;
     background-color: #193635;
     margin-bottom: 10px;
+    color: white !important;
 }
 .cnt1 button:hover{
     cursor: pointer;
@@ -140,12 +129,9 @@ a:active {
 
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    align-items: baseline;
-    justify-content: center;
-    font-size: 1.2rem;
+    align-items: baseline;  
+    font-size: 1rem;
     max-width: 300px;
-    margin-top: 20px;
 
 }
 .cnt3 {
@@ -178,13 +164,11 @@ a:active {
     }
 }
 
-
 .cnt4{
     display: flex;
     flex-direction: column;
     font-size: 1.75rem;
-    gap: 10px
-    ;
+    gap: 10px;
 }
 .contact-info{
     display: flex;
@@ -196,7 +180,6 @@ a:active {
     margin-right: 5px;
 }
 .contact-info div {
-    background-color: lightgray;
     padding: 5px;
 }
 .socialmedia-links img{
@@ -204,11 +187,110 @@ a:active {
     margin-right: 20px;
 }
 
+.socialmedia-links button{
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    align-self: center;
+    border: none;
+}
 .card-container {
     display: flex;
     align-items: start;
     flex: 1;
     margin-bottom: 20px;
+}
+
+.card{
+    background-color: #d3d3d3;
+    border: 5px solid black;
+    margin: 70px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    max-width: 400px;
+}
+
+.image-container{
+    width: 100%;
+    height: 65%;
+    position: relative;
+    border-bottom: 5px solid black;
+}
+.text-container{
+    width: 100%;
+    height: 35%;
+    background-color: whitesmoke;
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 10px;
+    padding-left: 2px;
+    font-size: 1.65vh;
+}
+.card-details span{
+    font-size: 1.9vh;
+    margin-right: 10px;
+    font-weight: 600;
+}
+
+.text-container > div{
+    flex: 50%;
+}
+
+
+.image-container img{
+    width: 100%;
+    height: 100%;
+}
+
+.Active{
+    position: absolute;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background-color: green;
+    top: 1px;
+    right: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*------ FONT RELATED -----*/
+    font-size: 2vh;
+    color: white;
+    font-weight: 600;
+}
+.not-active{
+    position: absolute;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background-color: orange;
+    top: 1px;
+    right: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*------ FONT RELATED -----*/
+    font-size: 2vh;
+    color: white;
+    font-weight: 600;
+}
+
+.canceled{
+    position: absolute;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    background-color: red;
+    top: 1px;
+    right: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*------ FONT RELATED -----*/
+    font-size: 2vh;
+    color: white;
+    font-weight: 600;
 }
 
 

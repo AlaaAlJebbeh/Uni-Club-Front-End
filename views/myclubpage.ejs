@@ -25,200 +25,161 @@
     <!--Header-->
     <header><%- include("partials/header.ejs") %></header>
     <!--My Club Header Part-->
-    <div class="container">
-      <div class="sidebar">
-        <div class="above-container">
-          <div class="items">
-            <div class="icon">
-              <img src="../public/images/myClubAssets/profile33.png" />
-            </div>
-            <a href="#" id="my-profile-link">My Profile</a>
+    <div class="container1">
+      <div class="sidebar1">
+        <div class="items">
+          <div class="icon">
+            <img src="../public/images/myClubAssets/profile33.png" />
           </div>
-          <div class="items">
-            <div class="icon">
-              <img src="../public/images/myClubAssets/event2.png" />
-            </div>
-            <a href="#" id="my-events-link">My Events</a>
+          <a href="#" id="my-profile-link">My Profile</a>
+        </div>
+        <div class="items">
+          <div class="icon">
+            <img src="../public/images/myClubAssets/event2.png" />
           </div>
-          <div class="items">
-            <div class="icon">
-              <img src="../public/images/myClubAssets/post2.png" />
-            </div>
-            <a href="#" id="my-posts-link">My Posts</a>
+          <a href="#" id="my-events-link">My Events</a>
+        </div>
+        <div class="items">
+          <div class="icon">
+            <img src="../public/images/myClubAssets/post2.png" />
           </div>
-          <div class="items" id="status-item">
-            <div class="icon">
-              <img src="../public/images/myClubAssets/status.png" />
-            </div>
-            <a href="#" id="my-status-link">Status Manager</a>
+          <a href="#" id="my-posts-link">My Posts</a>
+        </div>
+        <div class="items" id="status-item">
+          <div class="icon">
+            <img src="../public/images/myClubAssets/status.png" />
           </div>
-          <div class="items">
-            <div class="icon">
-              <img src="../public/images/myClubAssets/notification.png" />
-            </div>
-            <a href="#" id="club-notifications-link">Club Notifications</a>
+          <a href="#" id="my-status-link">Status Manager</a>
+        </div>
+        <div class="items">
+          <div class="icon">
+            <img src="../public/images/myClubAssets/notification.png" />
           </div>
+          <a href="#" id="club-notifications-link">Club Notifications</a>
         </div>
       </div>
-      <div class="body">
-        <div class="header-club">
+      <div class="ContentBody">
+        <div
+          id="my-profile-content"
+          class="content-section"
+          style="
+            background-image: url(../public/images/myClubAssets/barca.png);
+            display: block;
+          "
+        >
           <div class="cnt1">
             <div class="logo-side">
-              <img src="../public/images/myClubAssets/clublogo.png" />
+              <img src="../public/images/pixel.jpg" alt="Image not loading" />
             </div>
             <button>Upload</button>
           </div>
           <div class="cnt2">
-            <h1>Club Name</h1>
-            <h2>Club manager</h2>
-            <h2>Category</h2>
+            <h1>Club Name: <br /><%=clubInformation[0].club_name%></h1>
+            <h2>Club manager <br /><%= name[0].name %></h2>
+            <h2>
+              Category: <Strong><%=clubInformation[0].category %></Strong>
+            </h2>
           </div>
           <div class="cnt3">
             <h2>BIO:</h2>
             <div class="bio-textbox" placeholder="Enter your bio here">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore
-              ullam cumque, debitis eveniet suscipit sint nihil modi unde cum
-              quos atque, delectus vitae consequatur ut corporis cupiditate
-              ipsum, culpa perspiciatis.
+              <%=clubInformation[0].bio %>
             </div>
           </div>
           <div class="cnt4">
             <h2>Social Media / Contact Info</h2>
             <div class="contact-info">
               <img src="../public/images/myClubAssets/email.png" />
-              <div class="Email">example@example.com</div>
+              <div class="Email"><%= clubInformation[0].email %></div>
             </div>
             <div class="socialmedia-links">
-              <img src="../public/images/myClubAssets/insta.png" />
-              <img src="../public/images/myClubAssets/facebook.png" />
-              <img src="../public/images/myClubAssets/tiktok.png" />
+              <a href="/socialmedia/<%=clubInformation[0].social_media1 %>">
+                <button>
+                  <img src="../public/images/myClubAssets/facebook.png" />
+                </button>
+              </a>
+              <a href="/socialmedia/<%=clubInformation[0].social_media2 %>">
+                <button>
+                  <img src="../public/images/myClubAssets/insta.png" />
+                </button> </a
+              ><a href="/socialmedia/<%=clubInformation[0].social_media3 %>">
+                <button>
+                  <img src="../public/images/myClubAssets/tiktok.png" />
+                </button>
+              </a>
             </div>
           </div>
         </div>
-        <div class="header-body">
-          <div
-            id="my-events-content"
-            class="content-section"
-            style="display: none"
-          >
-            <div class="card-container">
-              <div class="card">
-                <div class="image-container">
-                  <img src="../public/images/myClubAssets/img1.png" />
+        <div
+          id="my-events-content"
+          class="content-section"
+          style="display: none"
+        >
+          <div class="card-container">
+            <div class="card">
+              <div class="image-container">
+                <img src="../public/images/myClubAssets/img1.png" />
 
-                  <div class="Active">Active</div>
-                </div>
-                <div class="text-container">
-                  <div class="card-details">
-                    <span>Club Name:</span> Pixel Club
-                  </div>
-                  <div class="card-details">
-                    <span>Event Name:</span> Trivia Event
-                  </div>
-                  <div class="card-details"><span>Date:</span> 12/04/2024</div>
-                  <div class="card-details"><span>Time:</span> 13:45</div>
-                  <div class="card-details">
-                    <span>Location:</span> Main campus
-                  </div>
-                  <div class="card-details"><span>Language:</span> English</div>
-                  <div class="card-details"><span>guest:</span> NONE</div>
-                  <div class="card-details">
-                    <span>Description:</span> Fun Trivia Event
-                  </div>
-                  <div class="card-details"><span>Capacity:</span> 200+</div>
-                  <div class="card-details"><span>Notes:</span> Have Fun!</div>
-                </div>
+                <div class="Active">Active</div>
               </div>
-              <div class="card">
-                <div class="image-container">
-                  <img src="../public/images/myClubAssets/img1.png" />
-
-                  <div class="Active">Active</div>
+              <div class="text-container">
+                <div class="card-details">
+                  <span>Club Name:</span> Pixel Club
                 </div>
-                <div class="text-container">
-                  <div class="card-details">
-                    <span>Club Name:</span> Pixel Club
-                  </div>
-                  <div class="card-details">
-                    <span>Event Name:</span> Trivia Event
-                  </div>
-                  <div class="card-details"><span>Date:</span> 12/04/2024</div>
-                  <div class="card-details"><span>Time:</span> 13:45</div>
-                  <div class="card-details">
-                    <span>Location:</span> Main campus
-                  </div>
-                  <div class="card-details"><span>Language:</span> English</div>
-                  <div class="card-details"><span>guest:</span> NONE</div>
-                  <div class="card-details">
-                    <span>Description:</span> Fun Trivia Event
-                  </div>
-                  <div class="card-details"><span>Capacity:</span> 200+</div>
-                  <div class="card-details"><span>Notes:</span> Have Fun!</div>
+                <div class="card-details">
+                  <span>Event Name:</span> Trivia Event
                 </div>
-              </div>
-              <div class="card">
-                <div class="image-container">
-                  <img src="../public/images/myClubAssets/img1.png" />
-
-                  <div class="Active">Active</div>
+                <div class="card-details"><span>Date:</span> 12/04/2024</div>
+                <div class="card-details"><span>Time:</span> 13:45</div>
+                <div class="card-details">
+                  <span>Location:</span> Main campus
                 </div>
-                <div class="text-container">
-                  <div class="card-details">
-                    <span>Club Name:</span> Pixel Club
-                  </div>
-                  <div class="card-details">
-                    <span>Event Name:</span> Trivia Event
-                  </div>
-                  <div class="card-details"><span>Date:</span> 12/04/2024</div>
-                  <div class="card-details"><span>Time:</span> 13:45</div>
-                  <div class="card-details">
-                    <span>Location:</span> Main campus
-                  </div>
-                  <div class="card-details"><span>Language:</span> English</div>
-                  <div class="card-details"><span>guest:</span> NONE</div>
-                  <div class="card-details">
-                    <span>Description:</span> Fun Trivia Event
-                  </div>
-                  <div class="card-details"><span>Capacity:</span> 200+</div>
-                  <div class="card-details"><span>Notes:</span> Have Fun!</div>
+                <div class="card-details"><span>Language:</span> English</div>
+                <div class="card-details"><span>guest:</span> NONE</div>
+                <div class="card-details">
+                  <span>Description:</span> Fun Trivia Event
                 </div>
+                <div class="card-details"><span>Capacity:</span> 200+</div>
+                <div class="card-details"><span>Notes:</span> Have Fun!</div>
               </div>
             </div>
-            <!-- Content for My Events -->
           </div>
-          <div
-            id="my-posts-content"
-            class="content-section"
-            style="display: none"
-          >
-            POSTS SECTION
-            <!-- Content for My Events -->
-          </div>
-          <div
-            id="my-status-content"
-            class="content-section"
-            style="display: none"
-          ></div>
-          <div
-            id="my-notification-content"
-            class="content-section"
-            style="display: none"
-          >
-            <!-- Notification Popup Modal -->
-            <div id="notificationModal" class="modal">
-              <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Notifications</h2>
-                <ul id="notificationList">
-                  <!-- Notification items will be added here dynamically -->
-                </ul>
-              </div>
+          <!-- Content for My Events -->
+        </div>
+        <div
+          id="my-posts-content"
+          class="content-section"
+          style="display: none"
+        >
+          POSTS SECTION
+          <!-- Content for My Events -->
+        </div>
+        <div
+          id="my-status-content"
+          class="content-section"
+          style="display: none"
+        ></div>
+        <div
+          id="my-notification-content"
+          class="content-section"
+          style="display: none"
+        >
+          <!-- Notification Popup Modal -->
+          <div id="notificationModal" class="modal">
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <h2>Notifications</h2>
+              <ul id="notificationList">
+                Notifications
+              </ul>
             </div>
-            <script src="../public/scripts/myclubpage.js"></script>
           </div>
+          <script src="../public/scripts/myclubpage.js"></script>
         </div>
       </div>
     </div>
+    <footer><%- include("partials/footer.ejs") %></footer>
+
     <!--Footer-->
     <!--Font Linking-->
     <script>
@@ -230,6 +191,6 @@
         searchBar.classList.toggle("active");
       });
     </script>
-    <script src="/Uni-Club-Front-End/public/scripts/myclubpage.js"></script>
+    <script src="../public/scripts/myclubpage.js"></script>
   </body>
 </html>

@@ -117,7 +117,8 @@ app.post("/clubRoleTest", authRole(ROLE.club), (req, res) => {
     res.render('clubRoleTest.ejs', data); 
 });
 
-//Route my clubPage (club role)
+/*
+//Rout my clubPage (club role)
 app.post("/myclubpage", authRole(ROLE.club), (req, res) => {
    
     const data = {
@@ -129,16 +130,48 @@ app.post("/myclubpage", authRole(ROLE.club), (req, res) => {
     res.render('myclubpage.ejs', data); 
 });
 
+*/
+app.get("/myclubpage", (req, res) => {
+    connection.query("SELECT * FROM club WHERE club_id = 1", (err, clubInformation) => {
+        if (err) {
+            console.error("Error fetching club information:", err);
+            return res.status(500).send("Internal Server Error");
+        }
 
-app.get("/myclubpage", authRole(ROLE.club), (req, res) => {
-   
-    const data = {
-        pageTitle: 'My Club Page',
-        message: "dfdf"
-        // Add more data as needed
-    };
+        connection.query("SELECT IMAGE_ID FROM IMG_CLUB WHERE club_id = 1", (err, imageID) => {
+            if (err) {
+                console.error("Error fetching image ID:", err);
+                return res.status(500).send("Internal Server Error");
+            }
 
-    res.render('myclubpage.ejs', data); 
+            const imageIDValue = imageID.length > 0 ? imageID[0].IMAGE_ID : null;
+
+            if (!imageIDValue) {
+                console.error("No image ID found for club");
+                return res.status(404).send("Image not found");
+            }
+
+            connection.query("SELECT IMG_URL FROM UPLOADED_IMG WHERE IMAGE_ID = ?", imageIDValue, (err, ImageURL) => {
+                if (err) {
+                    console.error("Error fetching image URL:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+
+                res.render("myclubpage.ejs", { clubInformation, ImageURL });
+            });
+        });
+    });
+});
+
+
+//to open social media link sin the database
+app.get("/socialmedia/:link",(req, res) => {
+    
+    res.redirect("https://" + req.params.link);
+});
+app.get("/socialmedia/:link/:link2",(req, res) => {
+    
+    res.redirect("https://" + req.params.link + "/" +req.params.link2);
 });
 
 //Route eventRequests 
@@ -249,7 +282,6 @@ function setUser(req, res, next) {
     }
 }
 
-<<<<<<< HEAD
 app.get("/ezz", (req, res) => {
     connection.query("select * from event where clm_id = 1", (err, result) => {
         if(err){
@@ -279,19 +311,6 @@ app.get("/getOldPicture", (req, res) => {
     });
   });
   
-
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
-
-=======
-function clubname(id){
-    connection.query('select club_name from clubs where club_id =' + id, (err, res) => {
-            return res.club_name;
-        
-    });
-}
->>>>>>> b231fda76cb5f403f7be97d5ea3a74097d7d284b
 
 //listining to the port 
 app.listen(port, () => {

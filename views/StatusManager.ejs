@@ -99,8 +99,8 @@
             </tr>
           </thead>
           <tbody>
-            <% tempResult.forEach(function(item,index){ %> <% let items = []; %>
-            <% items.push(item); %>
+            <% let index; %> <% tempResult.forEach(function(item,index){ %> <%
+            let items = []; %> <% items.push(item); %>
             <tr>
               <td>
                 <h4 style="color: black"><%=clubNames[index]%></h4>
@@ -114,7 +114,11 @@
                 <button class="reject-button">Reject</button>
               </td>
               <td>
-                <button class="details-button" id="<%=index+1%>">
+                <button
+                  class="details-button"
+                  onclick="showDetails(<%= index %>)"
+                  data-club-id="<%= item.club_id %>"
+                >
                   <img src="Details.png" alt="Button Image" />
                 </button>
               </td>
@@ -124,21 +128,23 @@
         </table>
       </section>
 
-      <div
-        id="popup"
-        class="popup-card"
-        style="display: none"
-        style="margin: auto"
-      >
+      <div id="popup" class="popup-card" style="display: none">
         <div class="wrapper">
           <div class="flip-card">
             <div class="front card">
               <table class="custom-table">
                 <tr>
                   <td class="column1">
-                    <p id="beforetext"><%= items[1].club_name %></p>
+                    <% if (tempResult[index - 1] && tempResult[index -
+                    1].requestType === 'newimg') { %>
+                    <img
+                      src="<%= tempResult[index - 1].newImage %>"
+                      alt="Old Image"
+                    />
+                    <% } else { %>
+                    <p id="beforetext"></p>
+                    <% } %>
                   </td>
-
                   <td class="column2">
                     <p id="after"></p>
                   </td>
@@ -149,6 +155,7 @@
         </div>
         <button id="closeButton" onclick="closePopup()">Close</button>
       </div>
+
       <div id="reject" class="reject-card1">
         <input
           type="text"
@@ -158,6 +165,28 @@
         <button id="sendButton">Send</button>
         <button id="closeButton2" onclick="closePopup2()">Close</button>
       </div>
+      <script>
+        function showDetails(index) {
+          // Retrieve the club ID from the button's data attribute
+          var clubId = document
+            .querySelector(`.details-button[data-club-id="${index}"]`)
+            .getAttribute("data-club-id");
+
+          // Fetch the old picture URL from the club table using AJAX
+          fetch(`/getOldPicture?clubId=${clubId}`)
+            .then((response) => response.json())
+            .then((data) => {
+              // Display the old picture URL in the popup
+              document.getElementById("beforetext").innerText = data.image;
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+
+          // Show the popup
+          document.getElementById("popup").style.display = "block";
+        }
+      </script>
 
       <script>
         // Function to show the popup card

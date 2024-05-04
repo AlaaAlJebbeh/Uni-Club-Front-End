@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--Font Linking-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!--Style Linking-->
+
+    <link rel="stylesheet" href="../public/styles/showingezz.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!--Header-->
+
+    <!--My Club Header Part-->
+
+    <div class="body">
+      <div class="header-club">
+        <div class="cnt1">
+          <div class="logo-side">
+            <img src="codyle.jpg" id="club-logo" />
+          </div>
+        </div>
+        <div class="cnt2">
+          <h1>Codyle</h1>
+          <h2>Manager: Mohammed Soqar</h2>
+          <h2>Category: Software engineering</h2>
+        </div>
+        <div class="cnt3">
+          <h2>BIO:</h2>
+          <div class="bio-textbox" placeholder="Enter your bio here">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores
+              ab assumenda exercitationem modi?
+            </p>
+          </div>
+        </div>
+        <div class="cnt4">
+          <h2>Social Media / Contact Info</h2>
+          <div class="contact-info">
+            <div class="social-media">
+              <i class="far fa-envelope" style="font-size: 36px"></i>
+            </div>
+            <div class="Email">codyle@uskudar.edu.tr</div>
+          </div>
+          <div class="social-media">
+            <a
+              href="https://www.facebook.com/uskudarsks/"
+              target="_blank"
+              class="icon"
+              ><i class="fa-brands fa-facebook-f"></i
+            ></a>
+            <a
+              href="https://www.instagram.com/cscuskudar?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              target="_blank"
+              class="icon"
+              ><i class="fa-brands fa-instagram"></i
+            ></a>
+            <a
+              href="https://www.youtube.com/channel/UCBKDuZsuc4et2e3IE_hYsBw"
+              target="_blank"
+              class="icon"
+              ><i class="fa-brands fa-youtube"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+
+      <!---->
+      <div class="container">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-6">
+              <% result.forEach((item) => { %>
+              <div class="container">
+                <div class="card">
+                  <div class="imgBx">
+                    <img src="images/img-1.jpg" alt="" />
+                  </div>
+                  <div class="contentBx">
+                    <div class="content">
+                      <h2>Club Name: <%=clubname[0].club_name%></h2>
+                      <br />
+                      <h2><%=item.event_name %></h2>
+                      <br />
+                      <h6>Date: <span><%=item.date %></span></h6>
+                      <h6>Time: <span><%=item.time%></span></h6>
+                      <h6>Location: <span><%=item.location %></span></h6>
+                      <h6>Language: <span><%=item.langauge %></span></h6>
+                      <h6>Guest: <span><%=item.guest_name %></span></h6>
+                      <h6>Description: <span><%=item.description %></span></h6>
+                      <h6>Capacity: <span><%=item.capacity %></span></h6>
+                      <h6>Notes: <span><%=item.notes %></span></h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Font Linking-->
+    <script>
+      let searchBtn = document.querySelector("#search-btn");
+      let searchBar = document.querySelector(".search-bar-container");
+
+      searchBtn.addEventListener("click", () => {
+        searchBtn.classList.toggle("fa-times");
+        searchBar.classList.toggle("active");
+      });
+    </script>
+    <script src="../public/scripts/showingezz.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

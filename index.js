@@ -119,15 +119,29 @@ app.post("/clubRoleTest", authRole(ROLE.club), (req, res) => {
     res.render('clubRoleTest.ejs', data); 
 });
 
+/*
+//Rout my clubPage (club role)
+app.post("/myclubpage", authRole(ROLE.club), (req, res) => {
+   
+    const data = {
+        pageTitle: 'My Club Page',
+        message: "dfdf"
+        // Add more data as needed
+    };
 
-app.get("/myclubpage", authRole(ROLE.club), (req, res) => {
-    connection.query("SELECT * FROM club WHERE club_id = 1", (err, clubInformation) => {
+    res.render('myclubpage.ejs', data); 
+});
+
+*/
+app.get("/myclubpage", (req, res) => {
+    const clubID = 1;
+    connection.query("SELECT * FROM club WHERE club_id = " + clubID, (err, clubInformation) => {
         if (err) {
             console.error("Error fetching club information:", err);
             return res.status(500).send("Internal Server Error");
         }
 
-        connection.query("SELECT IMAGE_ID FROM IMG_CLUB WHERE club_id = 1", (err, imageID) => {
+        connection.query("SELECT IMAGE_ID FROM IMG_CLUB WHERE club_id = " + clubID, (err, imageID) => {
             if (err) {
                 console.error("Error fetching image ID:", err);
                 return res.status(500).send("Internal Server Error");
@@ -145,8 +159,14 @@ app.get("/myclubpage", authRole(ROLE.club), (req, res) => {
                     console.error("Error fetching image URL:", err);
                     return res.status(500).send("Internal Server Error");
                 }
-
-                res.render("myclubpage.ejs", { clubInformation, ImageURL });
+                connection.query("select name from club_manager where club_id = ?",[clubID], (err, name) => {
+                    
+                    if (err) {
+                        console.error("Error fetching Club manager name:", err);
+                        return res.status(500).send("Internal Server Error");
+                    }
+                    res.render("myclubpage.ejs", { clubInformation, ImageURL, name });
+                });
             });
         });
     });

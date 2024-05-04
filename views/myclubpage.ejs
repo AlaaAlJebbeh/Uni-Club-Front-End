@@ -23,6 +23,7 @@
   </head>
   <body>
     <!--Header-->
+    <header><%- include("partials/header.ejs") %></header>
     <!--My Club Header Part-->
     <div class="container1">
       <div class="sidebar1">
@@ -68,13 +69,13 @@
         >
           <div class="cnt1">
             <div class="logo-side">
-              <img src="<%=ImageURL.img_url%>" />
+              <img src="../public/images/pixel.jpg" alt="Image not loading" />
             </div>
             <button>Upload</button>
           </div>
           <div class="cnt2">
             <h1>Club Name: <br /><%=clubInformation[0].club_name%></h1>
-            <h2>Club manager</h2>
+            <h2>Club manager <br /><%= name[0].name %></h2>
             <h2>
               Category: <Strong><%=clubInformation[0].category %></Strong>
             </h2>
@@ -82,7 +83,7 @@
           <div class="cnt3">
             <h2>BIO:</h2>
             <div class="bio-textbox" placeholder="Enter your bio here">
-              <%= clubInformation[0].bio %>
+              <%=clubInformation[0].bio %>
             </div>
           </div>
           <div class="cnt4">
@@ -177,6 +178,8 @@
         </div>
       </div>
     </div>
+    <footer><%- include("partials/footer.ejs") %></footer>
+
     <!--Footer-->
     <!--Font Linking-->
     <script>
@@ -188,6 +191,6 @@
         searchBar.classList.toggle("active");
       });
     </script>
-    <script src="/Uni-Club-Front-End/public/scripts/myclubpage.js"></script>
+    <script src="../public/scripts/myclubpage.js"></script>
   </body>
 </html>

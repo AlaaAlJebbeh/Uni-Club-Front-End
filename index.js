@@ -11,6 +11,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 import {ROLE} from "./data.js"
 import { authRole } from "./authontication.js";
 import bcrypt from "bcrypt";
+import fetch from "node-fetch";
 
 //Constants
 const app = express();
@@ -50,6 +51,7 @@ app.set('view engine', 'ejs');
 
 // Set the views directory
 app.set('views', path.join(__dirname, 'views'));
+app.use(express.json());
 
 
 //Rout to home page
@@ -73,7 +75,7 @@ app.post("/register", async (req,res) =>{
 
     
     try{
-        const { name, email, password, role } = req.body;
+        const { name, password, email, university_id, role } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10)
         let tableName = '';
         if (role === 'clubManager') {
@@ -85,8 +87,8 @@ app.post("/register", async (req,res) =>{
         }
 
         connection.query(
-            `INSERT INTO ${tableName} (name, password, email ) VALUES (?, ?, ?)`,
-            [name, hashedPassword, email],
+            `INSERT INTO ${tableName} (name, password, email, uni_id ) VALUES (?, ?, ?, ?)`,
+            [name, hashedPassword, email, university_id],
             (error, results, fields) => {
               if (error) {
                 console.error('Error inserting into database:', error);
@@ -117,21 +119,8 @@ app.post("/clubRoleTest", authRole(ROLE.club), (req, res) => {
     res.render('clubRoleTest.ejs', data); 
 });
 
-/*
-//Rout my clubPage (club role)
-app.post("/myclubpage", authRole(ROLE.club), (req, res) => {
-   
-    const data = {
-        pageTitle: 'My Club Page',
-        message: "dfdf"
-        // Add more data as needed
-    };
 
-    res.render('myclubpage.ejs', data); 
-});
-
-*/
-app.get("/myclubpage", (req, res) => {
+app.get("/myclubpage", authRole(ROLE.club), (req, res) => {
     connection.query("SELECT * FROM club WHERE club_id = 1", (err, clubInformation) => {
         if (err) {
             console.error("Error fetching club information:", err);
@@ -278,7 +267,7 @@ function setUser(req, res, next) {
             next();
         });
     } else {
-        next();
+        next(); // Proceed to next middleware if no userEmail is provided
     }
 }
 

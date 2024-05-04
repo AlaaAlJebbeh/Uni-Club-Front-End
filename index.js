@@ -291,7 +291,6 @@ function setUser(req, res, next) {
     }
 }
 
-
 app.get("/ezz", (req, res) => {
     connection.query("select * from event where clm_id = 1", (err, result) => {
         if(err){
@@ -321,19 +320,6 @@ app.get("/getOldPicture", (req, res) => {
     });
   });
   
-
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
-
-
-function clubname(id){
-    connection.query('select club_name from clubs where club_id =' + id, (err, res) => {
-            return res.club_name;
-        
-    });
-}
-
 
 //listining to the port 
 app.listen(port, () => {

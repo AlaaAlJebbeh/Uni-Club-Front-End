@@ -48,7 +48,19 @@ app.get("/", (req, res) => {
     res.render("home.ejs"); 
 });
 
-//Rout Testing club role
+//Route Register user
+app.get("/register", (req, res) => {
+   
+    const data = {
+        pageTitle: 'User Registration ',
+        message: "Register user"
+        // Add more data as needed
+    };
+
+    res.render('register.ejs', data); 
+});
+
+//Route Testing club role
 app.post("/clubRoleTest", authRole(ROLE.club), (req, res) => {
    
     const data = {
@@ -60,7 +72,7 @@ app.post("/clubRoleTest", authRole(ROLE.club), (req, res) => {
     res.render('clubRoleTest.ejs', data); 
 });
 
-//Rout my clubPage (club role)
+//Route my clubPage (club role)
 app.post("/myclubpage", authRole(ROLE.club), (req, res) => {
    
     const data = {

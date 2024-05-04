@@ -193,7 +193,7 @@ function setUser(req, res, next) {
     }
 }
 
-<<<<<<< HEAD
+
 app.get("/ezz", (req, res) => {
     connection.query("select * from event where clm_id = 1", (err, result) => {
         if(err){
@@ -228,14 +228,14 @@ app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 
-=======
+
 function clubname(id){
     connection.query('select club_name from clubs where club_id =' + id, (err, res) => {
             return res.club_name;
         
     });
 }
->>>>>>> b231fda76cb5f403f7be97d5ea3a74097d7d284b
+
 
 //listining to the port 
 app.listen(port, () => {

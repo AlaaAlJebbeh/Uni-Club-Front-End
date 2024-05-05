@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Adjust as needed */
+  height: 300px; /* Adjust as needed */
 }
 
 .card {
@@ -12,19 +12,19 @@
 }
 
 .imgBx {
-  width: 400px;
-  height: 300px;
+  width: 500px;
+  height: 250px;
   flex: 1;
 }
 
 .imgBx img {
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: 90%;
   object-fit: cover;
 }
 
 .contentBx {
-  width: 400px;
+  width: 500px;
   background: #ffd700;
   padding: 20px 60px 20px 100px;
   flex: 1;

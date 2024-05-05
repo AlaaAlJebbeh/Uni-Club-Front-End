@@ -117,7 +117,7 @@ li a{
 
 .container{
     position: relative;
-    max-width: 1000px;
+    max-width: auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -148,7 +148,7 @@ li a{
 .container .card .imgBx{
     position: relative;
     left: 25px;
-    width: 600px;
+    width: 1000px;
     height: 350px;
     z-index: 1;
 }
@@ -170,9 +170,9 @@ li a{
 .container .card .contentBx{
     position: relative;
     right: 25px;
-    width: 500px;
+    width: 1500px;
     height: 400px;
-    background: #ffd700;
+    background: #02afae;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -192,12 +192,12 @@ li a{
     bottom: -50px;
     left: 0;
     right: 0;
-    background: #ffd700;
+    background: #02afae;
     z-index: -1;
 }
 
 .container .card .contentBx h2{
-    font-size: 30px;
+    font-size: 45px;
     color: #000;
 }
 

@@ -1,4 +1,4 @@
-// Function to add click listeners to links
+
 function addClickListener(linkId, contentId) {
     const link = document.getElementById(linkId);
     const content = document.getElementById(contentId);
@@ -10,7 +10,7 @@ function addClickListener(linkId, contentId) {
     });
 }
 
-// Function to hide all content sections
+
 function hideAllContentSections() {
     const allContentSections = document.querySelectorAll(".content-section");
     allContentSections.forEach(section => {
@@ -18,7 +18,7 @@ function hideAllContentSections() {
     });
 }
 
-// Initialize event listeners on DOMContentLoaded
+
 document.addEventListener("DOMContentLoaded", function() {
     addClickListener("my-events-link", "my-events-content");
     addClickListener("my-posts-link", "my-posts-content");
@@ -56,13 +56,4 @@ document.addEventListener("DOMContentLoaded", function() {
             notificationList.appendChild(li);
         });
     }
-});
-
-// Search bar functionality
-let searchBtn1 = document.querySelector("#search-btn");
-let searchBar = document.querySelector(".search-bar-container");
-
-searchBtn1.addEventListener("click", () => {
-    searchBtn1.classList.toggle("fa-times");
-    searchBar.classList.toggle("active");
 });

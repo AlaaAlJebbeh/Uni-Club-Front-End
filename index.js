@@ -5,13 +5,8 @@ import { fileURLToPath } from "url";
 import path  from "path";
 import mysql from "mysql";
 import bodyParser from "body-parser";
-import { constrainedMemory } from "process";
-import { name } from "ejs";
 const __dirname = dirname(fileURLToPath(import.meta.url));
-import {ROLE} from "./data.js"
-import { authRole } from "./authontication.js";
-import bcrypt from "bcrypt";
-import fetch from "node-fetch";
+import session from "express-session";
 
 //Constants
 const app = express();
@@ -44,15 +39,69 @@ app.use('/views', express.static(path.join(__dirname, '/views')));
 app.use(express.static("views"));
 // Apply middleware
 app.use(express.json()); // For parsing application/json
-app.use(setUser); // Apply setUser middleware before route handlers
-app.use(express.urlencoded({extended: false}))
-// Set 'ejs' as the view engine
 app.set('view engine', 'ejs');
-
 // Set the views directory
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}));
+
+app.get('/', (req, res) => {
+    if (req.session.loggedin) {
+        if (req.session.role === 'club') {
+            res.render('home', { loggedIn: true });
+        } else if (req.session.role === 'sks') {
+            res.render('home', { loggedIn: true });
+        }
+    } else {
+        res.render('home', { loggedIn: false });
+    }
+});
+
+app.post('/login', (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    if (email && password) {
+        connection.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (err, results) => {
+            if (results.length > 0) {
+                req.session.loggedin = true;
+                req.session.email = email;
+                req.session.role = results[0].role; // Add this line
+                res.render('home', { loggedIn: true });
+            } else {
+                res.send('Incorrect email and/or password!');
+            }
+            res.end();
+        });
+    } else {
+        res.send('Please enter email and password!');
+        res.end();
+    }
+});
+
+// Render header with loggedIn status
+app.get('/header', (req, res) => {
+    res.render('partials/header', { loggedIn: req.session.loggedin });
+});
+
+// Add a logout route
+app.get('/logout', (req, res) => {
+    // Clear the session
+    req.session.destroy(err => {
+        if (err) {
+            console.log(err);
+        } else {
+            // Redirect to the login page
+            res.render('home', { loggedIn: false });
+        }
+    });
+});
 
 //Rout to home page
 app.get("/", (req, res) => {
@@ -106,18 +155,10 @@ app.post("/register", async (req,res) =>{
 
 })
 
-
-//Route Testing club role
-app.post("/clubRoleTest", authRole(ROLE.club), (req, res) => {
-   
-    const data = {
-        pageTitle: 'Club Role Test ',
-        message: "You did it"
-        // Add more data as needed
-    };
-
-    res.render('clubRoleTest.ejs', data); 
+app.get('/f', (req, res) => {
+    res.send("F* this");
 });
+
 
 /*
 //Rout my clubPage (club role)
@@ -264,32 +305,6 @@ app.get("/on_click_create_club", (req, res) => {
     res.render("on_click_create_club.ejs");
 });
 
-
-function setUser(req, res, next) {
-    const userEmail = req.body.email; // Assuming email is passed in the request body
-    console.log('Received userEmail:', userEmail);
-
-    if (userEmail) {
-        const query = `SELECT user_id, email, ROLE FROM users WHERE email = ?`;
-        connection.query(query, [userEmail], (err, results) => {
-            if (err) {
-                console.error('Error retrieving user from database:', err);
-                return res.status(500).send('Internal Server Error');
-            }
-
-            if (results.length > 0) {
-                req.user = results[0];
-                console.log('User found:', req.user);
-            } else {
-                console.log('User not found for email:', userEmail);
-            }
-
-            next();
-        });
-    } else {
-        next(); // Proceed to next middleware if no userEmail is provided
-    }
-}
 
 app.get("/ezz", (req, res) => {
     connection.query("select * from event where clm_id = 1", (err, result) => {

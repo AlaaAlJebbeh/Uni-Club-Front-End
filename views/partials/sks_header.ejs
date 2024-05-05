@@ -36,7 +36,7 @@
                   <a href="">Content Manager</a>
                 </li>
                 <li>
-                  <a href="">Event Requests</a>
+                  <a href="/eventRequests">Event Requests</a>
                 </li>
                 <li>
                   <a href="">Club Manager</a>
@@ -47,15 +47,11 @@
         <div class="icons">
             <div class="icons">
                 <i class="fas fa-search " id="search-btn"></i>
-                <% if (loggedIn) { %>
-                    <!-- If user is logged in, show logout button -->
                     <form action="/logout" method="GET">
-                        <button type="submit">Logout</button>
+                      <button type="submit">Logout</button>
+                      <i class="fa fa-sign-out" id="log-out"></i>
+
                     </form>
-                <% } else { %>
-                    <!-- If user is not logged in, show login button -->
-                    <i class="fas fa-user" id="log-btn"></i>
-                <% } %>
             </div>
     
             <form action="" class="search-bar-container">

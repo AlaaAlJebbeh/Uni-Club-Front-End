@@ -141,7 +141,12 @@ app.post("/register", async (req,res) =>{
 })
 
 app.get("/myclubpage", (req, res) => {
-    
+    console.log(req.session.loggedIn);
+    if(!req.session.loggedIn){
+        console.log("enterif");
+        return res.render("home.ejs",{ role:null, email: null, loggedIn:false});
+    }
+    console.log("clubuser");
     const clubID = 23;
     connection.query("SELECT * FROM club WHERE club_id = " + clubID, (err, clubInformation) => {
         if (err) {
@@ -174,14 +179,8 @@ app.get("/socialmedia/:link/:link2",(req, res) => {
 //Route eventRequests 
 
 app.get("/eventRequests", (req, res) => {
-   
-    const data = {
-        pageTitle: 'EventRequests',
-        message: "dfdf"
-        // Add more data as needed
-    };
 
-    res.render('eventRequests.ejs', data); 
+    res.render('eventRequests.ejs', {role:'sks', email: req.session.email, loggedIn:true}); 
 });
 
 //Route createClub

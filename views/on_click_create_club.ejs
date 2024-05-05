@@ -28,7 +28,7 @@
     <header>
       <div>
         <a href="#" class="logo"
-          ><img src="logo.png" alt="Logo" class="logo-image"
+          ><img src="../public/images/logo.png" alt="Logo" class="logo-image"
         /></a>
       </div>
       <input type="checkbox" id="nav_check" hidden />
@@ -101,6 +101,13 @@
         </div>
       </div>
   
+      <div class="input-box">
+        <label style="font-size: medium;" >Manager ID</label>
+        <input type="text" name="manager_id" inputmode="numeric" pattern="[0-9]*" placeholder="Manager Identity Number" required />
+        <span class="error-message" style="color: red; display: none;">Please enter only numbers.</span>
+      </div>
+
+
       <div class="input-box address">
         <label style="font-size: medium; ">BIO</label>
         <input type="text" name="bio" placeholder="write your bio" required />

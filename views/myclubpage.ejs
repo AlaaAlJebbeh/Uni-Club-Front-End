@@ -20,6 +20,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
+
   </head>
   <body>
     <!--Header-->
@@ -62,51 +63,74 @@
         <div
           id="my-profile-content"
           class="content-section"
-          style="
-            background-image: url(../public/images/myClubAssets/barca.png);
-            display: block;
-          "
+          style="display: block"
         >
-          <div class="cnt1">
-            <div class="logo-side">
-              <img src="../public/images/pixel.jpg" alt="Image not loading" />
-            </div>
-            <button>Upload</button>
+        <div class="cnt1">
+          <div class="logo-side">
+            <img src="../public/images/pixel.jpg" alt="Image not loading" />
           </div>
-          <div class="cnt2">
-            <h1>Club Name: <br /><%=clubInformation[0].club_name%></h1>
-            <h2>Club manager <br /><%= name[0].name %></h2>
-            <h2>
-              Category: <Strong><%=clubInformation[0].category %></Strong>
-            </h2>
-          </div>
-          <div class="cnt3">
-            <h2>BIO:</h2>
-            <div class="bio-textbox" placeholder="Enter your bio here">
-              <%=clubInformation[0].bio %>
+        </div>
+          <h1 style="text-align: center; font-size: 42px; margin-bottom: 75px">
+            Club Information
+          </h1>
+          <div class="content-container">
+            <div class="cnt2">
+              <h1>
+                <span style="color: #193635">Club Name:</span>
+                <%=clubInformation[0].club_name%>
+              </h1>
+              <h1>
+                Category: <Strong><%=clubInformation[0].category %></Strong>
+              </h1>
+            </div>
+            <div class="cnt3">
+              <h1 style="margin-right: 15px;">BIO:</h1>
+              <div class="bio-textbox" placeholder="Enter your bio here">
+                <%=clubInformation[0].bio %>
+              </div>
+            </div>
+            <div class="cnt4">
+              <h2>Social Media / Contact Info</h2>
+              <div class="contact-info">
+                <img src="../public/images/myClubAssets/email.png" />
+                <div class="Email" style="font-size: 20px">
+                  <%= clubInformation[0].email %>
+                </div>
+              </div>
+              <div class="socialmedia-links">
+                <a href="/socialmedia/<%=clubInformation[0].social_media1 %>">
+                  <button>
+                    <img src="../public/images/myClubAssets/facebook.png" />
+                  </button>
+                </a>
+                <a href="/socialmedia/<%=clubInformation[0].social_media2 %>">
+                  <button>
+                    <img src="../public/images/myClubAssets/insta.png" />
+                  </button> </a
+                ><a href="/socialmedia/<%=clubInformation[0].social_media3 %>">
+                  <button>
+                    <img src="../public/images/myClubAssets/tiktok.png" />
+                  </button>
+                </a>
+              </div>
             </div>
           </div>
-          <div class="cnt4">
-            <h2>Social Media / Contact Info</h2>
-            <div class="contact-info">
-              <img src="../public/images/myClubAssets/email.png" />
-              <div class="Email"><%= clubInformation[0].email %></div>
+          <hr />
+
+          <h1 style="text-align: center; font-size: 42px; margin-bottom: 75px">
+            Club Manager Information
+          </h1>
+          <div class="content-containerManager">
+            <% name.forEach((item) => { %>
+            <div class="CLMNAMES">
+              <img src="../public/images/images/Alson GC.jpg" />
+              <h1>
+                <span style="color: #193635">Club Manager Name:</span>
+                <br/>
+                <%=item.name%>
+              </h1>
             </div>
-            <div class="socialmedia-links">
-              <a href="/socialmedia/<%=clubInformation[0].social_media1 %>">
-                <button>
-                  <img src="../public/images/myClubAssets/facebook.png" />
-                </button>
-              </a>
-              <a href="/socialmedia/<%=clubInformation[0].social_media2 %>">
-                <button>
-                  <img src="../public/images/myClubAssets/insta.png" />
-                </button> </a
-              ><a href="/socialmedia/<%=clubInformation[0].social_media3 %>">
-                <button>
-                  <img src="../public/images/myClubAssets/tiktok.png" />
-                </button>
-              </a>
+            <% }); %>
             </div>
           </div>
         </div>
@@ -158,7 +182,94 @@
           id="my-status-content"
           class="content-section"
           style="display: none"
-        ></div>
+        >
+
+        <main class="table" id="customers_table">
+          <section class="table__header">
+            <h1>Content Management</h1>
+            <div class="input-group">
+              <input type="search" placeholder="Search Request..." />
+              <img src="images/search.png" alt="" />
+            </div>
+          </section>
+    
+          <section class="table__body">
+            <table>
+              <thead>
+                <tr>
+                  <th>Club Name <span class="icon-arrow">&UpArrow;</span></th>
+                  <th>Request Type <span class="icon-arrow">&UpArrow;</span></th>
+                  <th>Status <span class="icon-arrow">&UpArrow;</span></th>
+                  <th>Action</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <h4 style="color: black"></h4>
+                  </td>
+                  <td><h4 style="color: black"></h4></td>
+                  <td>
+                    <p class="status pending">Pending</p>
+                  </td>
+                  <td>
+                    <button class="approve-button">Approve</button>
+                    <button class="reject-button">Reject</button>
+                  </td>
+                  <td>
+                    <button
+                      class="details-button"
+                      onclick="showDetails()"
+                      data-club-id=""
+                    >
+                      <img src="Details.png" alt="Button Image" />
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+    
+          <div id="popup" class="popup-card" style="display: none">
+            <div class="wrapper">
+              <div class="flip-card">
+                <div class="front card">
+                  <table class="custom-table">
+                    <tr>
+                      <td class="column1">
+                        <img
+                          src=""
+                          alt="Old Image"
+                        />
+                        
+                        <p id="beforetext"></p>
+                     
+                      </td>
+                      <td class="column2">
+                        <p id="after"></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button id="closeButton" onclick="closePopup()">Close</button>
+          </div>
+    
+          <div id="reject" class="reject-card1">
+            <input
+              type="text"
+              id="rejectionReason"
+              placeholder="Enter rejection reason..."
+            />
+            <button id="sendButton">Send</button>
+            <button id="closeButton2" onclick="closePopup2()">Close</button>
+          </div>
+        </main>
+      </div>
         <div
           id="my-notification-content"
           class="content-section"
@@ -191,6 +302,7 @@
         searchBar.classList.toggle("active");
       });
     </script>
-    <script src="../public/scripts/myclubpage.js"></script>
+    <script src="../public/scripts/MyClubPage Scripts/myclubpage.js"></script>
+    <script src="../public/scripts/MyClubPage Scripts/StatusManagerclubpage.js"></script>
   </body>
 </html>

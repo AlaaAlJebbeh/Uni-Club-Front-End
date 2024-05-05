@@ -132,40 +132,20 @@ app.post("/myclubpage", authRole(ROLE.club), (req, res) => {
 
 */
 app.get("/myclubpage", (req, res) => {
-    const clubID = 1;
+    const clubID = 23;
     connection.query("SELECT * FROM club WHERE club_id = " + clubID, (err, clubInformation) => {
         if (err) {
             console.error("Error fetching club information:", err);
             return res.status(500).send("Internal Server Error");
-        }
-
-        connection.query("SELECT IMAGE_ID FROM IMG_CLUB WHERE club_id = " + clubID, (err, imageID) => {
+        }     
+        connection.query("select name from club_manager where club_id = ?",[clubID], (err, name) => {
+            
             if (err) {
-                console.error("Error fetching image ID:", err);
+                console.error("Error fetching Club manager name:", err);
                 return res.status(500).send("Internal Server Error");
             }
-
-            const imageIDValue = imageID.length > 0 ? imageID[0].IMAGE_ID : null;
-
-            if (!imageIDValue) {
-                console.error("No image ID found for club");
-                return res.status(404).send("Image not found");
-            }
-
-            connection.query("SELECT IMG_URL FROM UPLOADED_IMG WHERE IMAGE_ID = ?", imageIDValue, (err, ImageURL) => {
-                if (err) {
-                    console.error("Error fetching image URL:", err);
-                    return res.status(500).send("Internal Server Error");
-                }
-                connection.query("select name from club_manager where club_id = ?",[clubID], (err, name) => {
-                    
-                    if (err) {
-                        console.error("Error fetching Club manager name:", err);
-                        return res.status(500).send("Internal Server Error");
-                    }
-                    res.render("myclubpage.ejs", { clubInformation, ImageURL, name });
-                });
-            });
+            console.log(clubInformation);
+            res.render("myclubpage.ejs", { clubInformation, name });
         });
     });
 });

@@ -100,24 +100,17 @@ app.get('/logout', (req, res) => {
     });
 });
 
-//Route Register user
-app.get("/register", (req, res) => {
-   
-    const data = {
-        pageTitle: 'User Registration ',
-        message: "Register user"
-        // Add more data as needed
-    };
-
-    res.render('register', data); 
+app.get('/register', (req, res) => {
+    res.render("register.ejs");
 });
 
+
+// Register route
 app.post("/register", async (req,res) =>{
 
     
     try{
         const { name, password, email, university_id, role } = req.body;
-        const hashedPassword = await bcrypt.hash(password, 10)
         let tableName = '';
         if (role === 'clubManager') {
             tableName = 'club_manager';
@@ -129,7 +122,7 @@ app.post("/register", async (req,res) =>{
 
         connection.query(
             `INSERT INTO ${tableName} (name, password, email, uni_id ) VALUES (?, ?, ?, ?)`,
-            [name, hashedPassword, email, university_id],
+            [name, password, email, university_id],
             (error, results, fields) => {
               if (error) {
                 console.error('Error inserting into database:', error);
@@ -147,8 +140,8 @@ app.post("/register", async (req,res) =>{
 
 })
 
-
 app.get("/myclubpage", (req, res) => {
+    
     const clubID = 23;
     connection.query("SELECT * FROM club WHERE club_id = " + clubID, (err, clubInformation) => {
         if (err) {
@@ -162,7 +155,7 @@ app.get("/myclubpage", (req, res) => {
                 return res.status(500).send("Internal Server Error");
             }
             console.log(clubInformation);
-            res.render("myclubpage.ejs", { clubInformation, name });
+            res.render("myclubpage.ejs", { clubInformation, name, role:'club', email: req.session.email, loggedIn:true });
         });
     });
 });

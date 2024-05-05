@@ -52,15 +52,16 @@ app.use(session({
     saveUninitialized: true
 }));
 
+
 app.get('/', (req, res) => {
     if (req.session.loggedin) {
         if (req.session.role === 'club') {
-            res.render('home', { loggedIn: true });
+            res.render('home', { loggedIn: true, role:"club", email: req.session.email });
         } else if (req.session.role === 'sks') {
-            res.render('home', { loggedIn: true });
+            res.render('home', { loggedIn: true, role:"sks", email: req.session.email });
         }
     } else {
-        res.render('home', { loggedIn: false });
+        res.render('home', { loggedIn: false, role:null, email: null});
     }
 });
 
@@ -73,7 +74,8 @@ app.post('/login', (req, res) => {
                 req.session.loggedin = true;
                 req.session.email = email;
                 req.session.role = results[0].role; // Add this line
-                res.render('home', { loggedIn: true });
+                console.log(req.session.email);
+                res.render('home', { loggedIn: true, role:results[0].role, email: req.session.email });
             } else {
                 res.send('Incorrect email and/or password!');
             }
@@ -85,11 +87,6 @@ app.post('/login', (req, res) => {
     }
 });
 
-// Render header with loggedIn status
-app.get('/header', (req, res) => {
-    res.render('partials/header', { loggedIn: req.session.loggedin });
-});
-
 // Add a logout route
 app.get('/logout', (req, res) => {
     // Clear the session
@@ -98,14 +95,9 @@ app.get('/logout', (req, res) => {
             console.log(err);
         } else {
             // Redirect to the login page
-            res.render('home', { loggedIn: false });
+            res.render('home', { loggedIn: false, role:null, email:null  });
         }
     });
-});
-
-//Rout to home page
-app.get("/", (req, res) => {
-    res.render("home.ejs"); 
 });
 
 //Route Register user
@@ -155,25 +147,7 @@ app.post("/register", async (req,res) =>{
 
 })
 
-app.get('/f', (req, res) => {
-    res.send("F* this");
-});
 
-
-/*
-//Rout my clubPage (club role)
-app.post("/myclubpage", authRole(ROLE.club), (req, res) => {
-   
-    const data = {
-        pageTitle: 'My Club Page',
-        message: "dfdf"
-        // Add more data as needed
-    };
-
-    res.render('myclubpage.ejs', data); 
-});
-
-*/
 app.get("/myclubpage", (req, res) => {
     const clubID = 1;
     connection.query("SELECT * FROM club WHERE club_id = " + clubID, (err, clubInformation) => {

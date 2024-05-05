@@ -1,4 +1,13 @@
-<%- include("partials/header.ejs") %>
+
+
+<% if (!loggedIn) { %>
+  <%- include("partials/header.ejs"); %>
+<% } else if (role === 'club') { %>
+  <%- include("partials/club_header.ejs"); %>
+<% } else if (role === 'sks') { %>
+  <%- include("partials/sks_header.ejs"); %>
+<% } %>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>

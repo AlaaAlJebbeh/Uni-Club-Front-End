@@ -146,11 +146,7 @@ app.post("/register", async (req, res) => {
 })
 
 app.get("/myclubpage", (req, res) => {
-    console.log(req.session.loggedIn);
-    if (!req.session.loggedIn) {
-        console.log("enterif");
-        return res.render("home.ejs", { role: null, email: null, loggedIn: false });
-    }
+   
     console.log("clubuser");
     const clubID = 23;
     connection.query("SELECT * FROM club WHERE club_id = " + clubID, (err, clubInformation) => {
@@ -225,7 +221,7 @@ app.post("/createEvent", async (req, res) => {
 //Route createClub
 app.get("/createclub", (req, res) => {
 
-    res.render("on_click_create_club.ejs");
+    res.render("on_click_create_club.ejs",{role:'sks', email: req.session.email, loggedIn:true});
 });
 
 app.post("/createclub", function (req, res) {
@@ -283,11 +279,6 @@ app.get("/comparing", (req, res) => {
                 return res.status(500).send("Internal Server Error");
             });
     });
-});
-
-//Route on click create club
-app.get("/on_click_create_club", (req, res) => {
-    res.render("on_click_create_club.ejs");
 });
 
 

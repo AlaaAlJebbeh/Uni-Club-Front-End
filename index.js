@@ -208,8 +208,29 @@ app.get("/socialmedia/:link/:link2", (req, res) => {
 //Route eventRequests 
 
 app.get("/eventRequests", (req, res) => {
+    connection.query(`SELECT * FROM tempevents`, (err, results) => {
+        if (err) {
+            console.error("Error fetching temp events:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+        console.log(results);
+        // Extracting event IDs from the results of the first query
+        const eventIds = results.map(row => row.eventid);
+        console.log(eventIds);
+    
+        // Performing a second query to fetch events based on the event IDs
+        connection.query(`SELECT * FROM event WHERE event_id IN (?)`, [eventIds], (err, events) => {
+            if (err) {
+                console.error("Error fetching events:", err);
+                return res.status(500).send("Internal Server Error");
+            }
+            console.log(events);
+            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events: events });
+        });
+    });
+    
 
-    res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true });
+    
 });
 
 app.get("/createEvent", (req, res) => {
@@ -265,6 +286,41 @@ app.post("/createclub", function (req, res) {
         res.send('Club successfully created');
     });
 });
+
+app.post("/rejectMessage", async (req, res)=> {
+    const rejectionReason = req.body.rejectionReason;
+    const eventid=req.query.eventid;
+    console.log(rejectionReason);
+    console.log(eventid);
+
+    connection.query('SELECT sks_id from sks_admin WHERE email=?', [req.session.email],(err, result) => {
+        if (err) {
+            console.error("Error getting sks id:", error);
+            res.status(500).send("Error creating club");
+            return;
+        }
+        const sksid=result[0].sks_id;
+        connection.query('SELECT club_id from event WHERE event_id = ?', [eventid],(err, club) => {
+            if (err) {
+                console.error("error getting club id:", error);
+                res.status(500).send("Error creating club");
+                return;
+            }
+            const clubid = club[0].club_id;
+            connection.query('INSERT INTO history_event(status_condition, sks_id, club_id, comment) VALUES(?,?,?,?)', [1,sksid,clubid,rejectionReason], (error,results)=>{
+                if(error){
+                    console.log("couldn't insert to database",error)
+                }
+                else{
+                    res.send("message sent to database");
+                }
+        });
+    });
+
+
+   });
+});
+
 
 //Route Comparing 
 app.get("/comparing", (req, res) => {

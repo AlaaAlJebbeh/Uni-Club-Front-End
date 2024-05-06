@@ -45,153 +45,39 @@
                 <thead>
                     <tr>
                         <th> Request <span class="icon-arrow">&UpArrow;</span></th>
-                        <th> Request Date <span class="icon-arrow">&UpArrow;</span></th>
+                        <th> Event Name <span class="icon-arrow">&UpArrow;</span></th>
                         <th> Status <span class="icon-arrow">&UpArrow;</span></th>
                         <th>Action</th>
                         <th>Details</th>
                     </tr>
                 </thead>
                 <tbody>
+
+                    <% tempevents.forEach((item, index) => { %>
                     <tr>
                         <td> <img src="/images/images/Zinzu Chan Lee.jpg" alt="">Zinzu Chan Lee</td>
-                        <td> 17 Dec, 2022 </td>
+                        <td>  <%=events[index].event_name%></td>
                         <td>
                             <p class="status approved">Approved</p>
                         </td>
-                        <td><button class="approve-button">Approve</button> <button class="reject-button">Reject</button></td>
+                        <td><button class="approve-button">Approve</button> <button class="reject-button" id="<%=index%>" onclick="">Reject</button></td>
                         <td><button class="details-button"><img src="/images/images/Details.png" alt="Button Image"></button></td>
 
                     </tr>
-                    <tr>
-                        <td><img src="/images/images/Sonal Gharti.jpg" alt=""> Sonal Gharti </td>
-                        <td> 14 Mar, 2023 </td>
-                        <td>
-                            <p class="status pending">Pending</p>
-                            <td><button class="approve-button">Approve</button> <button class="reject-button">Reject</button></td>
-                        </td>
-                        <td><button class="details-button"><img src="/images/images/Details.png" alt="Button Image"></button></td>
-                    </tr>
-                    <tr>
-                        <td><img src="/images/images/Alson GC.jpg" alt=""> Alson GC </td>
-                        <td> 25 May, 2023 </td>
-                        <td>
-                            <p class="status approved">Approved</p>
-                            <td><button class="approve-button">Approve</button> <button class="reject-button">Reject</button></td>
-                            <td><button class="details-button"><img src="/images/images/Details.png" alt="Button Image"></button></td>
-
-
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <td><img src="/images/images/Sarita Limbu.jpg" alt=""> Sarita Limbu </td>
-                        <td> 23 Apr, 2023 </td>
-                        <td>
-                            <p class="status pending">Pending</p>
-                            <td><button class="approve-button">Approve</button> <button class="reject-button">Reject</button></td>
-                            <td><button class="details-button"><img src="/images/images/Details.png" alt="Button Image"></button></td>
-
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img src="/images/images/Alex Gonley.jpg" alt=""> Alex Gonley </td>
-                        <td> 23 Apr, 2023 </td>
-                        <td>
-                            <p class="status rejected">Rejected</p>
-                            <td><button class="approve-button">Approve</button> <button class="reject-button">Reject</button></td>
-                            <td><button class="details-button"><img src="/images/images/Details.png" alt="Button Image"></button></td>
-
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img src="/images/images/Alson GC.jpg" alt=""> Jeet Saru </td>
-                        <td> 20 May, 2023 </td>
-                        <td>
-                            <p class="status approved">Approved</p>
-                        </td>
-                        <td><button class="approve-button">Approve</button> <button class="reject-button">Reject</button></td>
-                        <td><button class="details-button"><img src="/images/images/Details.png" alt="Button Image"></button></td>
-
-
-                    </tr>
-                    <tr>
-                        <td><img src="/images/images/Sarita Limbu.jpg" alt=""> Aayat Ali Khan </td>
-                        <td> 30 Feb, 2023 </td>
-                        <td>
-                            <p class="status pending">Pending</p>
-                        </td>
-                        <td><button class="approve-button">Approve</button> <button class="reject-button">Reject</button></td>
-                        <td><button class="details-button"><img src="/images/images/Details.png" alt="Button Image"></button></td>
-
-
-                    </tr>
-                    <tr>
-                        <td><img src="/images/images/Alex Gonley.jpg" alt=""> Alson GC </td>
-                        <td> 22 Dec, 2023 </td>
-                        <td>
-                            <p class="status rejected">Rejected</p>
-                        </td>
-                        <td><button class="approve-button">Approve</button> <button class="reject-button">Reject</button></td>
-                        <td><button class="details-button"><img src="/images/images/Details.png" alt="Button Image"></button></td>
-
-
-                    </tr>
-                    <tr>
-                        <td><img src="/images/images/Alex Gonley.jpg" alt=""> Alson GC </td>
-                        <td> 22 Dec, 2023 </td>
-                        <td>
-                            <p class="status rejected">Rejected</p>
-                        </td>
-                        <td><button class="approve-button">Approve</button> <button class="reject-button">Reject</button></td>
-                        <td><button class="details-button"><img src="/images/images/Details.png" alt="Button Image"></button></td>
-
-
-                    </tr>
-                    <tr>
-                        <td><img src="/images/images/Alex Gonley.jpg" alt=""> Alson GC </td>
-                        <td> 22 Dec, 2023 </td>
-                        <td>
-                            <p class="status approved">Approved</p>
-                        </td>
-                        <td><button class="approve-button">Approve</button> <button class="reject-button">Reject</button></td>
-                        <td><button class="details-button"><img src="/images/images/Details.png" alt="Button Image"></button></td>
-
-                    </tr>
-                    <tr>
-                        <td><img src="/images/images/Alex Gonley.jpg" alt=""> Alson GC </td>
-                        <td> 22 Dec, 2023 </td>
-                        <td>
-                            <p class="status rejected">Rejected</p>
-                        </td>
-                        <td><button class="approve-button">Approve</button> <button class="reject-button">Reject</button></td>
-                        <td><button class="details-button"><img src="/images/images/Details.png" alt="Button Image"></button></td>
-
-
-                    </tr>
-                    <tr>
-                        <td><img src="/images/images/Alex Gonley.jpg" alt=""> Alson GC </td>
-                        <td> 22 Dec, 2023 </td>
-                        <td>
-                            <p class="status pending">Pending</p>
-                        </td>
-                        <td><button class="approve-button">Approve</button> <button class="reject-button">Reject</button></td>
-                        <td><button class="details-button"><img src="/images/images/Details.png" alt="Button Image"></button></td>
-
-
-                    </tr>
+                    <form action="/rejectMessage?eventid=<%=events[index].event_id%>" method="POST" class="form">
+                        <div id="reject" class="reject-card1">
+                    
+                            <input type="text" name="rejectionReason" placeholder="Enter rejection reason...">
+                            <button type="submit" id="sendButton">Send</button>
+                            <button id="closeButton2" onclick="closePopup2()">Close</button>
+                        </div>
+                    </form>
+                    <% }); %>
+                    
                 </tbody>
             </table>
         </section>
-
-        <div id="reject" class="reject-card1">
-    
-            <input type="text" id="rejectionReason" placeholder="Enter rejection reason...">
-            <button id="sendButton">Send</button>
-            <button id="closeButton2" onclick="closePopup2()">Close</button>
-        </div>
-
+       
 <section>
         <div id="popup" class="popup-card" style="display: none;" style="margin: auto;">
             <div class="wrapper">
@@ -277,13 +163,6 @@
                 var popup = document.getElementById("reject");
                 popup.style.display = "none";
             }
-            
-            var sendButton = document.getElementById("sendButton");
-            sendButton.addEventListener("click", function() {
-                var rejectionReason = document.getElementById("rejectionReason").value;
-                // Here you can handle what to do with the rejection reason, such as sending it to a server
-                console.log("Rejection Reason:", rejectionReason);
-            });
             
             var rejectButtons = document.querySelectorAll('.reject-button');
             

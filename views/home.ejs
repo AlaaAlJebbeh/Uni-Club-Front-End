@@ -1,18 +1,12 @@
-
-
-<% if (!loggedIn) { %>
-  <%- include("partials/header.ejs"); %>
-<% } else if (role === 'club') { %>
-  <%- include("partials/club_header.ejs"); %>
-<% } else if (role === 'sks') { %>
-  <%- include("partials/sks_header.ejs"); %>
-<% } %>
+<% if (!loggedIn) { %> <%- include("partials/header.ejs"); %> <% } else if (role
+=== 'club') { %> <%- include("partials/club_header.ejs"); %> <% } else if (role
+=== 'sks') { %> <%- include("partials/sks_header.ejs"); %> <% } %>
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
-    <title>Draggable Image Slider | CodingNepal</title>
+    <title>UniClubs Home Page</title>
     <link rel="stylesheet" href="../public/styles/home.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
@@ -94,7 +88,7 @@
                 </div>
                 <div class="contentBx">
                   <div class="content">
-                    <h2 style="color: yellow;">Club Name</h2>
+                    <h2 style="color: yellow">Club Name</h2>
                     <br />
                     <h2>Event Name</h2>
                     <br />
@@ -191,7 +185,7 @@
               </div>
               <div class="contentBx">
                 <div class="content">
-                  <h2 style="color: #193635; font-weight:900">Club Name</h2>
+                  <h2 style="color: #193635; font-weight: 900">Club Name</h2>
                   <br />
                   <h2>Event Name</h2>
                   <br />

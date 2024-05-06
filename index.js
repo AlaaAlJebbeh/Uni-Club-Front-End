@@ -71,10 +71,10 @@ app.post('/login', (req, res) => {
     if (email && password) {
         connection.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (err, results) => {
             if (results.length > 0) {
-                req.session.loggedin = true;
+                req.session.loggedIn = true;
                 req.session.email = email;
                 req.session.role = results[0].role; // Add this line
-                console.log(req.session.email);
+                console.log(req.session.loggedIn);
                 res.render('home', { loggedIn: true, role:results[0].role, email: req.session.email });
             } else {
                 res.send('Incorrect email and/or password!');
@@ -139,27 +139,53 @@ app.post("/register", async (req,res) =>{
     }
 
 })
-
 app.get("/myclubpage", (req, res) => {
-   
-    console.log("clubuser");
-    const clubID = 23;
-    connection.query("SELECT * FROM club WHERE club_id = " + clubID, (err, clubInformation) => {
+    if (!req.session.loggedIn) {
+        res.render('home.ejs', { loggedIn: false, role: null, email: null });
+        return; // Make sure to return after sending the response
+    }
+
+    let email = req.session.email;
+    getUserID(email, (err, userId) => {
         if (err) {
-            console.error("Error fetching club information:", err);
-            return res.status(500).send("Internal Server Error");
-        }     
-        connection.query("select name from club_manager where club_id = ?",[clubID], (err, name) => {
-            
+            console.error("Error getting user ID:", err);
+            return res.status(500).send("Error getting user ID");
+        }
+        if (userId === null || userId === undefined) {
+            return res.status(404).send("User ID not found");
+        }
+        
+        // All code depending on userId should be inside this callback function
+        const UserID = userId;
+        connection.query("SELECT club_id from club_manager where clm_id = ?", UserID, (err, result) => {
             if (err) {
-                console.error("Error fetching Club manager name:", err);
+                console.error("Error fetching club id:", err);
                 return res.status(500).send("Internal Server Error");
             }
-            console.log(clubInformation);
-            res.render("myclubpage.ejs", { clubInformation, name, role:'club', email: req.session.email, loggedIn:true });
+            let clubID = result[0].club_id;
+            console.log("club ID " + clubID);
+            connection.query("SELECT * FROM club WHERE club_id = ?", clubID, (err, clubInformation) => {
+                if (err) {
+                    console.error("Error fetching club information:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                if(clubInformation.length === 0){
+                    return res.status(500).send("Club Dosent Exist");
+                }
+                console.log(clubInformation + "club info")
+                connection.query("select name from club_manager where club_id = ?", [clubID], (err, name) => {
+                    if (err) {
+                        console.error("Error fetching Club manager name:", err);
+                        return res.status(500).send("Internal Server Error");
+                    }
+                    console.log(clubInformation);
+                    res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn });
+                });
+            });
         });
     });
 });
+
 
 
 //to open social media link sin the database
@@ -271,6 +297,32 @@ app.get("/getOldPicture", (req, res) => {
       res.json({ oldPictureUrl });
     });
   });
+
+  function getUserID(email, callback) {
+    connection.query("SELECT user_id FROM users WHERE email = ?", [email], (err, result) => {
+        if (err) {
+            console.error(err);
+            callback(err, null);
+            return;
+        }
+        const userId = result.length > 0 ? result[0].user_id : null;
+        callback(null, userId);
+    });
+}
+
+app.get("/tryID", (req, res) => {
+    let email = req.session.email;
+    getUserID(email, (err, userId) => {
+        if (userId !== null && userId !== undefined) {
+            res.send(userId.toString()); // Assuming userId is a number
+            console.log("User ID:", userId);
+        } else {
+            res.status(404).send("Error"); // Or another appropriate status code
+        }
+    });
+});
+
+
   
 
 //listining to the port 

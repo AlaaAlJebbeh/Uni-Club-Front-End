@@ -7,6 +7,7 @@ import mysql from "mysql";
 import bodyParser from "body-parser";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 import session from "express-session";
+import fileUpload from "express-fileupload";
 
 //Constants
 const app = express();
@@ -57,10 +58,11 @@ app.use((req, res, next) => {
     console.log('Incoming request body:', req.body);
     next();
   });
+app.use(fileUpload());
 
 
 app.get('/', (req, res) => {
-    if (req.session.loggedin) {
+    if (req.session.loggedIn) {
         if (req.session.role === 'club') {
             res.render('home', { loggedIn: true, role: "club", email: req.session.email });
         } else if (req.session.role === 'sks') {
@@ -217,26 +219,14 @@ app.get("/createEvent", (req, res) => {
 });
 
 app.post("/createEvent", async (req, res) => {
-    console.log("enterCreateEvent");
-    const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category } = req.body;
+    
+    const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category, uploadImage } = req.body;
     const language = req.body.language; // Get the selected language
 
-    // Process the form data (e.g., insert into database)
-    console.log('Event Name:', eventName);
-    console.log('Guest Name:', guestName);
-    console.log('Event Date:', eventDate);
-    console.log('Event Time:', eventTime);
-    console.log('Location:', eventLocation);
-    console.log('Capacity:', capacity);
-    console.log('Category:', category);
-    console.log('Category:', description);
-    console.log('Category:', notes);
-    console.log('Language:', language); // Log the selected language
-    // Insert into `event` table
     connection.query(
-        `INSERT INTO event (event_name, guest_name, date, time, language, location, capacity, description, notes, category) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category],
+        `INSERT INTO event (event_name, guest_name, date, time, language, location, capacity, description, notes, category, event_img) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, uploadImage],
         (error, results, fields) => {
             if (error) {
                 console.error('Error inserting event into database:', error);
@@ -245,6 +235,8 @@ app.post("/createEvent", async (req, res) => {
             res.status(200).send('event inserted successfully');
         });
 });
+
+
 
 //Route createClub
 app.get("/createclub", (req, res) => {

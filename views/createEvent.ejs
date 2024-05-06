@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Event Registration Form</title>
+    <link rel="stylesheet" href="/styles/createEvent.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+
+  
+<section class="container">
+    <header>Event Registration Form</header>
+    <form action="/createEvent" method="POST" class="form" name="createEvent" id="createEvent">
+        <div class="input-box">
+            <label>Event Name</label>
+            <input type="text" name="eventName" placeholder="Enter Event Name" required>
+        </div>
+
+        <div class="input-box">
+            <label>Guest Name</label>
+            <input type="text" name="guestName" placeholder="Enter Guest Name">
+        </div>
+
+        <div class="column">
+            <div class="input-box">
+                <label>Date</label>
+                <input type="date" name="eventDate" placeholder="Enter Event Date" required>
+            </div>
+            <div class="input-box">
+                <label>Event Time</label>
+                <input type="time" name="eventTime" id="meeting-time" required>
+            </div>
+        </div>
+
+        <div class="language-box">
+            <h3>Language</h3>
+            <div class="language-option">
+                <div class="language">
+                    <input type="radio" name="language" id="EN" checked>
+                    <label for="EN">English</label>
+                </div>
+                <div class="language">
+                    <input type="radio" name="language" id="TR">
+                    <label for="TR">Turkish</label>
+                </div>
+                <div class="language">
+                    <input type="radio" name="language" id="AR">
+                    <label for="AR">Arabic</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-box address">
+            <label>Location</label>
+            <input type="text" name="eventLocation" placeholder="Location" required>
+            <div class="column">
+                <div class="select-box">
+                    <select name="category">
+                        <option value="" disabled selected>Category</option>
+                        <option>Fun</option>
+                        <option>Computer Science</option>
+                        <option>Psychology</option>
+                        <option>Math</option>
+                        <option>Language</option>
+                        <option>Medicine</option>
+                        <option>Chemistry</option>
+                    </select>
+                </div>
+                <input type="number" name="capacity" placeholder="Capacity">
+            </div>
+            <div class="column">
+                <input type="text" name="description" placeholder="Descriptions" required>
+                <input type="text" name="notes" placeholder="Notes">
+            </div>
+        </div>
+
+        <div class="wrapper">
+            <header id="uploadImage" name="eventImage">Upload Event Image</header>
+            <input class="file-input" type="file" name="file" hidden id="uploadImage">
+            <i class="fas fa-cloud-upload-alt" id="uploadImage1"></i>
+            <p id="uploadImage2">Browse File to Upload</p>
+            <section class="progress-area"></section>
+            <section class="uploaded-area"></section>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+</section>
+</body>
+</html>

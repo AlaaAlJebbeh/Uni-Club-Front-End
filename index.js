@@ -2,7 +2,7 @@
 import express from "express";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import path  from "path";
+import path from "path";
 import mysql from "mysql";
 import bodyParser from "body-parser";
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -15,6 +15,7 @@ const port = 8000;
 
 //Body barser use
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(express.urlencoded({ extended: true }));
 
 //Connection To Database
 const connection = mysql.createConnection({
@@ -26,8 +27,8 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
     if (err) {
-      console.error("cant connect to the database", err);
-      return;
+        console.error("cant connect to the database", err);
+        return;
     }
     console.log("connected successfully to the database");
 });
@@ -52,16 +53,21 @@ app.use(session({
     saveUninitialized: true
 }));
 
+app.use((req, res, next) => {
+    console.log('Incoming request body:', req.body);
+    next();
+  });
+
 
 app.get('/', (req, res) => {
     if (req.session.loggedin) {
         if (req.session.role === 'club') {
-            res.render('home', { loggedIn: true, role:"club", email: req.session.email });
+            res.render('home', { loggedIn: true, role: "club", email: req.session.email });
         } else if (req.session.role === 'sks') {
-            res.render('home', { loggedIn: true, role:"sks", email: req.session.email });
+            res.render('home', { loggedIn: true, role: "sks", email: req.session.email });
         }
     } else {
-        res.render('home', { loggedIn: false, role:null, email: null});
+        res.render('home', { loggedIn: false, role: null, email: null });
     }
 });
 
@@ -71,11 +77,10 @@ app.post('/login', (req, res) => {
     if (email && password) {
         connection.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (err, results) => {
             if (results.length > 0) {
-                req.session.loggedin = true;
+                req.session.loggedIn = true;
                 req.session.email = email;
                 req.session.role = results[0].role; // Add this line
-                console.log(req.session.email);
-                res.render('home', { loggedIn: true, role:results[0].role, email: req.session.email });
+                res.render('home', { loggedIn: true, role: results[0].role, email: req.session.email });
             } else {
                 res.send('Incorrect email and/or password!');
             }
@@ -95,7 +100,7 @@ app.get('/logout', (req, res) => {
             console.log(err);
         } else {
             // Redirect to the login page
-            res.render('home', { loggedIn: false, role:null, email:null  });
+            res.render('home', { loggedIn: false, role: null, email: null });
         }
     });
 });
@@ -106,10 +111,10 @@ app.get('/register', (req, res) => {
 
 
 // Register route
-app.post("/register", async (req,res) =>{
+app.post("/register", async (req, res) => {
 
-    
-    try{
+
+    try {
         const { name, password, email, university_id, role } = req.body;
         let tableName = '';
         if (role === 'clubManager') {
@@ -124,17 +129,17 @@ app.post("/register", async (req,res) =>{
             `INSERT INTO ${tableName} (name, password, email, uni_id ) VALUES (?, ?, ?, ?)`,
             [name, password, email, university_id],
             (error, results, fields) => {
-              if (error) {
-                console.error('Error inserting into database:', error);
-                return res.status(500).send('Failed to register');
-              }
-              res.status(200).send('Registration successful');
+                if (error) {
+                    console.error('Error inserting into database:', error);
+                    return res.status(500).send('Failed to register');
+                }
+                res.status(200).send('Registration successful');
             }
-          );
+        );
 
         console.log("user registered sucssessfully");
 
-    } catch(e){
+    } catch (e) {
         console.log(e);
     }
 
@@ -142,9 +147,9 @@ app.post("/register", async (req,res) =>{
 
 app.get("/myclubpage", (req, res) => {
     console.log(req.session.loggedIn);
-    if(!req.session.loggedIn){
+    if (!req.session.loggedIn) {
         console.log("enterif");
-        return res.render("home.ejs",{ role:null, email: null, loggedIn:false});
+        return res.render("home.ejs", { role: null, email: null, loggedIn: false });
     }
     console.log("clubuser");
     const clubID = 23;
@@ -152,35 +157,69 @@ app.get("/myclubpage", (req, res) => {
         if (err) {
             console.error("Error fetching club information:", err);
             return res.status(500).send("Internal Server Error");
-        }     
-        connection.query("select name from club_manager where club_id = ?",[clubID], (err, name) => {
-            
+        }
+        connection.query("select name from club_manager where club_id = ?", [clubID], (err, name) => {
+
             if (err) {
                 console.error("Error fetching Club manager name:", err);
                 return res.status(500).send("Internal Server Error");
             }
             console.log(clubInformation);
-            res.render("myclubpage.ejs", { clubInformation, name, role:'club', email: req.session.email, loggedIn:true });
+            res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: true });
         });
     });
 });
 
 
 //to open social media link sin the database
-app.get("/socialmedia/:link",(req, res) => {
-    
+app.get("/socialmedia/:link", (req, res) => {
+
     res.redirect("https://" + req.params.link);
 });
-app.get("/socialmedia/:link/:link2",(req, res) => {
-    
-    res.redirect("https://" + req.params.link + "/" +req.params.link2);
+app.get("/socialmedia/:link/:link2", (req, res) => {
+
+    res.redirect("https://" + req.params.link + "/" + req.params.link2);
 });
 
 //Route eventRequests 
 
 app.get("/eventRequests", (req, res) => {
 
-    res.render('eventRequests.ejs', {role:'sks', email: req.session.email, loggedIn:true}); 
+    res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true });
+});
+
+app.get("/createEvent", (req, res) => {
+    res.render('createEvent.ejs');
+});
+
+app.post("/createEvent", async (req, res) => {
+    console.log("enterCreateEvent");
+    const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category } = req.body;
+    const language = req.body.language; // Get the selected language
+
+    // Process the form data (e.g., insert into database)
+    console.log('Event Name:', eventName);
+    console.log('Guest Name:', guestName);
+    console.log('Event Date:', eventDate);
+    console.log('Event Time:', eventTime);
+    console.log('Location:', eventLocation);
+    console.log('Capacity:', capacity);
+    console.log('Category:', category);
+    console.log('Category:', description);
+    console.log('Category:', notes);
+    console.log('Language:', language); // Log the selected language
+    // Insert into `event` table
+    connection.query(
+        `INSERT INTO event (event_name, guest_name, date, time, language, location, capacity, description, notes, category) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category],
+        (error, results, fields) => {
+            if (error) {
+                console.error('Error inserting event into database:', error);
+                return res.status(500).send('Failed to insert');
+            }
+            res.status(200).send('event inserted successfully');
+        });
 });
 
 //Route createClub
@@ -189,11 +228,11 @@ app.get("/createclub", (req, res) => {
     res.render("on_click_create_club.ejs");
 });
 
-app.post("/createclub", function(req, res){
+app.post("/createclub", function (req, res) {
 
-    var sql = "INSERT INTO club(club_id, club_name, category, bio, contact, social_media1, social_media2, social_media3, email) VALUES(null, '"+ req.body.name +"', '"+ req.body.cars +"','"+ req.body.bio +"','"+ req.body.contact +"','"+ req.body.media1 +"','"+ req.body.media2 +"','"+ req.body.media3 +"','"+ req.body.email +"')";
-    connection.query(sql, [req.body.name, req.body.cars, req.body.bio, req.body.contact, req.body.media1, req.body.media2, req.body.media3, req.body.email], function(error, result){
-        if(error) {
+    var sql = "INSERT INTO club(club_id, club_name, category, bio, contact, social_media1, social_media2, social_media3, email) VALUES(null, '" + req.body.name + "', '" + req.body.cars + "','" + req.body.bio + "','" + req.body.contact + "','" + req.body.media1 + "','" + req.body.media2 + "','" + req.body.media3 + "','" + req.body.email + "')";
+    connection.query(sql, [req.body.name, req.body.cars, req.body.bio, req.body.contact, req.body.media1, req.body.media2, req.body.media3, req.body.email], function (error, result) {
+        if (error) {
             console.error("Error inserting club:", error);
             res.status(500).send("Error creating club");
             return;
@@ -254,33 +293,33 @@ app.get("/on_click_create_club", (req, res) => {
 
 app.get("/ezz", (req, res) => {
     connection.query("select * from event where clm_id = 1", (err, result) => {
-        if(err){
+        if (err) {
             console.log(err.message);
         }
         connection.query("select club_name from club where clm_id = 1", (err, clubname) => {
             console.log(clubname);
-            res.render("showingezz.ejs", {result,clubname});
+            res.render("showingezz.ejs", { result, clubname });
         });
     });
-   
+
 });
 app.get("/getOldPicture", (req, res) => {
     const clubId = req.query.clubId;
-  
+
     connection.query("SELECT old_picture_url FROM club WHERE club_id = ?", [clubId], (err, result) => {
-      if (err) {
-        console.error(err);
-        res.status(500).json({ error: "Internal Server Error" });
-        return;
-      }
-      
-      // Assuming result is an array with a single object containing the old picture URL
-      const oldPictureUrl = result.length > 0 ? result[0].old_picture_url : null;
-      
-      res.json({ oldPictureUrl });
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: "Internal Server Error" });
+            return;
+        }
+
+        // Assuming result is an array with a single object containing the old picture URL
+        const oldPictureUrl = result.length > 0 ? result[0].old_picture_url : null;
+
+        res.json({ oldPictureUrl });
     });
-  });
-  
+});
+
 
 //listining to the port 
 app.listen(port, () => {

@@ -8,6 +8,9 @@ import bodyParser from "body-parser";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 import session from "express-session";
 import fileUpload from "express-fileupload";
+import multer from "multer"
+import fs from "fs";
+
 
 //Constants
 const app = express();
@@ -37,6 +40,7 @@ connection.connect((err) => {
 //Uses public - views - json - serUser middleware
 app.use('/public', express.static(path.join(__dirname, '/public')));
 app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/views', express.static(path.join(__dirname, '/views')));
 app.use(express.static("views"));
 // Apply middleware
@@ -59,6 +63,19 @@ app.use((req, res, next) => {
     next();
   });
 app.use(fileUpload());
+
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/images'); // Specify the destination directory
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        cb(null, 'upload-' + Date.now() + ext); // Specify the file naming scheme
+    }
+});
+
+const upload = multer({ storage: storage });
 
 
 app.get('/', (req, res) => {
@@ -218,24 +235,50 @@ app.get("/createEvent", (req, res) => {
     res.render('createEvent.ejs');
 });
 
-app.post("/createEvent", async (req, res) => {
-    
+
+app.post("/createEvent", upload.single('uploadImage'), async (req, res) => {
+
+    const email = req.session.email; // Retrieve email from request body
     const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category, uploadImage } = req.body;
     const language = req.body.language; // Get the selected language
+    const imageUrl = req.file ? req.file.path : null; // Save image path if uploaded
 
-    connection.query(
-        `INSERT INTO event (event_name, guest_name, date, time, language, location, capacity, description, notes, category, event_img) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, uploadImage],
-        (error, results, fields) => {
-            if (error) {
-                console.error('Error inserting event into database:', error);
-                return res.status(500).send('Failed to insert');
+    connection.query("SELECT user_id FROM users WHERE email = ?", [email], (err, userResult) => {
+        if (err) {
+            console.error("Error fetching userID:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+        if (userResult.length === 0) {
+            return res.status(404).send("User not found");
+        }
+
+        const userId = userResult[0].user_id;
+
+        connection.query("SELECT club_id FROM club WHERE clm_id = ?", [userId], (err, clubResult) => {
+            if (err) {
+                console.error("Error fetching club id:", err);
+                return res.status(500).send("Internal Server Error");
             }
-            res.status(200).send('event inserted successfully');
-        });
-});
+            if (clubResult.length === 0) {
+                return res.status(404).send("Club not found for the user");
+            }
 
+            const clubId = clubResult[0].club_id;
+
+            connection.query(
+                `INSERT INTO event (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, event_img, imageUrl) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, imageUrl],
+                (error, results, fields) => {
+                    if (error) {
+                        console.error('Error inserting event into database:', error);
+                        return res.status(500).send('Failed to insert');
+                    }
+                    res.redirect("/myclubpage");
+                });
+        });
+    });
+});
 
 
 //Route createClub

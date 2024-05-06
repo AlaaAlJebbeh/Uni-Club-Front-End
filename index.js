@@ -313,11 +313,20 @@ app.get("/createclub", (req, res) => {
     res.render("on_click_create_club.ejs",{role:'sks', email: req.session.email, loggedIn:true});
 });
 
-app.post("/createclub", function (req, res) {
+app.post("/clubform", async (req, res) => {
+ const name = req.body.name;
+ const cars = req.body.cars;
+ const bio = req.body.bio;
+ const number = req.body.number;
+ const media1 = req.body.media1;
+ const media2 = req.body.media;
+ const media3 = req.body.media3;
+ const email =req.body.email;
 
-    var sql = "INSERT INTO club(club_id, club_name, category, bio, contact, social_media1, social_media2, social_media3, email) VALUES(null, '" + req.body.name + "', '" + req.body.cars + "','" + req.body.bio + "','" + req.body.contact + "','" + req.body.media1 + "','" + req.body.media2 + "','" + req.body.media3 + "','" + req.body.email + "')";
-    connection.query(sql, [req.body.name, req.body.cars, req.body.bio, req.body.contact, req.body.media1, req.body.media2, req.body.media3, req.body.email], function (error, result) {
-        if (error) {
+
+ connection.query ('INSERT INTO club(club_name, category, bio, contact, social_media1, social_media2, social_media3, email) VALUES(?,?,?,?,?,?,?,?)',
+     [name, cars, bio, number, media1, media2, media3, email],  (err, result) => {
+        if (err) {
             console.error("Error inserting club:", error);
             res.status(500).send("Error creating club");
             return;

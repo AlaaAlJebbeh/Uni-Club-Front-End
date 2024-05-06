@@ -7,6 +7,10 @@ import mysql from "mysql";
 import bodyParser from "body-parser";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 import session from "express-session";
+import fileUpload from "express-fileupload";
+import multer from "multer"
+import fs from "fs";
+
 
 //Constants
 const app = express();
@@ -36,6 +40,7 @@ connection.connect((err) => {
 //Uses public - views - json - serUser middleware
 app.use('/public', express.static(path.join(__dirname, '/public')));
 app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/views', express.static(path.join(__dirname, '/views')));
 app.use(express.static("views"));
 // Apply middleware
@@ -55,12 +60,27 @@ app.use(session({
 
 app.use((req, res, next) => {
     console.log('Incoming request body:', req.body);
+    console.log(req.session.email);
     next();
   });
+app.use(fileUpload());
+
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/images'); // Specify the destination directory
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        cb(null, 'upload-' + Date.now() + ext); // Specify the file naming scheme
+    }
+});
+
+const upload = multer({ storage: storage });
 
 
 app.get('/', (req, res) => {
-    if (req.session.loggedin) {
+    if (req.session.loggedIn) {
         if (req.session.role === 'club') {
             res.render('home', { loggedIn: true, role: "club", email: req.session.email });
         } else if (req.session.role === 'sks') {
@@ -186,13 +206,19 @@ app.get("/myclubpage", (req, res) => {
                         return res.status(500).send("Internal Server Error");
                     }
                     console.log(clubInformation);
-                    res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn });
+                    connection.query("select * from event where club_id = ?", [clubID], (err, event) => {
+                        if (err) {
+                            console.error("Error fetching events:", err);
+                            return res.status(500).send("Internal Server Error");
+                        }
+                        res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, event });
+                    });
+                    
                 });
             });
         });
     });
 });
-
 
 
 //to open social media link sin the database
@@ -238,34 +264,48 @@ app.get("/createEvent", (req, res) => {
 });
 
 app.post("/createEvent", async (req, res) => {
-    console.log("enterCreateEvent");
-    const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category } = req.body;
+
+    const email = req.session.email; // Retrieve email from request body
+    const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category, uploadImage } = req.body;
     const language = req.body.language; // Get the selected language
 
-    // Process the form data (e.g., insert into database)
-    console.log('Event Name:', eventName);
-    console.log('Guest Name:', guestName);
-    console.log('Event Date:', eventDate);
-    console.log('Event Time:', eventTime);
-    console.log('Location:', eventLocation);
-    console.log('Capacity:', capacity);
-    console.log('Category:', category);
-    console.log('Category:', description);
-    console.log('Category:', notes);
-    console.log('Language:', language); // Log the selected language
-    // Insert into `event` table
-    connection.query(
-        `INSERT INTO event (event_name, guest_name, date, time, language, location, capacity, description, notes, category) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category],
-        (error, results, fields) => {
-            if (error) {
-                console.error('Error inserting event into database:', error);
-                return res.status(500).send('Failed to insert');
+    connection.query("SELECT user_id FROM users WHERE email = ?", [email], (err, userResult) => {
+        if (err) {
+            console.error("Error fetching userID:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+        if (userResult.length === 0) {
+            return res.status(404).send("User not found");
+        }
+
+        const userId = userResult[0].user_id;
+
+        connection.query("SELECT club_id FROM club WHERE clm_id = ?", [userId], (err, clubResult) => {
+            if (err) {
+                console.error("Error fetching club id:", err);
+                return res.status(500).send("Internal Server Error");
             }
-            res.status(200).send('event inserted successfully');
+            if (clubResult.length === 0) {
+                return res.status(404).send("Club not found for the user");
+            }
+
+            const clubId = clubResult[0].club_id;
+
+            connection.query(
+                `INSERT INTO event (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, event_img) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, uploadImage],
+                (error, results, fields) => {
+                    if (error) {
+                        console.error('Error inserting event into database:', error);
+                        return res.status(500).send('Failed to insert');
+                    }
+                    res.redirect("/myclubpage");
+                });
         });
+    });
 });
+
 
 //Route createClub
 app.get("/createclub", (req, res) => {

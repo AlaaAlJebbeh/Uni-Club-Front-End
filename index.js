@@ -189,28 +189,20 @@ app.get("/myclubpage", (req, res) => {
                         return res.status(500).send("Internal Server Error");
                     }
                     console.log(clubInformation);
-                    res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn });
+                    connection.query("select * from event where club_id = ?", [clubID], (err, event) => {
+                        if (err) {
+                            console.error("Error fetching events:", err);
+                            return res.status(500).send("Internal Server Error");
+                        }
+                        res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, event });
+                    });
+                    
                 });
             });
         });
     });
 });
 
-app.get("/myevents", (req, res) => {
-
-    const clubID = parseInt(req.params.clubID);
-    console.log("In here " + clubID);
-
-    connection.query("select * from event where club_id = ?", [clubID], (err, event) => {
-        if (err) {
-            console.error("Error fetching events:", err);
-            return res.status(500).send("Internal Server Error");
-        }
-        console.log({event});
-        res.json({event});
-    });
-
-});
 
 //to open social media link sin the database
 app.get("/socialmedia/:link", (req, res) => {

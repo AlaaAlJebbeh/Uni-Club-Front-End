@@ -316,16 +316,17 @@ app.get("/createclub", (req, res) => {
 app.post("/clubform", async (req, res) => {
  const name = req.body.name;
  const cars = req.body.cars;
+ const manager = req.body.manager;
  const bio = req.body.bio;
  const number = req.body.number;
  const media1 = req.body.media1;
- const media2 = req.body.media;
+ const media2 = req.body.media2;
  const media3 = req.body.media3;
  const email =req.body.email;
 
 
- connection.query ('INSERT INTO club(club_name, category, bio, contact, social_media1, social_media2, social_media3, email) VALUES(?,?,?,?,?,?,?,?)',
-     [name, cars, bio, number, media1, media2, media3, email],  (err, result) => {
+ connection.query ('INSERT INTO club(club_name, category, clm_id, bio, contact, social_media1, social_media2, social_media3, email) VALUES(?,?,?,?,?,?,?,?,?)',
+     [name, cars, manager, bio, number, media1, media2, media3, email],  (err, result) => {
         if (err) {
             console.error("Error inserting club:", error);
             res.status(500).send("Error creating club");

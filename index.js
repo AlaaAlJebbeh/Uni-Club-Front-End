@@ -60,6 +60,7 @@ app.use(session({
 
 app.use((req, res, next) => {
     console.log('Incoming request body:', req.body);
+    console.log(req.session.email);
     next();
   });
 app.use(fileUpload());
@@ -205,13 +206,19 @@ app.get("/myclubpage", (req, res) => {
                         return res.status(500).send("Internal Server Error");
                     }
                     console.log(clubInformation);
-                    res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn });
+                    connection.query("select * from event where club_id = ?", [clubID], (err, event) => {
+                        if (err) {
+                            console.error("Error fetching events:", err);
+                            return res.status(500).send("Internal Server Error");
+                        }
+                        res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, event });
+                    });
+                    
                 });
             });
         });
     });
 });
-
 
 
 //to open social media link sin the database
@@ -235,13 +242,11 @@ app.get("/createEvent", (req, res) => {
     res.render('createEvent.ejs');
 });
 
-
-app.post("/createEvent", upload.single('uploadImage'), async (req, res) => {
+app.post("/createEvent", async (req, res) => {
 
     const email = req.session.email; // Retrieve email from request body
     const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category, uploadImage } = req.body;
     const language = req.body.language; // Get the selected language
-    const imageUrl = req.file ? req.file.path : null; // Save image path if uploaded
 
     connection.query("SELECT user_id FROM users WHERE email = ?", [email], (err, userResult) => {
         if (err) {
@@ -266,9 +271,9 @@ app.post("/createEvent", upload.single('uploadImage'), async (req, res) => {
             const clubId = clubResult[0].club_id;
 
             connection.query(
-                `INSERT INTO event (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, event_img, imageUrl) 
+                `INSERT INTO event (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, event_img) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, imageUrl],
+                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, uploadImage],
                 (error, results, fields) => {
                     if (error) {
                         console.error('Error inserting event into database:', error);

@@ -81,6 +81,23 @@ a:active {
     top: -30px;
     left: 3;
 }
+
+
+.cnt6{
+    display: flex;
+    margin-top: 30px;
+    position: absolute;
+    top: 0px;
+    right: 150px;
+}
+.cnt6 button{
+   border: 1px solid black;
+   border-radius: 5px;
+   scale: 1.5;
+   width: 100px;
+   background-color: #193635;
+   color: white;
+}
 .container1 {
     display: flex;
     height: 100%;
@@ -130,8 +147,8 @@ a:active {
 }
 .cnt3 {
     display: flex;
-    font-size: 1.2rem;
-    align-items: top;
+    font-size: 1rem;
+    align-items: center;
     justify-content: center;
 }
 .cnt3 h2{
@@ -147,7 +164,6 @@ a:active {
     border: 1px solid #ccc; /* Add border for visual clarity */
     border-radius: 5px; /* Add border radius for rounded corners */
     margin-top: 10px; /* Add margin to create space */
-    overflow: scroll;
 }
 
 @media (max-width: 1230px) { /* Adjust breakpoint as needed */
@@ -190,7 +206,14 @@ a:active {
 }
 .card-container {
     display: flex;
-    align-items: start;
+    align-items: center;
+    flex: 1;
+    margin-bottom: 20px;
+}
+
+.table-container {
+    display: flex;
+    align-items: center;
     flex: 1;
     margin-bottom: 20px;
 }
@@ -203,6 +226,8 @@ a:active {
     flex-direction: column;
     border-radius: 15px;
     max-width: 400px;
+    max-height: 600px;
+    overflow: hidden;
 }
 
 .image-container{
@@ -219,7 +244,7 @@ a:active {
     flex-wrap: wrap;
     padding-top: 10px;
     padding-left: 2px;
-    font-size: 1.65vh;
+    font-size: 1.7vh;
 }
 .card-details span{
     font-size: 1.9vh;
@@ -234,6 +259,28 @@ a:active {
 .image-container img{
     width: 100%;
     height: 100%;
+    
+}
+
+#my-events-content {
+
+        background-size: auto;
+        background-repeat: no-repeat;
+        background-color: rgba(255, 255, 255, 0.5);
+        background-position: center;
+        height: 100%; /* Ensure it takes the full height of the ContentBody */
+        display: flex;
+        position: relative;
+}
+
+#my-status-content {
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.5);
+    background-position: center;
+    height: 100%; /* Ensure it takes the full height of the ContentBody */
+    display: flex;
+    position: relative;
 }
 
 .Active{
@@ -360,20 +407,6 @@ a:active {
 /*
 STYLES FOR TABLE IN STATUS
 */
-
-@media print {
-    .table, .table__body {
-     overflow: visible;
-     height: auto !important;
-     width: auto !important;
-    }
-   }
-
-@page {
-    size: landscape;
-    margin: 0; 
-}
-
 
 main.table {
     width: 100%;
@@ -561,7 +594,7 @@ thead th span.icon-arrow {
     border: 1.4px solid transparent;
     
     text-align: center;
-    font-size: 1rem;
+    font-size: 1.7rem;
     
     margin-left: .5rem;
     transition: .2s ease-in-out;
@@ -587,6 +620,112 @@ thead th.asc span.icon-arrow{
 thead th.active,tbody td.active {
     color: #0ab3ad;
 }
+
+.export__file {
+    position: relative;
+}
+
+.export__file .export__file-btn {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background: #fff6 url(images/export.png) center / 80% no-repeat;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+}
+
+.export__file .export__file-btn:hover { 
+    background-color: #fff;
+    transform: scale(1.15);
+    cursor: pointer;
+}
+
+.export__file input {
+    display: none;
+}
+
+.export__file .export__file-options {
+    position: absolute;
+    right: 0;
+    
+    width: 12rem;
+    border-radius: .5rem;
+    overflow: hidden;
+    text-align: center;
+
+    opacity: 0;
+    transform: scale(.8);
+    transform-origin: top right;
+    
+    box-shadow: 0 .2rem .5rem #0004;
+    
+    transition: .2s;
+}
+
+.export__file input:checked + .export__file-options {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 100;
+}
+
+.export__file .export__file-options label{
+    display: block;
+    width: 100%;
+    padding: .6rem 0;
+    background-color: #f2f2f2;
+    
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    transition: .2s ease-in-out;
+}
+
+.export__file .export__file-options label:first-of-type{
+    padding: 1rem 0;
+    background-color: #86e49d !important;
+}
+
+.export__file .export__file-options label:hover{
+    transform: scale(1.05);
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.export__file .export__file-options img{
+    width: 2rem;
+    height: auto;
+}
+
+.approve-button {
+    height: 55px;
+    width: 43%;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 400;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #289e46;
+    text-align: center;
+    display: inline-block; /* Ensure inline-block to set width */
+    
+}
+.reject-button {
+    height: 55px;
+    width: 40%;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 400;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: rgb(214, 60, 60);
+    text-align: center;
+    display: inline-block; /* Ensure inline-block to set width */
+    
+}
+
 .details-button{
     text-align: center;
     width: 67px;
@@ -595,5 +734,254 @@ thead th.active,tbody td.active {
     left: 0;
     cursor: pointer;
     background-color: #0ab3ad
+    
+    
+    
+}
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+
+.sideBar {
+    cursor: pointer;
+    display: none;
+}
+.sideBar div {
+    width: 30px;
+    height: 3px;
+    margin: 5px 0;
+    background: #fbfbfb;
+}
+
+@media only screen and (max-width: 1300px) {
+    header {
+        padding: 0 30px;
+    }
+}
+@media only screen and (max-width: 900px) {
+    .sideBar {
+        display: block;
+    }
+    header nav {
+        position: absolute;
+        width: 100%;
+        left: -100%;
+        top: 70px;
+        width: 100%;
+        background: #193635;
+        padding: 30px;
+        transition: 0.3s;
+    }
+    header #nav_check:checked ~ nav {
+        left: 0;
+    }
+    header nav ul {
+        display: block;
+    }
+    header nav ul li a {
+        margin: 5px 0;
+    }
+
+    header .icons i#search-btn {
+        position: absolute;
+        top: 37px;
+        right: 120px;    
+    }
+
+    header .icons i#log-btn {
+        position: absolute;
+        top: 37px;
+        right: 70px;    
+    }
 
 }
+ /*FOOTER*/
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+footer{
+    background-color: #193635;
+    
+}
+.footerContainer{
+    padding: 20px 30px 10px ;
+}
+.socialIcons{
+    display: flex;
+    justify-content: center;
+}
+.socialIcons a{
+    text-decoration: none;
+    padding:  10px;
+    background-color: white;
+    margin: 10px;
+    border-radius: 50%;
+}
+.socialIcons a i{
+    font-size: 2em;
+    color: #193635;
+    opacity: 0,9;
+}
+/* Hover affect on social media icon */
+.socialIcons a:hover{
+    background-color: #7BD3D1;
+    transition: 0.5s;
+}
+.socialIcons a:hover i{
+    color: white;
+    transition: 0.5s;
+}
+.footerNav{
+    margin: 30px 0;
+}
+.footerNav ul{
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+}
+.footerNav ul li a{
+    color:white;
+    margin: 20px;
+    text-decoration: none;
+    font-size: 1.3em;
+    opacity: 0.7;
+    transition: 0.5s;
+
+}
+.footerNav ul li a:hover{
+    opacity: 1;
+    color:#FFD700;
+}
+.footerBottom{
+    background-color: #000;
+    padding: 10px;
+    text-align: center;
+}
+.footerBottom p{
+    color: rgb(255, 255, 255);
+}
+
+@media (max-width: 900px){
+    .footerNav ul{
+        flex-direction: column;
+    } 
+    .footerNav ul li{
+        width:100%;
+        text-align: center;
+        margin: 10px;
+    }
+    .socialIcons a{
+        padding: 8px;
+        margin: 4px;
+    }
+}
+
+.reject-card1{
+    display: none;
+    position: absolute;
+    top: 65%;
+    left: 50%;   
+    justify-content: center;
+    align-items: center;
+    transform: translate(-50%, -50%); /* Center the popup */
+    z-index: 9999; 
+    width: 80%; 
+    max-width: 600px; 
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.reject-card1 {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.reject-card1 input[type="text"] {
+    width: 80%; /* Adjust width as needed */
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: whitesmoke;
+
+}
+
+#closeButton2 {
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: white;
+    background-color: rgb(214, 60, 60);
+}
+
+#sendButton {
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: white;
+    background-color: #289e46;
+}
+
+.custom-table {
+    border-collapse: collapse; /* Merge cell borders */
+    width: fit-content; /* Set table width */
+  }
+  
+  .custom-table td {
+    border: 0px solid #000; /* Add border to table cells */
+    padding: 0px; /* Add padding to table cells */
+    padding-left: 1px;
+    padding-right: 1px;
+  }
+  
+  .column3 {
+    width: 400px; /* Set width for the first column */
+    aspect-ratio: 1; /* Ensure the column maintains a square aspect ratio */
+    border: 2px solid black; /* Add a border for visualization */
+  }
+  
+  #popup img {
+    max-width: 100%; /* Ensure image fits within the column */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Ensure the image behaves as a block element */
+    border-radius: 0%; /* Remove border radius */
+    margin: auto; /* Center the image horizontally */
+  }
+  
+  .popup-card {
+    display: flex; /* Use flexbox to center the content */
+    justify-content: center; 
+    align-items: center;
+    position: fixed; /* Position the popup fixed */
+    top: 50%; /* Adjust the top position */
+    left: 50%; /* Adjust the left position */
+    transform: translate(-50%, -50%); /* Center the popup */
+    z-index: 9999; 
+    width: 30%; 
+    max-width: 800px; /* Adjust the maximum width */
+    height: 70%; /* Adjust the height */
+    max-height: 600px; /* Adjust the maximum height */
+    padding: 20px;
+    border-radius: 10px;
+    background-color: white; /* Add a background color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a box shadow for depth */
+    overflow: auto; /* Add overflow scrolling for content */
+  }
+  
+  #closeButton {
+    background-color: rgb(214, 60, 60);
+    color: white;
+    border-radius: 20%;
+    width: 60px;
+    height: 40px;
+    position: absolute; /* Position the close button absolutely */
+    bottom: 10px; /* Position the button 10px from the bottom */
+    right: 10px; /* Position the button 10px from the right */
+  }
+  
+  
+  

@@ -7,6 +7,7 @@ import mysql from "mysql";
 import bodyParser from "body-parser";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 import session from "express-session";
+import fileUpload from "express-fileupload";
 
 //Constants
 const app = express();
@@ -57,10 +58,11 @@ app.use((req, res, next) => {
     console.log('Incoming request body:', req.body);
     next();
   });
+app.use(fileUpload());
 
 
 app.get('/', (req, res) => {
-    if (req.session.loggedin) {
+    if (req.session.loggedIn) {
         if (req.session.role === 'club') {
             res.render('home', { loggedIn: true, role: "club", email: req.session.email });
         } else if (req.session.role === 'sks') {
@@ -229,6 +231,25 @@ app.get("/eventRequests", (req, res) => {
 app.get("/createEvent", (req, res) => {
     res.render('createEvent.ejs');
 });
+
+app.post("/createEvent", async (req, res) => {
+    
+    const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category, uploadImage } = req.body;
+    const language = req.body.language; // Get the selected language
+
+    connection.query(
+        `INSERT INTO event (event_name, guest_name, date, time, language, location, capacity, description, notes, category, event_img) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, uploadImage],
+        (error, results, fields) => {
+            if (error) {
+                console.error('Error inserting event into database:', error);
+                return res.status(500).send('Failed to insert');
+            }
+            res.status(200).send('event inserted successfully');
+        });
+});
+
 
 
 //Route createClub

@@ -193,7 +193,21 @@ app.get("/myclubpage", (req, res) => {
     });
 });
 
+app.get("/myevents", (req, res) => {
 
+    const clubID = parseInt(req.params.clubID);
+    console.log("In here " + clubID);
+
+    connection.query("select * from event where club_id = ?", [clubID], (err, event) => {
+        if (err) {
+            console.error("Error fetching events:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+        console.log({event});
+        res.json({event});
+    });
+
+});
 
 //to open social media link sin the database
 app.get("/socialmedia/:link", (req, res) => {
@@ -216,35 +230,6 @@ app.get("/createEvent", (req, res) => {
     res.render('createEvent.ejs');
 });
 
-app.post("/createEvent", async (req, res) => {
-    console.log("enterCreateEvent");
-    const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category } = req.body;
-    const language = req.body.language; // Get the selected language
-
-    // Process the form data (e.g., insert into database)
-    console.log('Event Name:', eventName);
-    console.log('Guest Name:', guestName);
-    console.log('Event Date:', eventDate);
-    console.log('Event Time:', eventTime);
-    console.log('Location:', eventLocation);
-    console.log('Capacity:', capacity);
-    console.log('Category:', category);
-    console.log('Category:', description);
-    console.log('Category:', notes);
-    console.log('Language:', language); // Log the selected language
-    // Insert into `event` table
-    connection.query(
-        `INSERT INTO event (event_name, guest_name, date, time, language, location, capacity, description, notes, category) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category],
-        (error, results, fields) => {
-            if (error) {
-                console.error('Error inserting event into database:', error);
-                return res.status(500).send('Failed to insert');
-            }
-            res.status(200).send('event inserted successfully');
-        });
-});
 
 //Route createClub
 app.get("/createclub", (req, res) => {

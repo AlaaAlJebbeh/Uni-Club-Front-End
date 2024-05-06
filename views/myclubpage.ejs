@@ -38,7 +38,7 @@
           <div class="icon">
             <img src="../public/images/myClubAssets/event2.png" />
           </div>
-          <a href="#" id="my-events-link">My Events</a>
+          <a href="/myevents?ClubId=<%=clubInformation[0].club_id%>" id="my-events-link">My Events</a>
         </div>
         <div class="items">
           <div class="icon">
@@ -68,6 +68,14 @@
         <div class="cnt1">
           <div class="logo-side">
             <img src="../public/images/pixel.jpg" alt="Image not loading" />
+          </div>
+        </div>
+        <div class="cnt6">
+          <div class="logo-side">
+            <% console.log("in create event href" + clubInformation[0].club_id) %>
+            <a href="/createevent?clubID=<%=clubInformation[0].club_id%>"><button>Create Event</button></a>
+
+            
           </div>
         </div>
           <h1 style="text-align: center; font-size: 42px; margin-bottom: 75px">

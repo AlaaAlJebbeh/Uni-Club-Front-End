@@ -81,6 +81,23 @@ a:active {
     top: -30px;
     left: 3;
 }
+
+
+.cnt6{
+    display: flex;
+    margin-top: 30px;
+    position: absolute;
+    top: 0px;
+    right: 150px;
+}
+.cnt6 button{
+   border: 1px solid black;
+   border-radius: 5px;
+   scale: 1.5;
+   width: 100px;
+   background-color: #193635;
+   color: white;
+}
 .container1 {
     display: flex;
     height: 100%;

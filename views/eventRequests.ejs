@@ -56,12 +56,12 @@
                     <% tempevents.forEach((item, index) => { %>
                     <tr>
                         <td> <img src="/images/images/Zinzu Chan Lee.jpg" alt="">Zinzu Chan Lee</td>
-                        <td>  <%=events[index].event_name%></td>
+                        <td>  <%=events[index].event_id%></td>
                         <td>
                             <p class="status approved">Approved</p>
                         </td>
                         <td><button class="approve-button">Approve</button> <button class="reject-button" id="<%=index%>" onclick="">Reject</button></td>
-                        <td><button class="details-button"><img src="/images/images/Details.png" alt="Button Image"></button></td>
+                        <td><button class="details-button"  data-event-id="<%= events[index].event_id %>"><img src="/images/images/Details.png" alt="Button Image"></button></td>
 
                     </tr>
                     <form action="/rejectMessage?eventid=<%=events[index].event_id%>" method="POST" class="form">

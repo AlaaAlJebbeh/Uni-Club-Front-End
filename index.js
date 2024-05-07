@@ -9,6 +9,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 import session from "express-session";
 import fileUpload from "express-fileupload";
 import { get } from "http";
+import multer from "multer"
+import fs from "fs";
+
 
 //Constants
 const app = express();
@@ -38,6 +41,7 @@ connection.connect((err) => {
 //Uses public - views - json - serUser middleware
 app.use('/public', express.static(path.join(__dirname, '/public')));
 app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/views', express.static(path.join(__dirname, '/views')));
 app.use(express.static("views"));
 // Apply middleware
@@ -61,6 +65,19 @@ app.use((req, res, next) => {
     next();
   });
 app.use(fileUpload());
+
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/images'); // Specify the destination directory
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        cb(null, 'upload-' + Date.now() + ext); // Specify the file naming scheme
+    }
+});
+
+const upload = multer({ storage: storage });
 
 
 app.get('/', (req, res) => {
@@ -206,8 +223,29 @@ app.get("/socialmedia/:link/:link2", (req, res) => {
 //Route eventRequests 
 
 app.get("/eventRequests", (req, res) => {
+    connection.query(`SELECT * FROM tempevents`, (err, results) => {
+        if (err) {
+            console.error("Error fetching temp events:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+        console.log(results);
+        // Extracting event IDs from the results of the first query
+        const eventIds = results.map(row => row.eventid);
+        console.log(eventIds);
+    
+        // Performing a second query to fetch events based on the event IDs
+        connection.query(`SELECT * FROM event WHERE event_id IN (?)`, [eventIds], (err, events) => {
+            if (err) {
+                console.error("Error fetching events:", err);
+                return res.status(500).send("Internal Server Error");
+            }
+            console.log(events);
+            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events: events });
+        });
+    });
+    
 
-    res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true });
+    
 });
 
 app.get("/createEvent", (req, res) => {
@@ -258,18 +296,27 @@ app.post("/createEvent", async (req, res) => {
 });
 
 
-
 //Route createClub
 app.get("/createclub", (req, res) => {
 
     res.render("on_click_create_club.ejs",{role:'sks', email: req.session.email, loggedIn:true});
 });
 
-app.post("/createclub", function (req, res) {
+app.post("/clubform", async (req, res) => {
+ const name = req.body.name;
+ const cars = req.body.cars;
+ const manager = req.body.manager;
+ const bio = req.body.bio;
+ const number = req.body.number;
+ const media1 = req.body.media1;
+ const media2 = req.body.media2;
+ const media3 = req.body.media3;
+ const email =req.body.email;
 
-    var sql = "INSERT INTO club(club_id, club_name, category, bio, contact, social_media1, social_media2, social_media3, email) VALUES(null, '" + req.body.name + "', '" + req.body.cars + "','" + req.body.bio + "','" + req.body.contact + "','" + req.body.media1 + "','" + req.body.media2 + "','" + req.body.media3 + "','" + req.body.email + "')";
-    connection.query(sql, [req.body.name, req.body.cars, req.body.bio, req.body.contact, req.body.media1, req.body.media2, req.body.media3, req.body.email], function (error, result) {
-        if (error) {
+
+ connection.query ('INSERT INTO club(club_name, category, clm_id, bio, contact, social_media1, social_media2, social_media3, email) VALUES(?,?,?,?,?,?,?,?,?)',
+     [name, cars, manager, bio, number, media1, media2, media3, email],  (err, result) => {
+        if (err) {
             console.error("Error inserting club:", error);
             res.status(500).send("Error creating club");
             return;
@@ -278,6 +325,41 @@ app.post("/createclub", function (req, res) {
         res.send('Club successfully created');
     });
 });
+
+app.post("/rejectMessage", async (req, res)=> {
+    const rejectionReason = req.body.rejectionReason;
+    const eventid=req.query.eventid;
+    console.log(rejectionReason);
+    console.log(eventid);
+
+    connection.query('SELECT sks_id from sks_admin WHERE email=?', [req.session.email],(err, result) => {
+        if (err) {
+            console.error("Error getting sks id:", error);
+            res.status(500).send("Error creating club");
+            return;
+        }
+        const sksid=result[0].sks_id;
+        connection.query('SELECT club_id from event WHERE event_id = ?', [eventid],(err, club) => {
+            if (err) {
+                console.error("error getting club id:", error);
+                res.status(500).send("Error creating club");
+                return;
+            }
+            const clubid = club[0].club_id;
+            connection.query('INSERT INTO history_event(status_condition, sks_id, club_id, comment) VALUES(?,?,?,?)', [1,sksid,clubid,rejectionReason], (error,results)=>{
+                if(error){
+                    console.log("couldn't insert to database",error)
+                }
+                else{
+                    res.send("message sent to database");
+                }
+        });
+    });
+
+
+   });
+});
+
 
 //Route Comparing 
 app.get("/comparing", (req, res) => {

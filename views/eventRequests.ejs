@@ -67,12 +67,19 @@
                     <% var buttonId; %>
                     <% tempevents.forEach((item, index) => { %>
                     <tr>
-                        <td> <img src="/images/images/Zinzu Chan Lee.jpg" alt="">Zinzu Chan Lee</td>
-                        <td>  <%=item.event_id%></td>
+                        <td> <img src="/images/images/Zinzu Chan Lee.jpg" alt=""> <%=item.clm_id%><td>
+
+
+                        <td> 
+                             <%=item.event_name%></td>
+
                         <td>
-                            <p class="status approved">Approved</p>
+                            <p class="status approved">Pending </p>
                         </td>
-                        <td><button class="approve-button">Approve</button> <button class="reject-button" id="<%=index%>" onclick="">Reject</button></td>
+
+                        <td>
+                            <button class="approve-button"  >Approve</button> 
+                            <button class="reject-button" id="<%=index%>" onclick="">Reject<button><td>
                         <td>
                             <% console.log("event id" + item.event_id);%>
                             <%  buttonId = 'button_' + item.event_id; %>

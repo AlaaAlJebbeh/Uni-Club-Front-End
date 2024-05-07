@@ -195,7 +195,7 @@ tbody tr.hide td img {
 }
 
 .status.approved {
-    background-color: #289e46;
+    background-color: orange;
     color: white;
 }
 

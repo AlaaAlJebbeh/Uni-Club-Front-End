@@ -251,15 +251,20 @@ app.get("/eventRequests", (req, res) => {
                 return res.status(500).send("Internal Server Error");
             }
             console.log(events);
-            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events });
+            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events});
+
         });
+
+
+           
+
+       
     });
 
 
 
 });
 
-<<<<<<< HEAD
 app.get("/popupContent", (req, res) => {
     const buttonId = req.query.buttonId;
     const lastIndex = buttonId.lastIndexOf('_');
@@ -275,10 +280,9 @@ app.get("/popupContent", (req, res) => {
         }
         console.log({results});
         res.render('popupContent.ejs', { results });
-    })
+    });
    
-  
-=======
+});
 app.get("/statusClubManager", (req, res) => {
 
     connection.query("SELECT club_id FROM club_manager WHERE email = ?", [email], (err, userResult) => {
@@ -304,7 +308,6 @@ app.get("/statusClubManager", (req, res) => {
             res.render('statusClubManager.ejs', { role: 'club', email: req.session.email, loggedIn: true, tempevents: results });
         });
     });
->>>>>>> d1e396f4ac3f80a9b5fb7ab8ca2180606f611f24
 });
 
 

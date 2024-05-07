@@ -207,15 +207,18 @@ app.get("/myclubpage", (req, res) => {
                                 return res.status(500).send("Internal Server Error");
                             }
                             console.log(resultsHistory);
-                            res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, event, results, resultsHistory });
+
+                            connection.query(`SELECT * from posts where club_id = ?`, [clubID], (err, posts) =>{
+                                if (err) {
+                                    console.error("Error fetching posts:", err);
+                                    return res.status(500).send("Internal Server Error");
+                                }
+                                res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, event, results, resultsHistory, posts });
+                            });
+                           
                         });
-
-                    });
-
-                    
+                    });     
                 });
-
-
             });
         });
     });

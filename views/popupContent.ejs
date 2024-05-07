@@ -1,0 +1,46 @@
+<div class="popup-content">
+    <!-- Render the fetched popup content here -->
+    <h2>Popup Content</h2>
+    
+    <% results.forEach((item) => { %>
+
+        <section>
+            <div class="wrapper">
+                            <div class="flip-card">
+           <div class="front card">
+           <table class="custom-table">
+            <div class="container">
+                <div class="card">
+                    <div class="imgBx">
+                        <img src="../public/images/images/Alex Gonley.jpg" alt="Event picture" />
+                    </div>
+                    <div class="contentBx">
+                        <div class="content">             
+                        <h6><span name="event_name">Event name:    </span><%=item.event_name %></h6>
+                        <br />
+                        <h6><span name="date" >Date:               </span><%=item.date %></h6>
+                        <h6><span name="time">Time:                </span><%=item.time %></h6>
+                        <h6><span name="location">Location:        </span><%=item.location %></h6>
+                        <h6><span name="language">Language:        </span><%=item.language %></h6>
+                        <h6><span name="geust">Guest:              </span><%=item.guest %></h6>
+                        <h6><span name="description">Description:  </span><%=item.description %></h6>
+                        <h6><span name="capacity">Capacity:        </span><%=item.capacity %></h6>
+                        <h6><span name="notes">Notes:              </span><%=item.notes %></h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+                
+    </table>
+    </div>
+</div>
+</div>
+
+            
+        <button id="closeButton" onclick="closePopup()">Close</button >
+    </div>
+</section>
+
+    <% }); %>
+    
+</div>

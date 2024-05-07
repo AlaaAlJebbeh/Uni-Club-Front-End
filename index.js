@@ -240,13 +240,34 @@ app.get("/eventRequests", (req, res) => {
                 return res.status(500).send("Internal Server Error");
             }
             console.log(events);
-            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events: events });
+            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events });
         });
     });
     
 
     
 });
+
+app.get("/popupContent", (req, res) => {
+    const buttonId = req.query.buttonId;
+    const lastIndex = buttonId.lastIndexOf('_');
+    const eventId = buttonId.substring(lastIndex + 1); // Extract the substring after the last '_'
+    // Get the button ID from the query string
+
+    console.log(eventId);
+    // Fetch popup content based on button ID from the database or any other source
+    console.log("this is the button id" + eventId);
+    connection.query('SELECT * FROM tempevents where event_id = ?', [eventId],(err, results)=>{
+        if(err){
+            console.log('didnt get', err);
+        }
+        console.log({results});
+        res.render('popupContent.ejs', { results });
+    })
+   
+  
+});
+
 
 app.get("/createEvent", (req, res) => {
     res.render('createEvent.ejs');

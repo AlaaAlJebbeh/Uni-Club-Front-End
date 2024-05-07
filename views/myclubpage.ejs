@@ -1,65 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Font Linking -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Style Linking -->
-    <link rel="stylesheet" href="../public/styles/myclubpage.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
-  </head>
-  <body>
-    <!-- Header -->
-    <header>
-      <% if(loggedIn) { %> <%- include("partials/club_header.ejs", {loggedIn:
-      true}); %> <% } else { %> <%- include("partials/header.ejs"); %> <% } %>
-    </header>
+  <!-- Font Linking -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet" />
 
-    <!-- My Club Header Part -->
-    <div class="container1">
-      <div class="sidebar1">
-        <div class="items">
-          <div class="icon">
-            <img src="../public/images/myClubAssets/profile33.png" />
-          </div>
-          <a href="#" id="my-profile-link"
-            ><% if(loggedIn) { %>My <% } else { %> Club <% } %> Profile</a
-          >
+  <!-- Style Linking -->
+  <link rel="stylesheet" href="../public/styles/myclubpage.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <% if(loggedIn) { %> <%- include("partials/club_header.ejs", {loggedIn: true}); %>
+        <% } else { %> <%- include("partials/header.ejs"); %>
+            <% } %>
+  </header>
+
+  <!-- My Club Header Part -->
+  <div class="container1">
+    <div class="sidebar1">
+      <div class="items">
+        <div class="icon">
+          <img src="../public/images/myClubAssets/profile33.png" />
         </div>
-        <div class="items">
-          <div class="icon">
-            <img src="../public/images/myClubAssets/event2.png" />
-          </div>
-          <a id="my-events-link"
-            ><% if(loggedIn) { %>My <% } else { %> Club <% } %> Events</a
-          >
+        <a href="#" id="my-profile-link">
+          <% if(loggedIn) { %>My <% } else { %> Club <% } %> Profile
+        </a>
+      </div>
+      <div class="items">
+        <div class="icon">
+          <img src="../public/images/myClubAssets/event2.png" />
         </div>
-        <div class="items">
-          <div class="icon">
-            <img src="../public/images/myClubAssets/post2.png" />
-          </div>
-          <a href="#" id="my-posts-link"
-            ><% if(loggedIn) { %>My <% } else { %> Club <% } %> Posts</a
-          >
+        <a id="my-events-link">
+          <% if(loggedIn) { %>My <% } else { %> Club <% } %> Events
+        </a>
+      </div>
+      <div class="items">
+        <div class="icon">
+          <img src="../public/images/myClubAssets/post2.png" />
         </div>
-        <% if (loggedIn) { %>
+        <a href="#" id="my-posts-link">
+          <% if(loggedIn) { %>My <% } else { %> Club <% } %> Posts
+        </a>
+      </div>
+      <% if (loggedIn) { %>
         <div class="items" id="status-item">
           <div class="icon">
             <img src="../public/images/myClubAssets/status.png" />
           </div>
-          <a href="#" id="my-status-link">Status Manager</a>
+          <a href="/statusClubManager" id="my-status-link">Status Manager</a>
         </div>
         <div class="items">
           <div class="icon">
@@ -68,191 +65,155 @@
           <a href="#" id="club-notifications-link">Club Notifications</a>
         </div>
         <% } %>
-      </div>
+    </div>
 
-      <div class="ContentBody">
-        <div
-          id="my-profile-content"
-          class="content-section"
-          style="display: block"
-        >
-          <div class="cnt1">
-            <div class="logo-side">
-              <img src="../public/images/pixel.jpg" alt="Image not loading" />
-              <% if (loggedIn) { %>
+    <div class="ContentBody">
+      <div id="my-profile-content" class="content-section" style="display: block">
+        <div class="cnt1">
+          <div class="logo-side">
+            <img src="../public/images/pixel.jpg" alt="Image not loading" />
+            <% if (loggedIn) { %>
               <button>Upload</button>
               <% } %>
-            </div>
           </div>
+        </div>
 
-          <% if (loggedIn) { %>
+        <% if (loggedIn) { %>
           <div class="cnt6">
             <div class="logo-side">
-              <% console.log("in create event href" +
-              clubInformation[0].club_id) %>
-              <a href="/createevent"><button>Create Event</button></a>
+              <% console.log("in create event href" + clubInformation[0].club_id) %>
+                <a href="/createevent"><button>Create Event</button></a>
             </div>
           </div>
           <% } %>
 
-          <h1 style="text-align: center; font-size: 42px; margin-bottom: 75px">
-            Club Information
-          </h1>
+            <h1 style="text-align: center; font-size: 42px; margin-bottom: 75px">
+              Club Information
+            </h1>
 
-          <form
-            id="profileForm"
-            method="POST"
-            action="/updateProfile"
-            class="content-container"
-            target="/myclubpage"
-          >
-            <div class="cnt2">
-              <h1>
-                <span style="color: #193635">Club Name:</span>
-                <span
-                  contenteditable="<%= loggedIn %>"
-                  id="clubNameField"
-                  data-field="club_name"
-                >
-                  <%= clubInformation[0].club_name %>
-                </span>
-                <input type="hidden" name="club_name_field" value="club_name" />
-                <input
-                  type="hidden"
-                  name="club_name_content"
-                  id="clubNameContent"
-                />
-              </h1>
-              <h1>
-                Category:
-                <strong contenteditable="<%= loggedIn %>" id="categoryField">
-                  <%= clubInformation[0].category %>
-                </strong>
-                <input type="hidden" name="category_field" value="category" />
-                <input
-                  type="hidden"
-                  name="category_content"
-                  id="categoryContent"
-                />
-              </h1>
-            </div>
-            <div class="cnt3">
-              <h1 style="margin-right: 15px">BIO:</h1>
-              <div
-                class="bio-textbox"
-                contenteditable="<%= loggedIn %>"
-                placeholder="Enter your bio here"
-                id="bioField"
-              >
-                <%= clubInformation[0].bio %>
+            <form id="profileForm" method="POST" action="/updateProfile" class="content-container" target="/myclubpage">
+              <div class="cnt2">
+                <h1>
+                  <span style="color: #193635">Club Name:</span>
+                  <span contenteditable="<%= loggedIn %>" id="clubNameField" data-field="club_name">
+                    <%= clubInformation[0].club_name %>
+                  </span>
+                  <input type="hidden" name="club_name_field" value="club_name" />
+                  <input type="hidden" name="club_name_content" id="clubNameContent" />
+                </h1>
+                <h1>
+                  Category:
+                  <strong contenteditable="<%= loggedIn %>" id="categoryField">
+                    <%= clubInformation[0].category %>
+                  </strong>
+                  <input type="hidden" name="category_field" value="category" />
+                  <input type="hidden" name="category_content" id="categoryContent" />
+                </h1>
               </div>
-              <input type="hidden" name="bio_field" value="bio" />
-              <input type="hidden" name="bio_content" id="bioContent" />
-            </div>
-            <div class="cnt4">
-              <h2>Social Media / Contact Info</h2>
-              <div class="contact-info">
-                <img src="../public/images/myClubAssets/email.png" />
-                <div
-                  class="Email"
-                  style="font-size: 20px"
-                  contenteditable="<%= loggedIn %>"
-                  id="emailField"
-                >
-                  <%= clubInformation[0].email %>
+              <div class="cnt3">
+                <h1 style="margin-right: 15px">BIO:</h1>
+                <div class="bio-textbox" contenteditable="<%= loggedIn %>" placeholder="Enter your bio here"
+                  id="bioField">
+                  <%= clubInformation[0].bio %>
                 </div>
-                <input type="hidden" name="email_field" value="email" />
-                <input type="hidden" name="email_content" id="emailContent" />
+                <input type="hidden" name="bio_field" value="bio" />
+                <input type="hidden" name="bio_content" id="bioContent" />
               </div>
-            </div>
-            <% if (loggedIn) { %>
-            <button type="submit" id="saveButton">Save</button>
-            <% } %>
-          </form>
-          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-          <script>
-            $(document).ready(function () {
-              $("#saveButton").on("click", function () {
-                var hasChanges = false; // Flag to track if there are any edits
-          
-                // Update club name content (check for changes)
-                var clubNameContent = $("#clubNameField").text();
-                var originalClubNameContent = $("#clubNameField").attr("data-original-content");
-                if (clubNameContent !== originalClubNameContent) {
-                  console.log(clubNameContent);
-                  $("#clubNameContent").val(clubNameContent);
-                  hasChanges = true;
-                } else {
-                  $("#clubNameContent").val('');
-                }
-          
-                // Update category content (check for changes)
-                var categoryContent = $("#categoryField").text();
-                var originalCategoryContent = $("#categoryField").attr("data-original-content");
-                if (categoryContent !== originalCategoryContent) {
-                  $("#categoryContent").val(categoryContent);
-                  hasChanges = true;
-                } else {
-                  $("#categoryContent").val('');
-                }
-          
-                // Update bio content (check for changes)
-                var bioContent = $("#bioField").text();
-                var originalBioContent = $("#bioField").attr("data-original-content");
-                if (bioContent !== originalBioContent) {
-                  $("#bioContent").val(bioContent);
-                  hasChanges = true;
-                } else {
-                  $("#bioContent").val('');
-                }
-          
-                // Update email content (check for changes)
-                var emailContent = $("#emailField").text();
-                var originalEmailContent = $("#emailField").attr("data-original-content");
-                if (emailContent !== originalEmailContent) {
-                  $("#emailContent").val(emailContent);
-                  hasChanges = true;
-                } else {
-                  $("#emailContent").val('');
-                }
-          
-                if (hasChanges) {
-                  $("#profileForm").submit();
-                } else {
-                  // Handle no changes scenario (optional: display a message)
-                  console.log("No changes detected in the form.");
-                }
+              <div class="cnt4">
+                <h2>Social Media / Contact Info</h2>
+                <div class="contact-info">
+                  <img src="../public/images/myClubAssets/email.png" />
+                  <div class="Email" style="font-size: 20px" contenteditable="<%= loggedIn %>" id="emailField">
+                    <%= clubInformation[0].email %>
+                  </div>
+                  <input type="hidden" name="email_field" value="email" />
+                  <input type="hidden" name="email_content" id="emailContent" />
+                </div>
+              </div>
+              <% if (loggedIn) { %>
+                <button type="submit" id="saveButton">Save</button>
+                <% } %>
+            </form>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script>
+              $(document).ready(function () {
+                $("#saveButton").on("click", function () {
+                  var hasChanges = false; // Flag to track if there are any edits
+
+                  // Update club name content (check for changes)
+                  var clubNameContent = $("#clubNameField").text();
+                  var originalClubNameContent = $("#clubNameField").attr("data-original-content");
+                  if (clubNameContent !== originalClubNameContent) {
+                    console.log(clubNameContent);
+                    $("#clubNameContent").val(clubNameContent);
+                    hasChanges = true;
+                  } else {
+                    $("#clubNameContent").val('');
+                  }
+
+                  // Update category content (check for changes)
+                  var categoryContent = $("#categoryField").text();
+                  var originalCategoryContent = $("#categoryField").attr("data-original-content");
+                  if (categoryContent !== originalCategoryContent) {
+                    $("#categoryContent").val(categoryContent);
+                    hasChanges = true;
+                  } else {
+                    $("#categoryContent").val('');
+                  }
+
+                  // Update bio content (check for changes)
+                  var bioContent = $("#bioField").text();
+                  var originalBioContent = $("#bioField").attr("data-original-content");
+                  if (bioContent !== originalBioContent) {
+                    $("#bioContent").val(bioContent);
+                    hasChanges = true;
+                  } else {
+                    $("#bioContent").val('');
+                  }
+
+                  // Update email content (check for changes)
+                  var emailContent = $("#emailField").text();
+                  var originalEmailContent = $("#emailField").attr("data-original-content");
+                  if (emailContent !== originalEmailContent) {
+                    $("#emailContent").val(emailContent);
+                    hasChanges = true;
+                  } else {
+                    $("#emailContent").val('');
+                  }
+
+                  if (hasChanges) {
+                    $("#profileForm").submit();
+                  } else {
+                    // Handle no changes scenario (optional: display a message)
+                    console.log("No changes detected in the form.");
+                  }
+                });
               });
-            });
-          </script>
-          
+            </script>
 
-          <hr />
 
-          <h1 style="text-align: center; font-size: 42px; margin-bottom: 75px">
-            Club Manager Information
-          </h1>
+            <hr />
 
-          <div class="content-containerManager">
-            <% name.forEach((item) => { %>
-            <div class="CLMNAMES">
-              <img src="../public/images/images/Alson GC.jpg" />
-              <h1>
-                <span style="color: #193635">Club Manager Name:</span><br />
-                <%=item.name%>
-              </h1>
+            <h1 style="text-align: center; font-size: 42px; margin-bottom: 75px">
+              Club Manager Information
+            </h1>
+
+            <div class="content-containerManager">
+              <% name.forEach((item)=> { %>
+                <div class="CLMNAMES">
+                  <img src="../public/images/images/Alson GC.jpg" />
+                  <h1>
+                    <span style="color: #193635">Club Manager Name:</span><br />
+                    <%=item.name%>
+                  </h1>
+                </div>
+                <% }); %>
             </div>
-            <% }); %>
-          </div>
-        </div>
+      </div>
 
-        <div
-          id="my-events-content"
-          class="content-section"
-          style="display: none"
-        >
-          <div class="card-container">
-            <% event.forEach((item, index) => { %>
+      <div id="my-events-content" class="content-section" style="display: none">
+        <div class="card-container">
+          <% event.forEach((item, index)=> { %>
             <div class="card">
               <div class="image-container">
                 <img src="../public/images/pixel.jpg" />
@@ -261,241 +222,139 @@
                 currentDate.setHours(0, 0, 0, 0); const eventDate = new
                 Date(item.date); eventDate.setHours(0, 0, 0, 0); if
                 (currentDate.getTime() === eventDate.getTime()) { %>
-                <div class="Active">Active</div>
-                <% } else if (currentDate.getTime() > eventDate.getTime()) { %>
+                <div class=" Active">Active
+              </div>
+              <% } else if (currentDate.getTime()> eventDate.getTime()) { %>
                 <div class="canceled">Finished</div>
                 <% } else { %>
-                <div class="not-active">SOON</div>
-                <% } %>
+                  <div class="not-active">SOON</div>
+                  <% } %>
+            </div>
+            <div class="text-container">
+              <div class="card-details">
+                <span>Club Name:</span>
+                <%= clubInformation[0].club_name %>
               </div>
-              <div class="text-container">
-                <div class="card-details">
-                  <span>Club Name:</span> <%= clubInformation[0].club_name %>
-                </div>
-                <div class="card-details">
-                  <span>Event Name:</span> <%= item.event_name %>
-                </div>
-                <div class="card-details">
-                  <span>Date:</span> <%= item.date.toString().substring(0, 11)
-                  %>
-                </div>
-                <div class="card-details">
-                  <span>Time:</span> <%= item.time %>
-                </div>
-                <div class="card-details">
-                  <span>Location:</span> <%= item.location %>
-                </div>
-                <div class="card-details">
-                  <span>Language:</span> <%= item.language %>
-                </div>
-                <div class="card-details">
-                  <span>guest:</span> <%= item.guest_name %>
-                </div>
-                <div class="card-details">
-                  <span>Description:</span> <%= item.description %>
-                </div>
-                <div class="card-details">
-                  <span>Capacity:</span> <%= item.capacity %>
-                </div>
-                <div class="card-details">
-                  <span>Notes:</span> <%= item.notes %>
-                </div>
+              <div class="card-details">
+                <span>Event Name:</span>
+                <%= item.event_name %>
+              </div>
+              <div class="card-details">
+                <span>Date:</span>
+                <%= item.date.toString().substring(0, 11) %>
+              </div>
+              <div class="card-details">
+                <span>Time:</span>
+                <%= item.time %>
+              </div>
+              <div class="card-details">
+                <span>Location:</span>
+                <%= item.location %>
+              </div>
+              <div class="card-details">
+                <span>Language:</span>
+                <%= item.language %>
+              </div>
+              <div class="card-details">
+                <span>guest:</span>
+                <%= item.guest_name %>
+              </div>
+              <div class="card-details">
+                <span>Description:</span>
+                <%= item.description %>
+              </div>
+              <div class="card-details">
+                <span>Capacity:</span>
+                <%= item.capacity %>
+              </div>
+              <div class="card-details">
+                <span>Notes:</span>
+                <%= item.notes %>
               </div>
             </div>
-            <% }); %>
-          </div>
         </div>
-        <div
-          id="my-posts-content"
-          class="content-section"
-          style="display: none"
-        >
-          POSTS SECTION
-          <!-- Content for My Events -->
-        </div>
-        <div
-          id="my-status-content"
-          class="content-section"
-          style="display: none"
-        >
-          <div class="table-container">
-            <main class="table" id="customers_table">
-              <section class="table__header">
-                <h1>Content Management</h1>
-                <div class="input-group">
-                  <input type="search" placeholder="Search Request..." />
-                  <img src="images/search.png" alt="" />
-                </div>
-              </section>
-
-              <section class="table__body">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>
-                        Club Name <span class="icon-arrow">&UpArrow;</span>
-                      </th>
-                      <th>
-                        Request Type <span class="icon-arrow">&UpArrow;</span>
-                      </th>
-                      <th>Status <span class="icon-arrow">&UpArrow;</span></th>
-                      <th>Details</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <h4 style="color: black"></h4>
-                      </td>
-                      <td><h4 style="color: black"></h4></td>
-                      <td>
-                        <p class="status pending"></p>
-                      </td>
-                      <td>
-                        <button
-                          class="details-button"
-                          onclick="showDetails()"
-                          data-club-id=""
-                        >
-                          <img src="Details.png" alt="Button Image" />
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </section>
-
-              <div id="popup" class="popup-card" style="display: none">
-                <div class="wrapper">
-                  <div class="flip-card">
-                    <div class="front card">
-                      <table class="custom-table">
-                        <tr>
-                          <td class="column1">
-                            <img src="" alt="Old Image" />
-
-                            <p id="beforetext"></p>
-                          </td>
-                          <td class="column2">
-                            <p id="after"></p>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-                <button id="closeButton" onclick="closePopup()">Close</button>
-              </div>
-
-              <div id="reject" class="reject-card1">
-                <input
-                  type="text"
-                  id="rejectionReason"
-                  placeholder="Enter rejection reason..."
-                />
-                <button id="sendButton">Send</button>
-                <button id="closeButton2" onclick="closePopup2()">Close</button>
-              </div>
-              <script>
-                function showDetails(index) {
-                  // Retrieve the club ID from the button's data attribute
-                  var clubId = document
-                    .querySelector(`.details-button[data-club-id="${index}"]`)
-                    .getAttribute("data-club-id");
-
-                  // Fetch the old picture URL from the club table using AJAX
-                  fetch(`/getOldPicture?clubId=${clubId}`)
-                    .then((response) => response.json())
-                    .then((data) => {
-                      // Display the old picture URL in the popup
-                      document.getElementById("beforetext").innerText =
-                        data.image;
-                    })
-                    .catch((error) => {
-                      console.error("Error:", error);
-                    });
-
-                  // Show the popup
-                  document.getElementById("popup").style.display = "block";
-                }
-              </script>
-
-              <script>
-                // Function to show the popup card
-                function showPopup() {
-                  document.getElementById("popup").style.display = "block";
-                }
-
-                // Function to close the popup card
-                function closePopup() {
-                  document.getElementById("popup").style.display = "none";
-                }
-
-                // Attach click event listener to the button
-                var buttons = document.querySelectorAll(".details-button");
-                buttons.forEach(function (button) {
-                  button.addEventListener("click", function (e) {
-                    showPopup();
-                    // Display the concatenated keys
-                  });
-                });
-              </script>
-
-              <!-- Script for the Send button and cancel button in the reject request pop
-            up-->
-              <script>
-                function showPopup2() {
-                  var popup = document.getElementById("reject");
-                  popup.style.display = "block";
-                }
-
-                function closePopup2() {
-                  var popup = document.getElementById("reject");
-                  popup.style.display = "none";
-                }
-
-                var sendButton = document.getElementById("sendButton");
-                sendButton.addEventListener("click", function () {
-                  var rejectionReason =
-                    document.getElementById("rejectionReason").value;
-                  // Here you can handle what to do with the rejection reason, such as sending it to a server
-                  console.log("Rejection Reason:", rejectionReason);
-                });
-
-                var rejectButtons = document.querySelectorAll(".reject-button");
-
-                rejectButtons.forEach(function (button) {
-                  button.addEventListener("click", showPopup2);
-                });
-              </script>
-            </main>
-          </div>
-        </div>
-        <div
-          id="my-notification-content"
-          class="content-section"
-          style="display: none"
-        >
-          <!-- Notification Popup Modal -->
-          <div id="notificationModal" class="modal">
-            <div class="modal-content">
-              <span class="close">&times;</span>
-              <h2>Notifications</h2>
-              <ul id="notificationList">
-                Notifications
-              </ul>
-            </div>
-          </div>
-          <script src="../public/scripts/myclubpage.js"></script>
-        </div>
+        <% }); %>
       </div>
     </div>
+    <div id="my-posts-content" class="content-section" style="display: none">
+      POSTS SECTION
+      <!-- Content for My Events -->
+    </div>
+    <div id="my-status-content" class="content-section" style="display: none">
+      <main class="table" id="customers_table">
+        <section class="table__header">
+          <h1>Event Requests</h1>
+          <div class="input-group">
+            <input type="search" placeholder="Search Request...">
+            <img src="/images/images/search.png" alt="search">
+          </div>
 
-    <!-- Footer -->
-    <footer><%- include("partials/footer.ejs") %></footer>
+        </section>
 
-    <!-- Scripts -->
-    <script src="../public/scripts/MyClubPage Scripts/myclubpage.js"></script>
-    <script src="../public/scripts/eventsRequests.js"></script>
-  </body>
+        <section class="table__body">
+          <table>
+            <thead>
+              <tr>
+                <th> Request <span class="icon-arrow">&UpArrow;</span></th>
+                <th> Status <span class="icon-arrow">&UpArrow;</span></th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% results.forEach((item, index)=> { %>
+                <tr>
+                  <td>
+                    <%=item.event_name%>
+                  </td>
+                  <td>
+                    <p class="status pending">Pending</p>
+                  </td>
+                </tr>
+                <% }); %>
+              
+                <% resultsHistory.forEach((itemh, index)=> { %>
+                    <tr>
+                      <td>
+                        <%=itemh.event_name%>
+                      </td>
+                      <td>
+                        <%if(itemh.status==1){%>
+                          <p class="status approved">Approved</p>
+                          <%} else if(itemh.status==0){%>
+                            <p class="status rejected">Rejected</p>
+                            <%}%>
+                      </td>
+                    </tr>
+                    <% }); %>
+
+                  
+            </tbody>
+          </table>
+        </section>
+    </div>
+  </div>
+  <div id="my-notification-content" class="content-section" style="display: none">
+    <!-- Notification Popup Modal -->
+    <div id="notificationModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Notifications</h2>
+        <ul id="notificationList">
+          Notifications
+        </ul>
+      </div>
+    </div>
+    <script src="../public/scripts/myclubpage.js"></script>
+  </div>
+  </div>
+  </div>
+
+  <!-- Footer -->
+  <footer><%- include("partials/footer.ejs") %></footer>
+
+  <!-- Scripts -->
+  <script src="../public/scripts/MyClubPage Scripts/myclubpage.js"></script>
+  <script src="../public/scripts/eventsRequests.js"></script>
+</body>
+
 </html>

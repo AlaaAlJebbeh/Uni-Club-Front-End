@@ -224,8 +224,6 @@ app.get("/myclubpage", (req, res) => {
 
                     
                 });
-
-
             });
         });
     });
@@ -312,8 +310,14 @@ app.get("/eventRequests", (req, res) => {
                 return res.status(500).send("Internal Server Error");
             }
             console.log(events);
-            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events: events });
+            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events});
+
         });
+
+
+           
+
+       
     });
 
 

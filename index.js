@@ -207,15 +207,18 @@ app.get("/myclubpage", (req, res) => {
                                 return res.status(500).send("Internal Server Error");
                             }
                             console.log(resultsHistory);
-                            res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, event, results, resultsHistory });
+
+                            connection.query(`SELECT * from posts where club_id = ?`, [clubID], (err, posts) =>{
+                                if (err) {
+                                    console.error("Error fetching posts:", err);
+                                    return res.status(500).send("Internal Server Error");
+                                }
+                                res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, event, results, resultsHistory, posts });
+                            });
+                           
                         });
-
-                    });
-
-                    
+                    });     
                 });
-
-
             });
         });
     });
@@ -254,38 +257,7 @@ app.get("/eventRequests", (req, res) => {
             res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events: events });
         });
     });
-
-
-
 });
-
-app.get("/statusClubManager", (req, res) => {
-
-    connection.query("SELECT club_id FROM club_manager WHERE email = ?", [email], (err, userResult) => {
-        if (err) {
-            console.error("Error fetching userID:", err);
-            return res.status(500).send("Internal Server Error");
-        }
-        if (userResult.length === 0) {
-            return res.status(404).send("User not found");
-        }
-
-        const clubId = userResult[0].club_id;
-
-        connection.query(`SELECT event_name FROM tempevents WHERE club_id(?)`, [clubId], (err, results) => {
-            if (err) {
-                console.error("Error fetching temp events:", err);
-                return res.status(500).send("Internal Server Error");
-            }
-            console.log(results);
-            // Extracting event IDs from the results of the first query
-            const eventIds = results.map(row => row.eventid);
-            console.log(eventIds);
-            res.render('statusClubManager.ejs', { role: 'club', email: req.session.email, loggedIn: true, tempevents: results });
-        });
-    });
-});
-
 
 app.get("/createEvent", (req, res) => {
     res.render('createEvent.ejs');

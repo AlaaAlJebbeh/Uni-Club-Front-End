@@ -285,7 +285,41 @@ app.get("/popupContent", (req, res) => {
         res.render('popupContent.ejs', { results });
     });
    
+}); 
+app.post("/approveEvent", (req, res) => {
+    const eventId = req.query.eventId; // Retrieve eventId from the query string
+
+    console.log("Received eventId:", eventId);
+
+    connection.query('SELECT * FROM tempevents where event_id = ?', [eventId], (err, results) => {
+        if (err) {
+            console.error('Error fetching event data:', err);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        console.log("Fetched event data:", results);
+
+        // Assuming you want to insert the entire event data into the toshareevents table
+        const eventData = JSON.stringify(results);
+
+        
+        // Loop through the results array
+     results.forEach(event => {
+    // Insert each event from the results array into the toshareevents table
+    connection.query('INSERT INTO toshareevents SET ?', [event], (err, result) => {
+        if (err) {
+            console.error("Error inserting event data into toshareevents:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        console.log("Event approved successfully!");
+        // Optionally, handle the result or send a response to the client
+    });
 });
+
+    });
+});
+
 app.get("/statusClubManager", (req, res) => {
 
     connection.query("SELECT club_id FROM club_manager WHERE email = ?", [email], (err, userResult) => {

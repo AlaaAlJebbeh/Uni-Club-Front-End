@@ -22,3 +22,22 @@ function showPopup(buttonId) {
     })
     .catch(error => console.error('Error fetching popup content:', error));
 }
+
+// Inside eventsRequests.js
+
+function approveEvent(eventId) {
+    fetch(`/approveEvent?eventId=${eventId}`, {
+        method: 'POST' // Assuming you're using POST method for updating data
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Event approved successfully!');
+            // Optionally, update the UI to reflect the approval
+        } else {
+            console.error('Failed to approve event:', response.statusText);
+        }
+    })
+    .catch(error => console.error('Error approving event:', error));
+}
+
+

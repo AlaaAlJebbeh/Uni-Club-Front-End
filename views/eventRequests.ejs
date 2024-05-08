@@ -100,11 +100,11 @@
                         </td>
 
                     </tr>
-                    <form action="/rejectMessage?eventid=<%=item.event_id%>" method="POST" class="form">
+                    <form action="/rejectMessage?eventId=<%=item.event_id%>" method="POST" class="form">
                         <div id="reject" class="reject-card1">
                     
                             <input type="text" name="rejectionReason" placeholder="Enter rejection reason...">
-                            <button type="submit" id="sendButton"  id="<%= buttonId %>" onclick="rejectEvent('<%= item.event_id %>')" >Send</button>
+                            <button type="submit" id="<%= buttonId %>" onclick="rejectEvent('<%= item.event_id %>')" >Send</button>
                             <button id="closeButton2" onclick="closePopup2()">Close</button>
                         </div>
                     </form>

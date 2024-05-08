@@ -666,6 +666,35 @@ app.post('/comparing', (req, res) => {
     });
   });
 
+// Define the endpoint to handle the button click
+app.post('/approve', (req, res) => {
+    const { status_condition, sks_id, clm_id, club_id, comment, post_id } = req.body; // Assuming you send these fields from the client-side
+
+    // Construct the data object to be inserted into the database
+    const postData = {
+        status_condition: status_condition,
+        sks_id: sks_id,
+        clm_id: clm_id,
+        club_id: club_id,
+        comment: comment,
+        post_id: post_id
+    };
+
+    const query = 'INSERT INTO tempposts (status_condition, sks_id, clm_id, club_id, comment, post_id) VALUES (?, ?, ?, ?, ?, ?)';
+    connection.query(query, [status_condition, sks_id, clm_id, club_id, comment, post_id], (err, result) => {
+        if (err) {
+            console.error('Error inserting data into database:', err);
+            res.status(500).send('Error inserting data into database');
+            return;
+        }
+        console.log('Data inserted successfully');
+        res.send('Data inserted successfully');
+    });
+});
+
+
+
+
 //listining to the port 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

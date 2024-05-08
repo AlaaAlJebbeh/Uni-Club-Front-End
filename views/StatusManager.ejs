@@ -101,6 +101,8 @@
           <tbody>
             <% let index; %> <% tempResult.forEach(function(item,index){ %> <%
             let items = []; %> <% items.push(item); %>
+            <% var buttonId = 'approve-button' + index; %>
+
             <tr>
               <td>
                 <h4 style="color: black"><%=clubNames[index]%></h4>
@@ -110,9 +112,9 @@
                 <p class="status pending">Pending</p>
               </td>
               <td>
-                <button class="approve-button">Approve</button>
+                <button class="approve-button" id="<%= buttonId %>" data-post-id="<%= item.post_id %>">Approve</button>
                 <button class="reject-button">Reject</button>
-              </td>
+              </td> 
               <td>
                 <button
                   class="details-button"
@@ -124,6 +126,9 @@
               </td>
             </tr>
             <% }) %>
+            
+
+
           </tbody>
         </table>
       </section>
@@ -165,6 +170,22 @@
         <button id="sendButton">Send</button>
         <button id="closeButton2" onclick="closePopup2()">Close</button>
       </div>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const approveButtons = document.querySelectorAll('.approve-button');
+            approveButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const buttonId = this.id;
+                    const postId = this.getAttribute('data-post-id');
+                    console.log('Button clicked:', buttonId);
+                    console.log('Post ID:', postId);
+                    // Perform further actions based on buttonId and postId
+                });
+            });
+        });
+    </script>
+
       <script>
         function showDetails(index) {
           // Retrieve the club ID from the button's data attribute
@@ -276,6 +297,30 @@
 
         showPopup2();
       </script>
+
+    <!--Script for the approve button --> 
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          const approveButton = document.querySelector('.approve-button');
+          approveButton.addEventListener('click', async () => {
+              try {
+                  const response = await fetch('/approve', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({ data: 'your data to send to the server' })
+                  });
+                  const result = await response.text();
+                  console.log(result);
+              } catch (error) {
+                  console.error('Error:', error);
+              }
+          });
+      });
+  </script>
+
+
     </main>
     <footer>
       <div class="footerContainer">

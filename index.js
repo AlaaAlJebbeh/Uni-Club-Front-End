@@ -324,6 +324,85 @@ app.get("/eventRequests", (req, res) => {
 
 });
 
+app.get("/popupContent", (req, res) => {
+    const buttonId = req.query.buttonId;
+    const lastIndex = buttonId.lastIndexOf('_');
+    const eventId = buttonId.substring(lastIndex + 1); // Extract the substring after the last '_'
+    // Get the button ID from the query string
+
+    console.log(eventId);
+    // Fetch popup content based on button ID from the database or any other source
+    console.log("this is the button id" + eventId);
+    connection.query('SELECT * FROM tempevents where event_id = ?', [eventId],(err, results)=>{
+        if(err){
+            console.log('didnt get', err);
+        }
+        console.log({results});
+        res.render('popupContent.ejs', { results });
+    });
+   
+}); 
+app.post("/approveEvent", (req, res) => {
+    const eventId = req.query.eventId; // Retrieve eventId from the query string
+
+    console.log("Received eventId:", eventId);
+
+    connection.query('SELECT * FROM tempevents where event_id = ?', [eventId], (err, results) => {
+        if (err) {
+            console.error('Error fetching event data:', err);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        console.log("Fetched event data:", results);
+
+        // Assuming you want to insert the entire event data into the toshareevents table
+        const eventData = JSON.stringify(results);
+
+        
+        // Loop through the results array
+     results.forEach(event => {
+    // Insert each event from the results array into the toshareevents table
+    connection.query('INSERT INTO toshareevents SET ?', [event], (err, result) => {
+        if (err) {
+            console.error("Error inserting event data into toshareevents:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        console.log("Event approved successfully!");
+        // Optionally, handle the result or send a response to the client
+    });
+});
+
+    });
+});
+
+app.get("/statusClubManager", (req, res) => {
+
+    connection.query("SELECT club_id FROM club_manager WHERE email = ?", [email], (err, userResult) => {
+        if (err) {
+            console.error("Error fetching userID:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+        if (userResult.length === 0) {
+            return res.status(404).send("User not found");
+        }
+
+        const clubId = userResult[0].club_id;
+
+        connection.query(`SELECT event_name FROM tempevents WHERE club_id(?)`, [clubId], (err, results) => {
+            if (err) {
+                console.error("Error fetching temp events:", err);
+                return res.status(500).send("Internal Server Error");
+            }
+            console.log(results);
+            // Extracting event IDs from the results of the first query
+            const eventIds = results.map(row => row.eventid);
+            console.log(eventIds);
+            res.render('statusClubManager.ejs', { role: 'club', email: req.session.email, loggedIn: true, tempevents: results });
+        });
+    });
+});
+
 
 app.get("/createEvent", (req, res) => {
     res.render('createEvent.ejs');

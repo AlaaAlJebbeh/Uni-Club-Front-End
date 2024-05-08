@@ -8,10 +8,7 @@ import bodyParser from "body-parser";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 import session from "express-session";
 import fileUpload from "express-fileupload";
-import { get } from "http";
 import multer from "multer"
-import fs from "fs";
-
 //Constants
 const app = express();
 const port = 8000;
@@ -64,11 +61,6 @@ app.use((req, res, next) => {
     next();
 });
 app.use(fileUpload());
-
-
-const storage = multer.memoryStorage();
-const upload = multer();
-
 
 app.get('/', (req, res) => {
     if (req.session.loggedIn) {
@@ -200,7 +192,7 @@ app.get("/myclubpage", (req, res) => {
                         }
                         console.log(resultsTemp);
                         // Extracting event IDs from the results of the first query
-                        
+
                         connection.query(`SELECT event_name, status, event_id FROM history_event WHERE club_id = ?`, [clubID], (err, resultsHistory) => {
                             if (err) {
                                 console.error("Error fetching temp events:", err);
@@ -218,27 +210,27 @@ app.get("/myclubpage", (req, res) => {
                             });
                         });
 
-                        
+
 
                     });
 
-                    
+
                 });
             });
         });
     });
 });
 
-app.post("/ToShareEvent", (req,res)=>{
+app.post("/ToShareEvent", (req, res) => {
     const eventId = req.query.eventId;
     console.log("To share " + eventId);
-    connection.query("SELECT * FROM toshareevents where event_id = ?", [eventId], (err, result) =>{
+    connection.query("SELECT * FROM toshareevents where event_id = ?", [eventId], (err, result) => {
         console.log("the selected result is");
         console.log(result);
-        if(err){
+        if (err) {
             console.log("error selecting from history event");
-        }else{
-            
+        } else {
+
             const eventData = result[0];
             console.log(eventData.club_id);
             const clubId = eventData.club_id;
@@ -257,23 +249,23 @@ app.post("/ToShareEvent", (req,res)=>{
             const clubMId = eventData.clm_id;
 
             connection.query(`INSERT INTO event (club_id, event_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category,clm_id, event_img1) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [clubId, eventId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category,clubMId, uploadImage1],
-            (error, results, fields) => {
-                if (error) {
-                    console.error('Error inserting event into database:', error);
-                    return res.status(500).send('Failed to insert');
-                } else{
-                    connection.query("Delete FROM toshareevents where event_id = ?", [eventId], (err, result) =>{
-                        if (err) {
-                            console.error('Error inserting event into database:', error);
-                            return res.status(500).send('Failed to insert');
-                        } else{
-                            res.redirect("/myclubpage");
-                        }
-                    });
-                }
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [clubId, eventId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, clubMId, uploadImage1],
+                (error, results, fields) => {
+                    if (error) {
+                        console.error('Error inserting event into database:', error);
+                        return res.status(500).send('Failed to insert');
+                    } else {
+                        connection.query("Delete FROM toshareevents where event_id = ?", [eventId], (err, result) => {
+                            if (err) {
+                                console.error('Error inserting event into database:', error);
+                                return res.status(500).send('Failed to insert');
+                            } else {
+                                res.redirect("/myclubpage");
+                            }
+                        });
+                    }
 
-            });
+                });
         }
 
     });
@@ -310,14 +302,14 @@ app.get("/eventRequests", (req, res) => {
                 return res.status(500).send("Internal Server Error");
             }
             console.log(events);
-            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events});
+            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events });
 
         });
 
 
-           
 
-       
+
+
     });
 
 
@@ -437,30 +429,15 @@ app.get("/createEvent", (req, res) => {
 
 app.post("/createEvent", async (req, res) => {
     console.log("The requuest is");
-    console.log(Object.keys(req.body));
+    const { uploadImage1 } = req.files;
+
+    const imgPath = __dirname + '/uploads/' + uploadImage1.name
+    // Move the uploaded image to our upload folder
+    uploadImage1.mv(imgPath);
 
     const email = req.session.email; // Retrieve email from request body
-    const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category} = req.body;
+    const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category } = req.body;
     const language = req.body.language; // Get the selected language
-
-
-    //const file = req.file;
-
-    // Define where to save the file
-    //const uploadDir = path.join(__dirname, 'uploads');
-    //if (!fs.existsSync(uploadDir)) {
-    //    fs.mkdirSync(uploadDir);
-    //}
-
-    // Set up the filename and file path
-    //const filePath = path.join(uploadDir, Date.now() + path.extname(file.originalname));
-
-    // Save the file from memory to disk using `fs.writeFile`
-    //fs.writeFile(filePath, file.buffer);
-
-    //uploadImage = filePath;
-
-    console.log()
 
     connection.query("SELECT user_id FROM users WHERE email = ?", [email], (err, userResult) => {
         if (err) {
@@ -472,8 +449,9 @@ app.post("/createEvent", async (req, res) => {
         }
 
         const userId = userResult[0].user_id;
+        console.log("\n\nuser id", userId);
 
-        connection.query("SELCET club_name FROM club WHERE clm_id = ?", [userId], (err,resultClubName) =>{
+        connection.query("SELECT club_name FROM club WHERE clm_id = ?", [userId], (err, resultClubName) => {
             const clubName = resultClubName[0].club_name;
 
             connection.query("SELECT club_id FROM club WHERE clm_id = ?", [userId], (err, clubResult) => {
@@ -484,13 +462,13 @@ app.post("/createEvent", async (req, res) => {
                 if (clubResult.length === 0) {
                     return res.status(404).send("Club not found for the user");
                 }
-    
+
                 const clubId = clubResult[0].club_id;
-    
+
                 connection.query(
-                    `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id, club_name) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                    [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, clubName],
+                    `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id, club_name, imageUrl)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, clubName, imgPath],
                     (error, results, fields) => {
                         if (error) {
                             console.error('Error inserting event into database:', error);
@@ -498,11 +476,12 @@ app.post("/createEvent", async (req, res) => {
                         }
                         res.redirect("/myclubpage");
                     });
+
             });
 
         });
 
-        
+
     });
 });
 
@@ -757,20 +736,100 @@ app.post('/comparing', (req, res) => {
     // Assuming you're receiving the rejection reason as JSON data in the request body
     const rejectionReason = req.body.reason;
     console.log('incoming req body:', req.body);
-  
+
     // Insert the rejection reason into the database
     const sql = 'INSERT INTO history_event (comment) VALUES (?)';
-    console.log('SQL query:' ,sql);
+    console.log('SQL query:', sql);
     connection.query(sql, [rejectionReason], (err, result) => {
-      if (err) {
-        console.error('Error inserting rejection reason:', err);
-        res.status(500).send('Error inserting rejection reason');
-        return;
-      }
-      console.log('Rejection reason inserted successfully');
-      res.status(200).send('Rejection reason inserted successfully');
+        if (err) {
+            console.error('Error inserting rejection reason:', err);
+            res.status(500).send('Error inserting rejection reason');
+            return;
+        }
+        console.log('Rejection reason inserted successfully');
+        res.status(200).send('Rejection reason inserted successfully');
     });
-  });
+});
+
+app.get("/notifications", (req, res) => {
+    const email = req.session.email;
+    connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
+        if (err) {
+            console.error("Error fetching club id:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+        let clubID = result[0].club_id;
+
+        connection.query(`SELECT event_name, status, comment, event_id, notificationstatus FROM history_event WHERE club_id = ?`, [clubID], (err, resultsHistoryNot) => {
+            if (err) {
+                console.error("Error fetching temp events:", err);
+                return res.status(500).send("Internal Server Error");
+            } else {
+                res.render("notifications.ejs", { loggedIn: true, role: "club", email: email, resultsHistoryNot });
+            }
+        });
+    });
+});
+
+app.post("/changeNotificationStatus", (req, res) => {
+    console.log("form has been sent");
+    const email = req.session.email;
+    const eventId = req.query.eventId;
+    console.log("form has been sent " + eventId);
+    connection.query("UPDATE history_event SET notificationstatus = 1 WHERE event_id = ?", [eventId], (err) => {
+        if (err) {
+            console.log("can't update the notifiction status")
+        } else {
+            console.log("The status has been updated");
+
+            connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
+                if (err) {
+                    console.error("Error fetching club id:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                let clubID = result[0].club_id;
+
+                connection.query(`SELECT event_name, status, comment, event_id, notificationstatus FROM history_event WHERE club_id = ?`, [clubID], (err, resultsHistoryNot) => {
+                    if (err) {
+                        console.error("Error fetching temp events:", err);
+                        return res.status(500).send("Internal Server Error");
+                    } else {
+                        res.render("notifications.ejs", { loggedIn: true, role: "club", email: email, resultsHistoryNot });
+                    }
+                });
+            });
+        }
+    });
+});
+
+// Define the endpoint to handle the button click
+app.post('/approve', (req, res) => {
+    const { status_condition, sks_id, clm_id, club_id, comment, post_id } = req.body; // Assuming you send these fields from the client-side
+
+    // Construct the data object to be inserted into the database
+    const postData = {
+        status_condition: status_condition,
+        sks_id: sks_id,
+        clm_id: clm_id,
+        club_id: club_id,
+        comment: comment,
+        post_id: post_id
+    };
+
+    const query = 'INSERT INTO tempposts (status_condition, sks_id, clm_id, club_id, comment, post_id) VALUES (?, ?, ?, ?, ?, ?)';
+    connection.query(query, [status_condition, sks_id, clm_id, club_id, comment, post_id], (err, result) => {
+        if (err) {
+            console.error('Error inserting data into database:', err);
+            res.status(500).send('Error inserting data into database');
+            return;
+        }
+        console.log('Data inserted successfully');
+        res.send('Data inserted successfully');
+    });
+});
+
+
+
 
 //listining to the port 
 app.listen(port, () => {

@@ -41,6 +41,32 @@ function approveEvent(eventId) {
     })
     .catch(error => console.error('Error approving event:', error));
 
+    const statusElement = document.getElementById(`status_${eventId}`);
+    if (statusElement) {
+        statusElement.textContent = "Approved";
+    }
+}
+
+function rejectEvent(eventId) {
+    fetch(`/rejectMessage?eventId=${eventId}`, {
+        method: 'POST' // Assuming you're using POST method for updating data
+    })
+    .then(response => {
+        if (response.ok) {
+            const statusElement = document.getElementById(`status_${buttonId}`);
+            statusElement.textContent = "Rejected";
+            console.log('Event rejected successfully!');
+            // Optionally, update the UI to reflect the approval
+        } else {
+            console.error('Failed to reject event:', response.statusText);
+        }
+    })
+    .catch(error => console.error('Error rejecting event:', error));
+
+    const statusElement = document.getElementById(`status_${eventId}`);
+    if (statusElement) {
+        statusElement.textContent = "Rejected";
+    }
 }
 
 

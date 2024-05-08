@@ -76,10 +76,11 @@
                         </td>
 
                         <td>
-                            <p id="status_<%= item.event_id %>" class="status approved">Pending </p>
+                            <p id="status_<%= item.event_id %>" class="status pending">Pending </p>
+                            
 
                         </td>
-                             
+                       
 
                         <td>
                           
@@ -103,7 +104,7 @@
                         <div id="reject" class="reject-card1">
                     
                             <input type="text" name="rejectionReason" placeholder="Enter rejection reason...">
-                            <button type="submit" id="sendButton"   >Send</button>
+                            <button type="submit" id="sendButton"  id="<%= buttonId %>" onclick="rejectEvent('<%= item.event_id %>')" >Send</button>
                             <button id="closeButton2" onclick="closePopup2()">Close</button>
                         </div>
                     </form>

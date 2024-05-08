@@ -529,26 +529,73 @@ app.post("/rejectMessage", async (req, res) => {
             return;
         }
         const sksid = result[0].sks_id;
-        connection.query('SELECT club_id from event WHERE event_id = ?', [eventid], (err, club) => {
-            if (err) {
-                console.error("error getting club id:", error);
-                res.status(500).send("Error creating club");
-                return;
-            }
-            const clubid = club[0].club_id;
-            connection.query('INSERT INTO history_event(status_condition, sks_id, club_id, comment) VALUES(?,?,?,?)', [1, sksid, clubid, rejectionReason], (error, results) => {
-                if (error) {
-                    console.log("couldn't insert to database", error)
+    
+
+       
+            const eventId = req.query.eventId; // Retrieve eventId from the query string
+        
+            console.log("Received eventId:", eventId);
+        
+            connection.query('SELECT * FROM tempevents where event_id = ?', [eventId], (err, results) => {
+                if (err) {
+                    console.error('Error fetching event data:', err);
+                    return res.status(500).send("Internal Server Error");
                 }
-                else {
-                    res.send("message sent to database");
+        
+                console.log("Fetched event data:", results);
+        
+                // Assuming you want to insert the entire event data into the toshareevents table
+                const eventData = JSON.stringify(results);
+                
+        
+                connection.query('UPDATE tempevents SET status = 0 WHERE event_id = ?', [eventId], (err, result) => {
+                    if (err) {
+                        console.error("Error updating status in temporary events table:", err);
+                        return res.status(500).send("Internal Server Error");
+                    }
+        
+                    console.log("Status updated in temporary events table");
+        
+        
+                results.forEach(event => {
+               
+                
+                // Loop through the results array
+                event.status = 0; 
+        
+            connection.query('INSERT INTO history_event SET ?', [event], (err, result) => {
+                if (err) {
+                    console.error("Error inserting event data into history of events", err);
+                    return res.status(500).send("Internal Server Error");
                 }
+        
+                console.log("Event rejected successfully!");
+                // Optionally, handle the result or send a response to the client
+            });
+             
+        
+            });
+            connection.query('INSERT INTO history_event(comment) where event_id=?', [eventId], (err, result) => {
+                if (err) {
+                    console.error("Error inserting event data into history of events", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+        
+                console.log("Event rejected successfully!");
+                // Optionally, handle the result or send a response to the client
+            });
+
+        });
+        
             });
         });
 
 
+        
+
+
     });
-});
+
 
 
 //Route Comparing 

@@ -31,6 +31,8 @@ function approveEvent(eventId) {
     })
     .then(response => {
         if (response.ok) {
+            const statusElement = document.getElementById(`status_${buttonId}`);
+            statusElement.textContent = "Approved";
             console.log('Event approved successfully!');
             // Optionally, update the UI to reflect the approval
         } else {
@@ -38,6 +40,9 @@ function approveEvent(eventId) {
         }
     })
     .catch(error => console.error('Error approving event:', error));
+
 }
+
+
 
 

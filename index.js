@@ -357,10 +357,22 @@ app.post("/approveEvent", (req, res) => {
 
         // Assuming you want to insert the entire event data into the toshareevents table
         const eventData = JSON.stringify(results);
+        
 
+        connection.query('UPDATE tempevents SET status = 1 WHERE event_id = ?', [eventId], (err, result) => {
+            if (err) {
+                console.error("Error updating status in temporary events table:", err);
+                return res.status(500).send("Internal Server Error");
+            }
+
+            console.log("Status updated in temporary events table");
+
+
+        results.forEach(event => {
+       
         
         // Loop through the results array
-     results.forEach(event => {
+        event.status = 1; 
     // Insert each event from the results array into the toshareevents table
     connection.query('INSERT INTO toshareevents SET ?', [event], (err, result) => {
         if (err) {
@@ -370,6 +382,21 @@ app.post("/approveEvent", (req, res) => {
 
         console.log("Event approved successfully!");
         // Optionally, handle the result or send a response to the client
+    });
+
+    
+        
+    connection.query('INSERT INTO history_event SET ?', [event], (err, result) => {
+        if (err) {
+            console.error("Error inserting event data into history of events", err);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        console.log("Event approved successfully!");
+        // Optionally, handle the result or send a response to the client
+    });
+     
+
     });
 });
 

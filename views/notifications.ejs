@@ -18,48 +18,47 @@
                 <p id="mark-as-read">Mark as All Read</p>
             </header>
             <main>
-                <div class="notificationCard unread">
-                    <img alt="photo" src="/Assets/avatar-anna-kim.webp" />
-                    <div class="description">
-                        <p>Hi Guys, I'm Anna Kim, I'm from United States. I'm 25 years old Computer Engineer.</p>
-                        <p id="notif-time">1m ago</p>
-                    </div>
-                </div>
-                <div class="notificationCard unread">
-                    <img alt="photo" src="/Assets/avatar-anna-kim.webp" />
-                    <div class="description">
-                        <p>Hi Guys, I'm Anna Kim, I'm from United States. I'm 25 years old Computer Engineer.</p>
-                        <p id="notif-time">1m ago</p>
-                    </div>
-                </div>
-                <div class="notificationCard unread">
-                    <img alt="photo" src="/Assets/avatar-anna-kim.webp" />
-                    <div class="description">
-                        <p>Hi Guys, I'm Anna Kim, I'm from United States. I'm 25 years old Computer Engineer.</p>
-                        <p id="notif-time">1m ago</p>
-                    </div>
-                </div>
-                <div class="notificationCard">
-                    <img alt="photo" src="/Assets/avatar-mark-webber.webp" />
-                    <div class="description">
-                        <p>Hi Guys, I'm Mark Webber, I'm from United States. I'm 25 years old Computer Engineer.</p>
-                        <p id="notif-time">1m ago</p>
-                    </div>
-                </div>
-                <div class="notificationCard">
-                    <img alt="photo" src="/Assets/avatar-mark-webber.webp" />
-                    <div class="description">
-                        <p>Hi Guys, I'm Mark Webber, I'm from United States. I'm 25 years old Computer Engineer.</p>
-                        <p id="notif-time">1m ago</p>
-                    </div>
-                </div>
-                <div class="notificationCard">
-                    <img alt="photo" src="/Assets/avatar-mark-webber.webp" />
-                    <div class="description">
-                        <p>Hi Guys, I'm Mark Webber, I'm from United States. I'm 25 years old Computer Engineer.</p>
-                        <p id="notif-time">1m ago</p>
-                    </div>
-                </div>
+                <% resultsHistoryNot.forEach((itemEN, index)=> { %>
+                    <% var eventName = itemEN.event_name; %>
+                    <% var eventComment = itemEN.comment; %>
+                    <% var eventID=parseInt(itemEN.event_id); %>
+                    <% var divId='button_' + itemEN.event_id; %>
+                    
+                    <%if (itemEN.notificationstatus == 0){%>
+                        <%console.log("notificationn " + eventID + "Event Name" + eventName)%>
+                        <form id="readNotificationForm" action="/changeNotificationStatus?eventId=<%= eventID%>" method="POST">
+                            <div class="notificationCard unread read-notification" id="<%= divId %>">
+                                <img alt="photo" src="../public/images/pixel.jpg" />
+                                <div class="description">
+                                        <%if(itemEN.status == 1){%>
+                                            <p>Your Event "<%=eventName%>" Request has been approved</p>
+                                            <p id="notif-time">1m ago</p>
+                                        <%} else if(itemEN.status == 0){%>
+                                            <p>Your Event "<%=eventName%>" Request has not been approved</p>
+                                            <p>Rejection Reason "<%=eventComment%>"</p>
+                                            <p id="notif-time">1m ago</p>
+                                            <%}%>
+                                </div>
+                            </div>
+                        </form>
+                        
+                    <%} else if((itemEN.notificationstatus == 1)){%>
+                        <div class="notificationCard">
+                            <img alt="photo" src="../public/images/pixel.jpg" />
+                            <div class="description">
+                                    <%if(itemEN.status == 1){%>
+                                        <p>Your Event "<%=eventName%>" Request has been approved</p>
+                                        <p id="notif-time">1m ago</p>
+                                    <%} else if(itemEN.status == 0){%>
+                                        <p>Your Event "<%=eventName%>" Request has not been approved</p>
+                                        <p>Rejection Reason "<%=eventComment%>"</p>
+                                        <p id="notif-time">1m ago</p>
+                                        <%}%>
+                            </div>
+                        </div>
+                        <%}%>
+                <%})%>
+                
             </main>
         </div>
     </div>

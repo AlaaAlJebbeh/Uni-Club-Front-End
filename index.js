@@ -449,7 +449,7 @@ app.post("/rejectMessage", async (req, res) => {
 //Route Comparing 
 app.get("/comparing", (req, res) => {
     // Query to retrieve data from the 'TempEvents' table
-    connection.query("SELECT * FROM TempClubEdit", (err, tempResult) => {
+    connection.query("SELECT * FROM tempprofile", (err, tempResult) => {
         if (err) {
             console.log(err.message);
             return res.status(500).send("Internal Server Error2");
@@ -627,6 +627,24 @@ app.post('/updateProfile', (req, res) => {
     });
 });
 
+app.post('/comparing', (req, res) => {
+    // Assuming you're receiving the rejection reason as JSON data in the request body
+    const rejectionReason = req.body.reason;
+    console.log('incoming req body:', req.body);
+  
+    // Insert the rejection reason into the database
+    const sql = 'INSERT INTO history_event (comment) VALUES (?)';
+    console.log('SQL query:' ,sql);
+    connection.query(sql, [rejectionReason], (err, result) => {
+      if (err) {
+        console.error('Error inserting rejection reason:', err);
+        res.status(500).send('Error inserting rejection reason');
+        return;
+      }
+      console.log('Rejection reason inserted successfully');
+      res.status(200).send('Rejection reason inserted successfully');
+    });
+  });
 
 //listining to the port 
 app.listen(port, () => {

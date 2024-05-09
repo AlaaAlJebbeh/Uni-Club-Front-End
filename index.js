@@ -485,6 +485,64 @@ app.post("/createEvent", async (req, res) => {
     });
 });
 
+app.get("/createPost", (req, res) => {
+    res.render('createPost.ejs');
+});
+
+app.post("/createPost", async (req, res) => {
+    console.log("The requuest is");
+    const { ImagePost } = req.files;
+
+    const imgPath = __dirname + '/public/' + ImagePost.name
+    // Move the uploaded image to our upload folder
+    ImagePost.mv(imgPath);
+
+    const email = req.session.email; // Retrieve email from request body
+    const postText  = req.body.postText;
+
+    connection.query("SELECT user_id FROM users WHERE email = ?", [email], (err, userResult) => {
+        if (err) {
+            console.error("Error fetching userID:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+        if (userResult.length === 0) {
+            return res.status(404).send("User not found");
+        }
+
+        const userId = userResult[0].user_id;
+        console.log("\n\nuser id", userId);
+
+        connection.query("SELECT club_name FROM club WHERE clm_id = ?", [userId], (err, resultClubName) => {
+            const clubName = resultClubName[0].club_name;
+
+            connection.query("SELECT club_id FROM club WHERE clm_id = ?", [userId], (err, clubResult) => {
+                if (err) {
+                    console.error("Error fetching club id:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                if (clubResult.length === 0) {
+                    return res.status(404).send("Club not found for the user");
+                }
+
+                const clubId = clubResult[0].club_id;
+
+                connection.query(
+                    `INSERT INTO tempposts (clm_id, club_id, club_name, postText, postImageUrl) VALUES (?, ?, ?, ?, ?)`,
+                    [userId, clubId, clubName, postText, imgPath],
+                    (error, results, fields) => {
+                        if (error) {
+                            console.error('Error inserting event into database:', error);
+                            return res.status(500).send('Failed to insert');
+                        }
+                        res.redirect("/myclubpage");
+                    });
+
+            });
+
+        });
+    });
+});
+
 
 //Route createClub
 app.get("/createclub", (req, res) => {

@@ -82,17 +82,16 @@ li a{
   }
   .carousel .card {
     scroll-snap-align: start;
-    height: 360px;
+    height: 350px;
     list-style: none;
     background: #dfecff;
     cursor: pointer;
-    padding-bottom: 15px;
     flex-direction: column;
     border-radius: 8px;
   }
   .carousel .card .img {
     background: #dfecff;
-    height: 360px;
+    height: 350px;
     width: 600px;
   }
   .card .img img {
@@ -117,7 +116,7 @@ li a{
 
 .container{
     position: relative;
-    max-width: auto;
+    max-width: 1000px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -148,7 +147,7 @@ li a{
 .container .card .imgBx{
     position: relative;
     left: 25px;
-    width: 1000px;
+    width: 600px;
     height: 350px;
     z-index: 1;
 }
@@ -165,18 +164,19 @@ li a{
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border: 4px solid #000;
 }
 
 .container .card .contentBx{
     position: relative;
     right: 25px;
-    width: 1500px;
-    height: 400px;
-    background: #02afae;
+    width: 600px;
+    height: 350px;
+    background: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 60px 20px 100px;
+    padding: 20px 40px 20px 80px;
 }
 
 /*.container .card:nth-child(even) .contentBx
@@ -192,33 +192,36 @@ li a{
     bottom: -50px;
     left: 0;
     right: 0;
-    background: #02afae;
+    background: #fff;
     z-index: -1;
 }
 
 .container .card .contentBx h2{
-    font-size: 45px;
+    font-size: 30px;
     color: #000;
+    z-index: 1;
 }
 
 .container .card .contentBx h6{
-    font-size: 20px;
+    font-size: 25px;
     color: #000;
     margin-top: 10px;
+    font-weight: bold;
 }
 
 .container .card .contentBx p
 {
     margin-top: 10px;
-    color: #000;
-    font-size: 20px;
+    color: #fff;
+    font-size: 17.5px;
 }
 
 .container .card .contentBx span
 {
     margin-top: 10px;
-    font-size: 15px;
+    font-size: 20px;
     color: #000;
+    font-weight: normal;
 }
 
 
@@ -259,4 +262,42 @@ li a{
     right: 0;
     padding: 30px;
     }
+}
+
+.overlay{
+  background-color: white;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 40px 20px 80px;
+  width: 100%;
+  height: 95%;
+  top: 10;
+  right: 0;
+  left: 0;
+  bottom: 5;
+  transition: 0.3s;
+  transform: scale(0);
+}
+.contentBx:hover .overlay{
+  transform: scale(1);
+  
+}
+
+.statu-00{
+  position: absolute;
+  bottom: 340px;
+  left: 295px;
+  background-color: green;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.statu-01{
+  position: absolute;
+  bottom: 340px;
+  left: 275px;
+  background-color: green;
+  border-radius: 50%;
+  z-index: 1;
 }

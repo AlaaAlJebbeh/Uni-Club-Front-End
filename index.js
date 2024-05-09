@@ -404,7 +404,7 @@ app.post("/createEvent", async (req, res) => {
     console.log("The requuest is");
     const { uploadImage1 } = req.files;
 
-    const imgPath = __dirname + '/uploads/' + uploadImage1.name
+    const imgPath = __dirname + '/public/' + uploadImage1.name
     // Move the uploaded image to our upload folder
     uploadImage1.mv(imgPath);
 

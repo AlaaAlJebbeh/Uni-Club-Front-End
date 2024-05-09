@@ -28,6 +28,8 @@ markAll.addEventListener('click', () => {
     });
     const newUnreadMessages = document.querySelectorAll('.unread');
     unReadMessagesCount.innerHTML = newUnreadMessages.length;
+
+    
 });
 
 $(document).ready(function() {

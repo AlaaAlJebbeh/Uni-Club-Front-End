@@ -529,10 +529,7 @@ app.post("/rejectMessage", async (req, res) => {
             return;
         }
         const sksid = result[0].sks_id;
-    
-
-       
-            const eventId = req.query.eventId; // Retrieve eventId from the query string
+      const eventId = req.query.eventId; // Retrieve eventId from the query string
         
             console.log("Received eventId:", eventId);
         

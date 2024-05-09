@@ -346,11 +346,7 @@ app.post("/approveEvent", (req, res) => {
         }
 
         console.log("Fetched event data:", results);
-
-        // Assuming you want to insert the entire event data into the toshareevents table
-        const eventData = JSON.stringify(results);
-        
-
+    /*
         connection.query('UPDATE tempevents SET status = 1 WHERE event_id = ?', [eventId], (err, result) => {
             if (err) {
                 console.error("Error updating status in temporary events table:", err);
@@ -358,12 +354,9 @@ app.post("/approveEvent", (req, res) => {
             }
 
             console.log("Status updated in temporary events table");
-
-
-        results.forEach(event => {
-       
-        
-        // Loop through the results array
+*/
+    results.forEach(event => {
+     // Loop through the results array
         event.status = 1; 
     // Insert each event from the results array into the toshareevents table
     connection.query('INSERT INTO toshareevents SET ?', [event], (err, result) => {
@@ -376,8 +369,6 @@ app.post("/approveEvent", (req, res) => {
         // Optionally, handle the result or send a response to the client
     });
 
-    
-        
     connection.query('INSERT INTO history_event SET ?', [event], (err, result) => {
         if (err) {
             console.error("Error inserting event data into history of events", err);
@@ -393,7 +384,7 @@ app.post("/approveEvent", (req, res) => {
 });
 
     });
-});
+
 
 app.get("/statusClubManager", (req, res) => {
 
@@ -518,9 +509,9 @@ app.post("/clubform", async (req, res) => {
 
 app.post("/rejectMessage", async (req, res) => {
     const rejectionReason = req.body.rejectionReason;
-    const eventid = req.query.eventid;
+    const buttonId = req.query.buttonId;
     console.log(rejectionReason);
-    console.log(eventid);
+    
 
     connection.query('SELECT sks_id from sks_admin WHERE email=?', [req.session.email], (err, result) => {
         if (err) {
@@ -529,37 +520,29 @@ app.post("/rejectMessage", async (req, res) => {
             return;
         }
         const sksid = result[0].sks_id;
-      const eventId = req.query.eventId; // Retrieve eventId from the query string
         
-            console.log("Received eventId:", eventId);
+       // Retrieve eventId from the query string
         
-            connection.query('SELECT * FROM tempevents where event_id = ?', [eventId], (err, results) => {
-                if (err) {
-                    console.error('Error fetching event data:', err);
-                    return res.status(500).send("Internal Server Error");
-                }
-        
-                console.log("Fetched event data:", results);
-        
+            console.log("Received eventId:", buttonId);
+
+
+                connection.query('SELECT * FROM tempevents where event_id = ?', [buttonId], (err, results) => {
+                    if (err) {
+                        console.error('Error fetching event data:', err);
+                        return res.status(500).send("Internal Server Error");
+                    }
+            
+                    
+                    console.log("Fetched event data:", results);
+           
+
                 // Assuming you want to insert the entire event data into the toshareevents table
                 const eventData = JSON.stringify(results);
                 
-        
-                connection.query('UPDATE tempevents SET status = 0 WHERE event_id = ?', [eventId], (err, result) => {
-                    if (err) {
-                        console.error("Error updating status in temporary events table:", err);
-                        return res.status(500).send("Internal Server Error");
-                    }
-        
-                    console.log("Status updated in temporary events table");
-        
-        
-                results.forEach(event => {
-               
-                
-                // Loop through the results array
+                results.forEach(event =>{
                 event.status = 0; 
-        
+                console.log("Type of results:", typeof results);
+         
             connection.query('INSERT INTO history_event SET ?', [event], (err, result) => {
                 if (err) {
                     console.error("Error inserting event data into history of events", err);
@@ -569,29 +552,31 @@ app.post("/rejectMessage", async (req, res) => {
                 console.log("Event rejected successfully!");
                 // Optionally, handle the result or send a response to the client
             });
-             
-        
-            });
-            connection.query('INSERT INTO history_event(comment) where event_id=?', [eventId], (err, result) => {
-                if (err) {
-                    console.error("Error inserting event data into history of events", err);
-                    return res.status(500).send("Internal Server Error");
-                }
-        
-                console.log("Event rejected successfully!");
-                // Optionally, handle the result or send a response to the client
-            });
-
         });
-        
-            });
+        connection.query('INSERT INTO history_event (comment) VALUES (?)', [rejectionReason], (err, result) => {
+            if (err) {
+                console.error("Error inserting message history of events", err);
+                return res.status(500).send("Internal Server Error");
+            }
+    
+            console.log("message inserted successfully!");
+            // Optionally, handle the result or send a response to the client
+      
         });
-
-
-        
-
-
     });
+});
+});
+
+
+
+
+
+
+
+
+        
+      
+    
 
 
 

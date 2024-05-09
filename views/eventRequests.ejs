@@ -63,48 +63,39 @@
                     </tr>
                 </thead>
                 <tbody>
-
                     <% var buttonId; %>
                     <% tempevents.forEach((item, index) => { %>
                     <tr>
                         <td> <img src="/images/images/Zinzu Chan Lee.jpg" alt=""> <%=item.clm_id%><td>
-
-
-                        <td> 
+                         <td> 
                              <%=item.event_name%>
-                            
                         </td>
 
                         <td>
                             <p id="status_<%= item.event_id %>" class="status pending">Pending </p>
-                            
-
-                        </td>
+                       </td>
                        
-
-                        <td>
-                          
-                            <button class="approve-button"  id="<%= buttonId %>" onclick="approveEvent('<%= item.event_id %>')" >Approve
-                            </button> 
-                            
-
-                            <button class="reject-button" id="<%=index%>" onclick="">Reject<button>
-                                
-                        <td>
+                       <td>
+                           <button class="approve-button"  id="<%= buttonId %>" onclick="approveEvent('<%= item.event_id %>')" >Approve</button> 
+                           <button class="reject-button" id="<%=buttonId%>" onclick="">Reject<button>
+                       <td>
                         <td>
                             <% console.log("event id" + item.event_id);%>
                             <%  buttonId = 'button_' + item.event_id; %>
+                          
 
-                            <!-- Create button element -->
+
+  <!-- Create button element -->
+                
+                       
                             <button id="<%= buttonId %>" class="details-button" onclick="showPopup('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>
                         </td>
+                        </tr>
 
-                    </tr>
-                    <form action="/rejectMessage?eventId=<%=item.event_id%>" method="POST" class="form">
+                    <form action="/rejectMessage?buttonId=<%= item.event_id%>" method="POST" class="form">
                         <div id="reject" class="reject-card1">
-                    
-                            <input type="text" name="rejectionReason" placeholder="Enter rejection reason...">
-                            <button type="submit" id="<%= buttonId %>" onclick="rejectEvent('<%= item.event_id %>')" >Send</button>
+                            <input type="text" id="rejectionReason_<%= item.event_id %>" name="rejectionReason" placeholder="Enter rejection reason...">
+                            <button class="send-button" id="<%= buttonId %>" onclick="rejectEvent('<%= item.event_id %>')" >Send</button>
                             <button id="closeButton2" onclick="closePopup2()">Close</button>
                         </div>
                     </form>

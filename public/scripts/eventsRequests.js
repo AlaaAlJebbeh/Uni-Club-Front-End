@@ -47,9 +47,11 @@ function approveEvent(eventId) {
     }
 }
 
-function rejectEvent(eventId) {
-    fetch(`/rejectMessage?eventId=${eventId}`, {
-        method: 'POST' // Assuming you're using POST method for updating data
+function rejectEvent(buttonId) {
+    const rejectionReason = document.getElementById(`rejectionReason_${buttonId}`).value;
+
+    fetch(`/rejectMessage?buttonId=${buttonId}`, {
+        method: 'POST'
     })
     .then(response => {
         if (response.ok) {
@@ -67,6 +69,7 @@ function rejectEvent(eventId) {
     if (statusElement) {
         statusElement.textContent = "Rejected";
     }
+    
 }
 
 

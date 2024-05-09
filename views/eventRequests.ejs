@@ -71,15 +71,22 @@
 
 
                         <td> 
-                             <%=item.event_name%></td>
-
-                        <td>
-                            <p class="status approved">Pending </p>
+                             <%=item.event_name%>
+                            
                         </td>
 
                         <td>
+                            <p id="status_<%= item.event_id %>" class="status pending">Pending </p>
+                            
+
+                        </td>
+                       
+
+                        <td>
                           
-                            <button class="approve-button"  id="<%= buttonId %>" onclick="approveEvent('<%= item.event_id %>')" >Approve</button> 
+                            <button class="approve-button"  id="<%= buttonId %>" onclick="approveEvent('<%= item.event_id %>')" >Approve
+                            </button> 
+                            
 
                             <button class="reject-button" id="<%=index%>" onclick="">Reject<button>
                                 
@@ -89,15 +96,15 @@
                             <%  buttonId = 'button_' + item.event_id; %>
 
                             <!-- Create button element -->
-                            <button id="<%= buttonId %>" class="details-button" onclick="showPopup('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image"></button>
+                            <button id="<%= buttonId %>" class="details-button" onclick="showPopup('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>
                         </td>
 
                     </tr>
-                    <form action="/rejectMessage?eventid=<%=item.event_id%>" method="POST" class="form">
+                    <form action="/rejectMessage?eventId=<%=item.event_id%>" method="POST" class="form">
                         <div id="reject" class="reject-card1">
                     
                             <input type="text" name="rejectionReason" placeholder="Enter rejection reason...">
-                            <button type="submit" id="sendButton">Send</button>
+                            <button type="submit" id="<%= buttonId %>" onclick="rejectEvent('<%= item.event_id %>')" >Send</button>
                             <button id="closeButton2" onclick="closePopup2()">Close</button>
                         </div>
                     </form>

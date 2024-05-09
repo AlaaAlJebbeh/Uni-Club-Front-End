@@ -349,10 +349,22 @@ app.post("/approveEvent", (req, res) => {
 
         // Assuming you want to insert the entire event data into the toshareevents table
         const eventData = JSON.stringify(results);
+        
 
+        connection.query('UPDATE tempevents SET status = 1 WHERE event_id = ?', [eventId], (err, result) => {
+            if (err) {
+                console.error("Error updating status in temporary events table:", err);
+                return res.status(500).send("Internal Server Error");
+            }
+
+            console.log("Status updated in temporary events table");
+
+
+        results.forEach(event => {
+       
         
         // Loop through the results array
-     results.forEach(event => {
+        event.status = 1; 
     // Insert each event from the results array into the toshareevents table
     connection.query('INSERT INTO toshareevents SET ?', [event], (err, result) => {
         if (err) {
@@ -362,6 +374,21 @@ app.post("/approveEvent", (req, res) => {
 
         console.log("Event approved successfully!");
         // Optionally, handle the result or send a response to the client
+    });
+
+    
+        
+    connection.query('INSERT INTO history_event SET ?', [event], (err, result) => {
+        if (err) {
+            console.error("Error inserting event data into history of events", err);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        console.log("Event approved successfully!");
+        // Optionally, handle the result or send a response to the client
+    });
+     
+
     });
 });
 
@@ -502,68 +529,142 @@ app.post("/rejectMessage", async (req, res) => {
             return;
         }
         const sksid = result[0].sks_id;
-        connection.query('SELECT club_id from event WHERE event_id = ?', [eventid], (err, club) => {
-            if (err) {
-                console.error("error getting club id:", error);
-                res.status(500).send("Error creating club");
-                return;
-            }
-            const clubid = club[0].club_id;
-            connection.query('INSERT INTO history_event(status_condition, sks_id, club_id, comment) VALUES(?,?,?,?)', [1, sksid, clubid, rejectionReason], (error, results) => {
-                if (error) {
-                    console.log("couldn't insert to database", error)
+      const eventId = req.query.eventId; // Retrieve eventId from the query string
+        
+            console.log("Received eventId:", eventId);
+        
+            connection.query('SELECT * FROM tempevents where event_id = ?', [eventId], (err, results) => {
+                if (err) {
+                    console.error('Error fetching event data:', err);
+                    return res.status(500).send("Internal Server Error");
                 }
-                else {
-                    res.send("message sent to database");
+        
+                console.log("Fetched event data:", results);
+        
+                // Assuming you want to insert the entire event data into the toshareevents table
+                const eventData = JSON.stringify(results);
+                
+        
+                connection.query('UPDATE tempevents SET status = 0 WHERE event_id = ?', [eventId], (err, result) => {
+                    if (err) {
+                        console.error("Error updating status in temporary events table:", err);
+                        return res.status(500).send("Internal Server Error");
+                    }
+        
+                    console.log("Status updated in temporary events table");
+        
+        
+                results.forEach(event => {
+               
+                
+                // Loop through the results array
+                event.status = 0; 
+        
+            connection.query('INSERT INTO history_event SET ?', [event], (err, result) => {
+                if (err) {
+                    console.error("Error inserting event data into history of events", err);
+                    return res.status(500).send("Internal Server Error");
                 }
+        
+                console.log("Event rejected successfully!");
+                // Optionally, handle the result or send a response to the client
+            });
+             
+        
+            });
+            connection.query('INSERT INTO history_event(comment) where event_id=?', [eventId], (err, result) => {
+                if (err) {
+                    console.error("Error inserting event data into history of events", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+        
+                console.log("Event rejected successfully!");
+                // Optionally, handle the result or send a response to the client
+            });
+
+        });
+        
             });
         });
 
 
+        
+
+
     });
-});
+
 
 
 //Route Comparing 
 app.get("/comparing", (req, res) => {
-    // Query to retrieve data from the 'TempEvents' table
-    connection.query("SELECT * FROM tempprofile", (err, tempResult) => {
+    // Query to retrieve data from the 'TempPosts' table
+    connection.query("SELECT * FROM TempPosts", (err, TempPosts) => {
         if (err) {
             console.log(err.message);
             return res.status(500).send("Internal Server Error2");
         }
 
-        // Array to store promises for fetching club names
-        const promises = [];
+        // Query to retrieve data from the 'PostEditRequests' table
+        connection.query("SELECT * FROM PostEditRequests", (err, PostEditRequests) => {
+            if (err) {
+                console.log(err.message);
+                return res.status(500).send("Internal Server Error2");
+            }
 
-        // Iterate over each item in tempResult to fetch club names asynchronously
-        tempResult.forEach(item => {
-            // Create a promise for each query to fetch club name
-            const promise = new Promise((resolve, reject) => {
-                connection.query("SELECT club_name FROM club WHERE club_id = ?", item.club_id, (err, result) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        // Resolve the promise with club name or null if not found
-                        resolve(result.length > 0 ? result[0].club_name : null);
-                    }
+            // Array to store promises for fetching club names for TempPosts
+            const tempPromises = [];
+
+            // Iterate over each item in TempPosts to fetch club names asynchronously
+            TempPosts.forEach(item => {
+                // Create a promise for each query to fetch club name
+                const promise = new Promise((resolve, reject) => {
+                    connection.query("SELECT club_name FROM club WHERE club_id = ?", [item.club_id], (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            // Resolve the promise with club name or null if not found
+                            resolve(result.length > 0 ? result[0].club_name : null);
+                        }
+                    });
                 });
+                // Push the promise to the array of promises
+                tempPromises.push(promise);
             });
-            // Push the promise to the array of promises
-            promises.push(promise);
-        });
 
-        // Wait for all promises to resolve using Promise.all
-        Promise.all(promises)
-            .then(clubNames => {
-                // Render the 'StatusManager.ejs' template with the populated data
-                res.render("StatusManager.ejs", { tempResult, clubNames });
-            })
-            .catch(err => {
-                console.error(err);
-                // Handle error appropriately
-                return res.status(500).send("Internal Server Error");
+            // Array to store promises for fetching club names for PostEditRequests
+            const postPromises = [];
+
+            // Iterate over each item in PostEditRequests to fetch club names asynchronously
+            PostEditRequests.forEach(item => {
+                // Create a promise for each query to fetch club name
+                const promise = new Promise((resolve, reject) => {
+                    connection.query("SELECT club_name FROM club WHERE club_id = ?", [item.club_id], (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            // Resolve the promise with club name or null if not found
+                            resolve(result.length > 0 ? result[0].club_name : null);
+                        }
+                    });
+                });
+                // Push the promise to the array of promises
+                postPromises.push(promise);
             });
+
+            // Wait for all promises to resolve using Promise.all
+            Promise.all([...tempPromises, ...postPromises])
+                .then(clubNames => {
+                    // Combine data from TempPosts and PostEditRequests into a single array
+                    const combinedData = [...TempPosts, ...PostEditRequests];
+                    // Render the 'StatusManager.ejs' template with the combined data and club names
+                    res.render("StatusManager.ejs", { combinedData, clubNames });
+                })
+                .catch(err => {
+                    console.error(err);
+                    // Handle error appropriately
+                    return res.status(500).send("Internal Server Error");
+                });
+        });
     });
 });
 
@@ -772,32 +873,6 @@ app.post("/changeNotificationStatus", (req, res) => {
                 });
             });
         }
-    });
-});
-
-// Define the endpoint to handle the button click
-app.post('/approve', (req, res) => {
-    const { status_condition, sks_id, clm_id, club_id, comment, post_id } = req.body; // Assuming you send these fields from the client-side
-
-    // Construct the data object to be inserted into the database
-    const postData = {
-        status_condition: status_condition,
-        sks_id: sks_id,
-        clm_id: clm_id,
-        club_id: club_id,
-        comment: comment,
-        post_id: post_id
-    };
-
-    const query = 'INSERT INTO tempposts (status_condition, sks_id, clm_id, club_id, comment, post_id) VALUES (?, ?, ?, ?, ?, ?)';
-    connection.query(query, [status_condition, sks_id, clm_id, club_id, comment, post_id], (err, result) => {
-        if (err) {
-            console.error('Error inserting data into database:', err);
-            res.status(500).send('Error inserting data into database');
-            return;
-        }
-        console.log('Data inserted successfully');
-        res.send('Data inserted successfully');
     });
 });
 

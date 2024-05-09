@@ -99,7 +99,7 @@
             </tr>
           </thead>
           <tbody>
-            <% let index; %> <% tempResult.forEach(function(item,index){ %> <%
+            <% let index; %> <% combinedData.forEach(function(item,index){ %> <%
             let items = []; %> <% items.push(item); %>
             <% var buttonId = 'approve-button' + index; %>
 
@@ -107,12 +107,12 @@
               <td>
                 <h4 style="color: black"><%=clubNames[index]%></h4>
               </td>
-              <td><h4 style="color: black"><%=item.requestType%></h4></td>
+              <td><h4 style="color: black"><%=item.RequestType%></h4></td>
               <td>
                 <p class="status pending">Pending</p>
               </td>
               <td>
-                <button class="approve-button" id="<%= buttonId %>" data-post-id="<%= item.post_id %>">Approve</button>
+                <button class="approve-button">Approve</button>
                 <button class="reject-button">Reject</button>
               </td> 
               <td>
@@ -140,7 +140,7 @@
               <table class="custom-table">
                 <tr>
                   <td class="column1">
-                    <% if (tempResult[index - 1] && tempResult[index -
+                    <% if (combinedData[index - 1] && combinedData[index -
                     1].requestType === 'newimg') { %>
                     <img
                       src="<%= tempResult[index - 1].newImage %>"

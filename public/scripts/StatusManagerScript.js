@@ -213,3 +213,55 @@ details.addEventListener("click", (e) => {
 });
 
 
+function approvePost(PostId, RequestId) {
+    let endpoint = `/approvePost?postId=${PostId}`; // Default endpoint for regular posts
+
+    // Check if RequestId is defined
+    if (RequestId) {
+        endpoint = `/approvePostEditRequest?postId=${PostId}&requestId=${RequestId}`; // Use endpoint for post edit requests
+    }
+
+    fetch(endpoint, {
+        method: 'POST' // Assuming you're using POST method for updating data
+    })
+    .then(response => {
+        if (response.ok) {
+            const statusElement = document.getElementById(`Status_${PostId}_${RequestId}`); // Update status element ID
+            if (statusElement) {
+                statusElement.textContent = "Approved";
+            }
+            console.log('Event approved successfully!');
+            // Optionally, update the UI to reflect the approval
+        } else {
+            console.error('Failed to approve post:', response.statusText);
+        }
+    })
+    .catch(error => console.error('Error approving post:', error));
+}
+
+
+/*function rejectPost(buttonId) {
+    const rejectionReason = document.getElementById(`rejectionReason_${buttonId}`).value;
+
+    fetch(`/PostRejectMessage?buttonId=${buttonId}`, {
+        method: 'POST'
+    })
+    .then(response => {
+        if (response.ok) {
+            const statusElement = document.getElementById(`Status_${buttonId}`);
+            statusElement.textContent = "Rejected";
+            console.log('post rejected successfully!');
+            // Optionally, update the UI to reflect the approval
+        } else {
+            console.error('Failed to reject post:', response.statusText);
+        }
+    })
+    .catch(error => console.error('Error rejecting post:', error));
+
+    const statusElement = document.getElementById(`Status_${eventId}`);
+    if (statusElement) {
+        statusElement.textContent = "Rejected";
+    }
+    
+}*/
+

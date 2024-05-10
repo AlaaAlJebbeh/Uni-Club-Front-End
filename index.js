@@ -213,7 +213,18 @@ app.get("/myclubpage", (req, res) => {
                                     console.error("Error fetching posts:", err);
                                     return res.status(500).send("Internal Server Error");
                                 }
-                                res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, event, results, resultsHistory, posts });
+                                connection.query("select * from notifications_clm where club_id = ?", [clubID], (err, notification) => {
+                                    if (err) {
+                                        console.error("Error fetching notification:", err);
+                                        res.status(500).send("internal server error");
+                                    }
+
+                                    res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, event, results, resultsHistory, posts, notification });
+
+                                });
+
+
+                                
                             });
                            
                         });
@@ -262,7 +273,6 @@ app.get("/eventRequests", (req, res) => {
 
 });
 
-<<<<<<< HEAD
 app.get("/popupContent", (req, res) => {
     const buttonId = req.query.buttonId;
     const lastIndex = buttonId.lastIndexOf('_');
@@ -280,8 +290,7 @@ app.get("/popupContent", (req, res) => {
         res.render('popupContent.ejs', { results });
     })
    
-  
-=======
+});
 app.get("/statusClubManager", (req, res) => {
 
     connection.query("SELECT club_id FROM club_manager WHERE email = ?", [email], (err, userResult) => {
@@ -307,7 +316,6 @@ app.get("/statusClubManager", (req, res) => {
             res.render('statusClubManager.ejs', { role: 'club', email: req.session.email, loggedIn: true, tempevents: results });
         });
     });
->>>>>>> d1e396f4ac3f80a9b5fb7ab8ca2180606f611f24
 });
 
 

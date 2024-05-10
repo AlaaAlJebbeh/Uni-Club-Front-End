@@ -66,19 +66,30 @@
                     <% var buttonId; %>
                     <% tempevents.forEach((item, index) => { %>
                     <tr>
-                        <td> <img src="/images/images/Zinzu Chan Lee.jpg" alt=""> <%=item.clm_id%><td>
+                        <td> <img src="/images/images/Zinzu Chan Lee.jpg" alt=""> <%=item.clm_id%></td>
                          <td> 
                              <%=item.event_name%>
                         </td>
 
                         <td>
-                            <p id="status_<%= item.event_id %>" class="status pending">Pending </p>
+                            <% if (item.status === 0) { %>
+                                <p id="status_<%= item.event_id %>" class="status rejected">Rejected</p>
+                            <% } else if (item.status === 1) { %>
+                                <p id="status_<%= item.event_id %>" class="status approved">Approved</p>
+                            <% } else { %>
+                                <p id="status_<%= item.event_id %>" class="status pending">Pending</p>
+                            <% } %>
                        </td>
                        
                        <td>
-                           <button class="approve-button"  id="<%= buttonId %>" onclick="approveEvent('<%= item.event_id %>')" >Approve</button> 
-                           <button class="reject-button" id="<%=buttonId%>" onclick="">Reject<button>
-                       <td>
+                        <% if (item.status === 0 || item.status === 1) { %>
+                            <!-- No action can be done once approved or rejected -->
+                        <% } else { %>
+                            <button class="approve-button" onclick="approveEvent('<%= item.event_id %>')" >Approve</button> 
+                            <button class="reject-button" onclick="rejectEvent('<%= item.event_id %>')">Reject</button>
+                        <% } %>
+                        </td>
+
                         <td>
                             <% console.log("event id" + item.event_id);%>
                             <%  buttonId = 'button_' + item.event_id; %>
@@ -91,16 +102,21 @@
                             <button id="<%= buttonId %>" class="details-button" onclick="showPopup('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>
                         </td>
                         </tr>
-
-                    <form action="/rejectMessage?buttonId=<%= item.event_id%>" method="POST" class="form">
+                        
+                        <% var eventID=parseInt(item.event_id); %>
+                        <%console.log("event Iddd" + eventID)%>
+                    <form action="/rejectMessage?eventId=<%= eventID%>" method="POST" class="form">
+                      
                         <div id="reject" class="reject-card1">
-                            <input type="text" id="rejectionReason_<%= item.event_id %>" name="rejectionReason" placeholder="Enter rejection reason...">
-                            <button class="send-button" id="<%= buttonId %>" onclick="rejectEvent('<%= item.event_id %>')" >Send</button>
+                            <input type="text" id="rejectionReason_<%= eventID %>" name="rejectionReason" placeholder="Enter rejection reason...">
+                            <% var buttonId='button_' + item.event_id; %>
+                            <button class="send-button" id="<%= buttonId %>" onclick="rejectEvent('<%= eventID %>')">Send</button>
                             <button id="closeButton2" onclick="closePopup2()">Close</button>
+                            
                         </div>
                     </form>
+                  
                     <% }); %>
-                    
                 </tbody>
             </table>
         </section>

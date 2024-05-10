@@ -31,7 +31,7 @@ function approveEvent(eventId) {
     })
     .then(response => {
         if (response.ok) {
-            const statusElement = document.getElementById(`status_${buttonId}`);
+            const statusElement = document.getElementById(`status_${eventId}`);
             statusElement.textContent = "Approved";
             console.log('Event approved successfully!');
             // Optionally, update the UI to reflect the approval
@@ -45,17 +45,27 @@ function approveEvent(eventId) {
     if (statusElement) {
         statusElement.textContent = "Approved";
     }
+    
 }
 
-function rejectEvent(buttonId) {
-    const rejectionReason = document.getElementById(`rejectionReason_${buttonId}`).value;
 
-    fetch(`/rejectMessage?buttonId=${buttonId}`, {
-        method: 'POST'
+$(document).ready(function() {
+    // Add click event listener to all buttons with the class 'post-button'
+    $('.reject-button').click(function() {
+        // Retrieve the post ID from the button's ID
+        var eventId = parseInt($(this).attr('id').split('_')[1]);
+        console.log('Button clicked for eventToShareId ID:', eventId);
+        // Perform further actions if needed
+    });
+});
+
+function rejectEvent(eventId) {
+    fetch(`/rejectMessage?eventId=${eventId}`, {
+        method: 'POST' // Assuming you're using POST method for updating data
     })
     .then(response => {
         if (response.ok) {
-            const statusElement = document.getElementById(`status_${buttonId}`);
+            const statusElement = document.getElementById(`status_${eventId}`);
             statusElement.textContent = "Rejected";
             console.log('Event rejected successfully!');
             // Optionally, update the UI to reflect the approval
@@ -67,11 +77,8 @@ function rejectEvent(buttonId) {
 
     const statusElement = document.getElementById(`status_${eventId}`);
     if (statusElement) {
-        statusElement.textContent = "Rejected";
+        statusElement.textContent = "rejected";
     }
     
 }
-
-
-
 

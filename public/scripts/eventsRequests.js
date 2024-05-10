@@ -24,6 +24,16 @@ function showPopup(buttonId) {
 }
 
 // Inside eventsRequests.js
+$(document).ready(function() {
+    // Add click event listener to all buttons with the class 'post-button'
+    $('.approve-button').click(function() {
+        // Retrieve the post ID from the button's ID
+        var eventId = parseInt($(this).attr('id').split('_')[1]);
+        console.log('Button clicked for eventToShareId ID:', eventId);
+        // Perform further actions if needed
+    });
+});
+
 
 function approveEvent(eventId) {
     fetch(`/approveEvent?eventId=${eventId}`, {
@@ -59,7 +69,7 @@ $(document).ready(function() {
     });
 });
 
-function rejectEvent(eventId) {
+function rejectMessage(eventId) {
     fetch(`/rejectMessage?eventId=${eventId}`, {
         method: 'POST' // Assuming you're using POST method for updating data
     })

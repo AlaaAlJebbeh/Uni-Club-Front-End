@@ -20,10 +20,11 @@ app.use(express.urlencoded({ extended: true }));
 
 //Connection To Database
 const connection = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
+    host: "club.clmoo8csmsef.us-east-2.rds.amazonaws.com",
+    user: "admin",
+    password: "asdf2024",
     database: "clm",
+    port: 3306,
 });
 
 connection.connect((err) => {
@@ -84,6 +85,7 @@ app.post('/login', (req, res) => {
                 req.session.loggedIn = true;
                 req.session.email = email;
                 req.session.role = results[0].role; // Add this line
+                req.session.userID = results[0].user_id; // Add this line
                 console.log(req.session.email);
                 res.render('home', { loggedIn: true, role: results[0].role, email: req.session.email });
             } else {
@@ -221,6 +223,19 @@ app.get("/myclubpage", (req, res) => {
     });
 });
 
+app.post("/deleteEvent", (req, res) => {
+
+    const eventID = parseInt(req.query.eventID);
+    connection.query("DELETE From event WHERE event_id = ?",[eventID], (err, resultsToDelete) => {
+        if(err) {
+            console.log("Error deleting row " + err.message);
+            res.status(500).send("Internal Error");
+        }
+
+        res.redirect("/myclubpage");
+    });
+});
+
 app.post("/ToShareEvent", (req, res) => {
     const eventId = req.query.eventId;
     console.log("To share " + eventId);
@@ -285,6 +300,9 @@ app.get("/socialmedia/:link/:link2", (req, res) => {
 //Route eventRequests 
 
 app.get("/eventRequests", (req, res) => {
+    
+
+
     connection.query(`SELECT * FROM tempevents`, (err, results) => {
         if (err) {
             console.error("Error fetching temp events:", err);
@@ -306,7 +324,15 @@ app.get("/eventRequests", (req, res) => {
 
         });
 
+       connection.query(`SELECT * FROM event WHERE event_id IN (?)`, [eventIds], (err, events) => {
+            if (err) {
+                console.error("Error fetching events:", err);
+                return res.status(500).send("Internal Server Error");
+            }
+            console.log(events);
+            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events });
 
+        });
 
 
 
@@ -346,15 +372,7 @@ app.post("/approveEvent", (req, res) => {
         }
 
         console.log("Fetched event data:", results);
-    /*
-        connection.query('UPDATE tempevents SET status = 1 WHERE event_id = ?', [eventId], (err, result) => {
-            if (err) {
-                console.error("Error updating status in temporary events table:", err);
-                return res.status(500).send("Internal Server Error");
-            }
-
-            console.log("Status updated in temporary events table");
-*/
+   
     results.forEach(event => {
      // Loop through the results array
         event.status = 1; 
@@ -377,9 +395,18 @@ app.post("/approveEvent", (req, res) => {
 
         console.log("Event approved successfully!");
         // Optionally, handle the result or send a response to the client
+   
+
+    connection.query("Delete FROM tempevents where event_id = ?", [eventId], (err, result) => {
+        if (err) {
+            console.error('Error deleting from  database:', error);
+            return res.status(500).send('Failed to delete');
+        } else {
+            res.redirect("/eventRequests");
+        }
     });
      
-
+});
     });
 });
 
@@ -415,6 +442,7 @@ app.get("/statusClubManager", (req, res) => {
 
 
 app.get("/createEvent", (req, res) => {
+    console.log(req.session.userID);
     res.render('createEvent.ejs');
 });
 
@@ -430,16 +458,7 @@ app.post("/createEvent", async (req, res) => {
     const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category } = req.body;
     const language = req.body.language; // Get the selected language
 
-    connection.query("SELECT user_id FROM users WHERE email = ?", [email], (err, userResult) => {
-        if (err) {
-            console.error("Error fetching userID:", err);
-            return res.status(500).send("Internal Server Error");
-        }
-        if (userResult.length === 0) {
-            return res.status(404).send("User not found");
-        }
-
-        const userId = userResult[0].user_id;
+        const userId = req.session.userID;
         console.log("\n\nuser id", userId);
 
         connection.query("SELECT club_name FROM club WHERE clm_id = ?", [userId], (err, resultClubName) => {
@@ -457,9 +476,9 @@ app.post("/createEvent", async (req, res) => {
                 const clubId = clubResult[0].club_id;
 
                 connection.query(
-                    `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id, club_name, imageUrl)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                    [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, clubName, imgPath],
+                    `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imgPath],
                     (error, results, fields) => {
                         if (error) {
                             console.error('Error inserting event into database:', error);
@@ -472,8 +491,6 @@ app.post("/createEvent", async (req, res) => {
 
         });
 
-
-    });
 });
 
 app.get("/createPost", (req, res) => {
@@ -567,64 +584,54 @@ app.post("/clubform", async (req, res) => {
 
 app.post("/rejectMessage", async (req, res) => {
     const rejectionReason = req.body.rejectionReason;
-    const buttonId = req.query.buttonId;
-    console.log(rejectionReason);
-    
+    const eventId = req.query.eventId;
+    console.log("To share " + eventId);
 
-    connection.query('SELECT sks_id from sks_admin WHERE email=?', [req.session.email], (err, result) => {
+    connection.query("SELECT * FROM tempevents where event_id = ?", [eventId], (err, result) => {
+        console.log("the selected result is");
+        console.log(result);
         if (err) {
-            console.error("Error getting sks id:", error);
-            res.status(500).send("Error creating club");
-            return;
-        }
-        const sksid = result[0].sks_id;
-        
-       // Retrieve eventId from the query string
-        
-            console.log("Received eventId:", buttonId);
+            console.log("error selecting from temporary event");
+        } 
 
 
-                connection.query('SELECT * FROM tempevents where event_id = ?', [buttonId], (err, results) => {
-                    if (err) {
-                        console.error('Error fetching event data:', err);
-                        return res.status(500).send("Internal Server Error");
-                    }
+        result.forEach(event => {
+            // Loop through the results array
             
-                    
-                    console.log("Fetched event data:", results);
-           
-
-                // Assuming you want to insert the entire event data into the toshareevents table
-                const eventData = JSON.stringify(results);
-                
-                results.forEach(event =>{
-                event.status = 0; 
-                console.log("Type of results:", typeof results);
-         
-            connection.query('INSERT INTO history_event SET ?', [event], (err, result) => {
-                if (err) {
-                    console.error("Error inserting event data into history of events", err);
-                    return res.status(500).send("Internal Server Error");
-                }
-        
-                console.log("Event rejected successfully!");
-                // Optionally, handle the result or send a response to the client
+               event.status = 0; 
+           // Insert each event from the results array into the toshareevents table
+          
+       
+           connection.query('INSERT INTO history_event SET ?', [event], (err, result) => {
+               if (err) {
+                   console.error("Error inserting event data into history of events", err);
+                   return res.status(500).send("Internal Server Error");
+               }
+               console.error("rejected event inserted into  history of events");
             });
-        });
-        connection.query('INSERT INTO history_event (comment) VALUES (?)', [rejectionReason], (err, result) => {
-            if (err) {
-                console.error("Error inserting message history of events", err);
-                return res.status(500).send("Internal Server Error");
-            }
-    
-            console.log("message inserted successfully!");
-            // Optionally, handle the result or send a response to the client
-      
-        });
-    });
-});
-});
 
+            connection.query('INSERT INTO history_event (comment) VALUES (?)', [rejectionReason], (err, result)=>{
+                if(err){
+                    console.log("error inserting rejection reason:", err);
+                }
+                console.error("rejection reason inserted into  history of events");
+                console.log("rejected event summary: ", result)
+            })
+
+           });
+            
+       
+          
+           connection.query("Delete FROM tempevents where event_id = ?", [eventId], (err, result) => {
+            if (err) {
+                console.error('Error deleting from  database:', error);
+                return res.status(500).send('Failed to delete');
+            } else {
+                res.redirect("/eventRequests");
+            }
+        });
+});
+});
 
 
 

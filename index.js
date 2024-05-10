@@ -810,27 +810,62 @@ app.post("/approvePostEditRequest", (req, res) => {
 });
 
 
-  // Route to handle rejecting a post
-  app.post('/reject', (req, res) => {
+app.post('/reject', (req, res) => {
     const postId = req.body.postId;
     const rejectionReason = req.body.rejectionReason;
-    
-  
+
     // Update the post status to 'rejected' in History_post table
-    const rejectQuery = `INSERT INTO History_post (PostID, Status, rejectionReason)
+    const rejectQuery = `INSERT INTO history_post (PostID, Status, rejectionReason)
                          VALUES (?, 'rejected', ?);
                         `;
-  
-    connection.query(rejectQuery, [postId, rejectionReason], (err, results) => {
-      if (err) {
-        console.error('Error rejecting post:', err);
-        res.status(500).send('Error rejecting post');
-      } else {
-        console.log('Post rejected successfully');
-        res.status(200).send('Post rejected successfully');
-      }
+
+    // Move post from TempPosts to History_post
+    const movePostQuery = `
+    INSERT INTO history_post (PostID, clm_id, club_id, club_name, postText, postImageURL, Status, rejectionReason)
+    SELECT PostID, clm_id, club_id, club_name, postText, postImageURL, 'rejected', ? FROM TempPosts WHERE PostID = ?;
+    `;
+
+
+    connection.beginTransaction(err => {
+        if (err) {
+            console.error('Error starting transaction:', err);
+            res.status(500).send('Error rejecting post');
+            return;
+        }
+
+        connection.query(movePostQuery, [rejectionReason, postId], (err, results) => {
+            if (err) {
+                console.error('Error moving post to History_post:', err);
+                connection.rollback(() => {
+                    res.status(500).send('Error rejecting post');
+                });
+            } else {
+                connection.query(`DELETE FROM TempPosts WHERE PostID = ?`, [postId], (err, results) => {
+                    if (err) {
+                        console.error('Error deleting post from TempPosts:', err);
+                        connection.rollback(() => {
+                            res.status(500).send('Error rejecting post');
+                        });
+                    } else {
+                        connection.commit(err => {
+                            if (err) {
+                                console.error('Error committing transaction:', err);
+                                connection.rollback(() => {
+                                    res.status(500).send('Error rejecting post');
+                                });
+                            } else {
+                                console.log('Post rejected and deleted successfully');
+                                res.status(200).send('Post rejected and deleted successfully');
+                            }
+                        });
+                    }
+                });
+            }
+        });
     });
-  });
+});
+
+  
 
 app.get("/ezz", (req, res) => {
     connection.query("select * from event where clm_id = 1", (err, result) => {
@@ -969,24 +1004,6 @@ app.post('/updateProfile', (req, res) => {
     });
 });
 
-app.post('/comparing', (req, res) => {
-    // Assuming you're receiving the rejection reason as JSON data in the request body
-    const rejectionReason = req.body.reason;
-    console.log('incoming req body:', req.body);
-
-    // Insert the rejection reason into the database
-    const sql = 'INSERT INTO history_event (comment) VALUES (?)';
-    console.log('SQL query:', sql);
-    connection.query(sql, [rejectionReason], (err, result) => {
-        if (err) {
-            console.error('Error inserting rejection reason:', err);
-            res.status(500).send('Error inserting rejection reason');
-            return;
-        }
-        console.log('Rejection reason inserted successfully');
-        res.status(200).send('Rejection reason inserted successfully');
-    });
-});
 
 app.get("/notifications", (req, res) => {
     const email = req.session.email;

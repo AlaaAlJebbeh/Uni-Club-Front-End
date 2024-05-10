@@ -83,6 +83,11 @@
             <div class="logo-side">
               <% console.log("in create event href" + clubInformation[0].club_id) %>
                 <a href="/createevent"><button>Create Event</button></a>
+                <p></p>
+                <a href="/notifications"><button>Notifications</button></a>
+                <p></p>
+                <a href="/createPost"><button>createPost</button></a>
+
             </div>
           </div>
           <% } %>
@@ -200,6 +205,7 @@
 
             <div class="content-containerManager">
               <% name.forEach((item)=> { %>
+              <% name.forEach((item)=> { %>
                 <div class="CLMNAMES">
                   <img src="../public/images/images/Alson GC.jpg" />
                   <h1>
@@ -278,7 +284,6 @@
     </div>
     <div id="my-posts-content" class="content-section" style="display: none">
       <!-- POSTS SECTION -->
-     
   </div>
   
     <div id="my-status-content" class="content-section" style="display: none">
@@ -302,33 +307,51 @@
               </tr>
             </thead>
             <tbody>
-              <% results.forEach((item, index)=> { %>
+
+              <% resultsToShare.forEach((itemTs, index)=> { %>
+                    <tr>
+                      <td>
+                        <%=itemTs.event_name%>
+                      </td>
+                      <td>
+                        <p class="status approved">Approved</p>
+                      </td>
+                      <td>
+                        <% var eventID=parseInt(itemTs.event_id); %>
+                        <%console.log("event Iddd" + eventID)%>
+                          <form action="/ToShareEvent?eventId=<%= eventID %>" method="POST">
+                            <% var buttonId='button_' + itemTs.event_id; %>
+                              <p><button id="<%= buttonId %>" class="approve-button" type="submit">Share</button></p>
+                          </form>
+                      </td>
+                    </tr>
+                    <% }); %>
+
+              <% resultsTemp.forEach((item, index)=> { %>
                 <tr>
                   <td>
                     <%=item.event_name%>
                   </td>
+
                   <td>
                     <p class="status pending">Pending</p>
                   </td>
                 </tr>
                 <% }); %>
-              
-                <% resultsHistory.forEach((itemh, index)=> { %>
+                  <% resultsHistory.forEach((itemh, index)=> { %>
                     <tr>
                       <td>
-                        <%=itemh.event_name%>
+                        <%if(itemh.status == 0){%>
+                          <%=itemh.event_name%>
+                          <%}%>
                       </td>
                       <td>
-                        <%if(itemh.status==1){%>
-                          <p class="status approved">Approved</p>
-                          <%} else if(itemh.status==0){%>
-                            <p class="status rejected">Rejected</p>
-                            <%}%>
+                        <%if(itemh.status==0){%>
+                          <p class="status rejected">Rejected</p>
+                          <%}%>
                       </td>
-                    </tr>
-                    <% }); %>
-
-                  
+                      </tr>
+                  <% }); %>
             </tbody>
           </table>
         </section>

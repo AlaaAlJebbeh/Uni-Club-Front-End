@@ -58,16 +58,16 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-// Assuming you're using jQuery
 $(document).ready(function() {
     // Add click event listener to all buttons with the class 'post-button'
-    $('.post-button').click(function() {
+    $('.approve-button').click(function() {
         // Retrieve the post ID from the button's ID
-        var postId = parseInt($(this).attr('id').split('_')[1]);
-        console.log('Button clicked for post ID:', postId);
+        var eventToShareId = parseInt($(this).attr('id').split('_')[1]);
+        console.log('Button clicked for eventToShareId ID:', eventToShareId);
         // Perform further actions if needed
     });
-});
+})
+
 
 
 

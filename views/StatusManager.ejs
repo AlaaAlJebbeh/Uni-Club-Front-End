@@ -78,7 +78,7 @@
       });
     </script>
 
-    <main class="table" id="customers_table">
+    <main class="table" id="customers_table" >
       <section class="table__header">
         <h1>Content Management</h1>
         <div class="input-group">
@@ -100,9 +100,8 @@
           </thead>
           <tbody>
             <% let index; %> <% combinedData.forEach(function(item,index){ %> <%
-            let items = []; %> <% items.push(item); %>
-            <% var buttonId = 'approve-button' + index; %>
-
+            let items = []; %> <% items.push(item); %>            
+            <% var buttonId; %>
             <tr>
               <td>
                 <h4 style="color: black"><%=clubNames[index]%></h4>
@@ -111,9 +110,10 @@
               <td>
                 <p class="status pending">Pending</p>
               </td>
+              
               <td>
-                <button class="approve-button">Approve</button>
-                <button class="reject-button">Reject</button>
+                <button class="approve-button" id="<%= buttonId %>" onclick="approvePost('<%= item.PostID %>', '<%= item.RequestID %>')">Approve</button>
+                <button class="reject-button" id="<%= buttonId %>" onclick="rejectPost('<%= item.PostID %>')">Reject</button>
               </td> 
               <td>
                 <button
@@ -161,13 +161,16 @@
         <button id="closeButton" onclick="closePopup()">Close</button>
       </div>
 
+      
+
       <div id="reject" class="reject-card1">
         <input
           type="text"
-          id="rejectionReason"
+          id="rejectionReason_<%= combinedData.PostId %>" name="rejectionReason"
           placeholder="Enter rejection reason..."
         />
-        <button id="sendButton">Send</button>
+        <% var buttonId; %>
+        <button class="send-button" id="<%= buttonId %>" onclick="rejectPost('<%= combinedData.PostID %>')">Send</button>
         <button id="closeButton2" onclick="closePopup2()">Close</button>
       </div>
 

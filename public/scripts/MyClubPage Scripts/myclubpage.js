@@ -36,9 +36,7 @@ document.addEventListener("DOMContentLoaded", function() {
         displayNotifications();
     });
 
-    closeButton.addEventListener("click", function() {
-        notificationModal.style.display = "none";
-    });
+
 
     window.addEventListener("click", function(event) {
         if (event.target === notificationModal) {
@@ -68,7 +66,37 @@ $(document).ready(function() {
     });
 })
 
-
-
-
-
+document.addEventListener("DOMContentLoaded", function() {
+    // Add event listener to all edit icons
+    const editIcons = document.querySelectorAll('.edit-icon');
+    editIcons.forEach(icon => {
+        icon.addEventListener('click', function() {
+            // Get the event ID associated with the clicked edit icon
+            const eventID = this.getAttribute('data-eventid');
+            // Get the corresponding text container by ID
+            const textContainer = document.getElementById(`text-container-${eventID}`);
+            const saveButton = document.getElementById(`save-button-${eventID}`);
+            console.log(saveButton);
+            // Toggle contenteditable attribute
+            if (textContainer) {
+                // Check if the text container is currently editable
+                const isEditable = textContainer.getAttribute('contenteditable') === 'true';
+                saveButton.style.display = isEditable ? 'none' : 'block';
+                // Toggle the contenteditable attribute
+                textContainer.contentEditable = !isEditable;
+            }
+        });
+    });
+});
+document.addEventListener("DOMContentLoaded", function() {
+    const saveButtons = document.querySelectorAll('.events-save-button');
+    saveButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const eventID = this.getAttribute('data-eventid');
+            const form = document.getElementById(`edit-form-${eventID}`);
+            
+            // Submit the form
+            form.submit();
+        });
+    });
+});

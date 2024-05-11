@@ -937,7 +937,7 @@ app.post('/reject', (req, res) => {
     // Move post from TempPosts to History_post
     const movePostQuery = `
     INSERT INTO history_post (PostID, clm_id, club_id, club_name, postText, postImageURL, Status, rejectionReason)
-    SELECT PostID, clm_id, club_id, club_name, postText, postImageURL, 'rejected', ? FROM TempPosts WHERE PostID = ?;
+    SELECT PostID, clm_id, club_id, club_name, postText, postImageURL, 'rejected', ? FROM tempposts WHERE PostID = ?;
     `;
 
 
@@ -955,7 +955,7 @@ app.post('/reject', (req, res) => {
                     res.status(500).send('Error rejecting post');
                 });
             } else {
-                connection.query(`DELETE FROM TempPosts WHERE PostID = ?`, [postId], (err, results) => {
+                connection.query(`DELETE FROM tempposts WHERE PostID = ?`, [postId], (err, results) => {
                     if (err) {
                         console.error('Error deleting post from TempPosts:', err);
                         connection.rollback(() => {

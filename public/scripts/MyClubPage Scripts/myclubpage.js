@@ -67,34 +67,39 @@ $(document).ready(function() {
 })
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Add event listener to all edit icons
     const editIcons = document.querySelectorAll('.edit-icon');
     editIcons.forEach(icon => {
         icon.addEventListener('click', function() {
-            // Get the event ID associated with the clicked edit icon
             const eventID = this.getAttribute('data-eventid');
-            // Get the corresponding text container by ID
             const textContainer = document.getElementById(`text-container-${eventID}`);
             const saveButton = document.getElementById(`save-button-${eventID}`);
-            console.log(saveButton);
-            // Toggle contenteditable attribute
+            const uploadButton = document.getElementById(`upload-button-${eventID}`);
+            
             if (textContainer) {
-                // Check if the text container is currently editable
                 const isEditable = textContainer.getAttribute('contenteditable') === 'true';
                 saveButton.style.display = isEditable ? 'none' : 'block';
-                // Toggle the contenteditable attribute
+                uploadButton.style.display = isEditable ? 'none' : 'block';
                 textContainer.contentEditable = !isEditable;
             }
         });
     });
-});
-document.addEventListener("DOMContentLoaded", function() {
+
     const saveButtons = document.querySelectorAll('.events-save-button');
     saveButtons.forEach(button => {
         button.addEventListener('click', function() {
             const eventID = this.getAttribute('data-eventid');
+            console.log("Event ID in Javascript: " + eventID);
             const form = document.getElementById(`edit-form-${eventID}`);
-            
+            const imageContainer = document.getElementById(`image-container-${eventID}`);
+            const imageSrc = imageContainer.querySelector('img').src; // Get the current image source
+
+            // Create a hidden input field for the image source and append it to the form
+            const imageInput = document.createElement('input');
+            imageInput.type = 'hidden';
+            imageInput.name = 'eventImage';
+            imageInput.value = imageSrc;
+            form.appendChild(imageInput);
+
             // Submit the form
             form.submit();
         });

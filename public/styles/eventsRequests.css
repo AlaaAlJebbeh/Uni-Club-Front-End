@@ -702,10 +702,11 @@ footer{
   
   #popup img {
     max-width: 100%; /* Ensure image fits within the column */
-    height: auto; /* Maintain aspect ratio */
+    height: 100%; /* Maintain aspect ratio */
     display: block; /* Ensure the image behaves as a block element */
     border-radius: 0%; /* Remove border radius */
     margin: auto; /* Center the image horizontally */
+    margin-top: 100%;
   }
   
   .popup-card {

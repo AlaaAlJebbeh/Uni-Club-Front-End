@@ -1,540 +1,41 @@
-/*
-Color Pallete
-#193635  -> Dark green
-#0AB3AD  -> Light green 
-#7BD3D1  -> Tiffany Blue
-#FFD700  -> Gold
-#000000  -> Black
-#FFFFFF  -> White
-*/
-html,body {
-    height: 100%;
-    min-height: 1000px;
-}
-body {
-    display: flex;
-    flex-direction: column;
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+
+* {
     margin: 0;
     padding: 0;
-}
-h1 {
-    color: #193635;
-}
-h2{
-    margin: 0;
-}
-a{
-    color: #FFFFFF;
-    text-decoration: none;
-}
-a:active {
-    color: #0AB3AD;
-    cursor: grabbing;
-}
-.sidebar1 {
-    width: 325px; /* Adjust sidebar width as needed */
-    background-color: gainsboro;
-    border-radius: 5px;
-    font-size: 1.5rem;
-    padding-top: 10vh;
-}
 
-@media (max-width: 800px) { /* Adjust breakpoint as needed */
-    .sidebar1 {
-        display: none;
-    }
-}
-
-.items {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-    box-shadow: 4px 17px 27px -18px rgba(0,0,0,0.81);
-    height: 75px;
-    align-items: center;
-    font-size: 2rem;
-    padding-left: 30px;
-    background: #193635;
-    color: #FFFFFF;
-    border-radius: 5px;
-}
-
-
-.items:hover{
-    cursor: pointer;
-    height: 80px;
-    font-size: 2.1rem;
-}
-
-.icon img{
-    max-width: 50px;
-}
-
-.logo-side img{
-    max-width: 300px;
-}
-
-.logo-side{
-    display: flex;
-    margin-top: 30px;
-    position: absolute;
-    flex-direction: column;
-    top: -30px;
-    left: 3;
-}
-
-
-.cnt6{
-    display: flex;
-    margin-top: 30px;
-    position: absolute;
-    top: 0px;
-    right: 150px;
-}
-.cnt6 button{
-   border: 1px solid black;
-   border-radius: 5px;
-   scale: 1.5;
-   width: 100px;
-   background-color: #193635;
-   color: white;
-}
-.container1 {
-    display: flex;
-    height: 100%;
-}
-
-/* Media query for smaller screens */
-@media (max-width: 768px) {
-    .header-club > div > h2 {
-        max-height: 20%; /* Adjust height as needed */
-        font-size: auto; /* Adjust font size as needed */
-    }
-}
-.ContentBody {
-    flex: 1;
-    background-color: #FFFFFF;
-    padding: 20px; /* Add padding for spacing */
-}
-
-#my-profile-content {
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-color: rgba(255, 255, 255, 0.5);
-    background-position: center;
-    height: 100%; /* Ensure it takes the full height of the ContentBody */
-    display: flex;
-    position: relative;
-}
-  
-
-.cnt1 img {
-    max-width: 125px;
-}
-
-.cnt1 button {
-    width: fit-content;
-    align-self: center;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #193635;
-    color: white;
-    font-weight: bold;
-    font-size: large;
-    margin-top: 5px;
-    z-index: 100;
-}
-
-.cnt1 button:hover {
-    cursor: pointer;
-}
-
-.cnt1 button:active {
-    cursor: grab;
-    scale: 0.9;
-}
-
-#saveButton {
-    position: absolute; 
-    bottom: 0; 
-    right: 0;
-    width: fit-content;
-    align-self: center;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #193635;
-    color: white;
-    font-weight: bold;
-    font-size: large;
-    margin-top: 5px;
-    z-index: 100;
-
-}
-
-.cnt2 {
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;  
-    font-size: 1rem;
-    max-width: 300px;
-    justify-content: center;
-}
-
-.cnt2 img{
-
-    max-width: 100px;
-}
-.cnt3 {
-    display: flex;
-    font-size: 1rem;
-    align-items: center;
-    justify-content: center;
-}
-.cnt3 h2{
-    transform: translate(-50%,10%);
-}
-.bio-textbox {
-    max-height: 150px;
-    max-width: 300px;
-    height: 150px;
-    width: 300px;
-    padding: 10px; /* Adjust padding as needed */
-    font-size: 16px; /* Adjust font size as needed */
-    border: 1px solid #ccc; /* Add border for visual clarity */
-    border-radius: 5px; /* Add border radius for rounded corners */
-    margin-top: 10px; /* Add margin to create space */
-}
-
-@media (max-width: 1230px) { /* Adjust breakpoint as needed */
-    .bio-textbox {
-        width: 100%; /* Set width to 100% when screen width is less than or equal to 600px */
-        max-width: none; /* Remove max-width constraint */
-        height: auto; /* Allow height to adjust based on content */
-    }
-}
-
-.cnt4{
-    display: flex;
-    flex-direction: column;
-    font-size: 1.75rem;
-    gap: 10px;
-}
-.contact-info{
-    display: flex;
-    align-items: center;
-    font-size: 1.5rem;
-}
-.contact-info img {
-    height: 35px;
-    margin-right: 5px;
-}
-.contact-info div {
-    padding: 5px;
-}
-.socialmedia-links img{
-    height: 35px;
-    margin-right: 20px;
-}
-
-.socialmedia-links button{
-    background-color: transparent;
-    margin: 0;
-    padding: 0;
-    align-self: center;
-    border: none;
-}
-.card-container {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.table-container {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    margin-bottom: 20px;
-}
-
-.card{
-    background-color: #d3d3d3;
-    border: 5px solid black;
-    margin: 70px 20px 20px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 15px;
-    max-width: 400px;
-    max-height: 600px;
-    overflow: hidden;
-}
-
-.image-container{
-    width: 100%;
-    height: 65%;
-    position: relative;
-    border-bottom: 5px solid black;
-}
-.text-container{
-    width: 100%;
-    height: 35%;
-    background-color: whitesmoke;
-    display: flex;
-    flex-wrap: wrap;
-    padding-top: 10px;
-    padding-left: 2px;
-    font-size: 1.7vh;
-    position: relative;
-}
-.card-details span{
-    font-size: 1.9vh;
-    margin-right: 10px;
-    font-weight: 600;
-}
-
-.text-container > div{
-    flex: 50%;
-}
-
-.image-container img{
-    width: 100%;
-    height: 100%;
+    box-sizing: border-box;
+    font-family: "Roboto Slab", serif;
+    font-size: medium;
     
 }
+@media print {
+    .table, .table__body {
+     overflow: visible;
+     height: auto !important;
+     width: auto !important;
+    }
+   }
 
-#my-events-content {
-
-        background-size: auto;
-        background-repeat: no-repeat;
-        background-color: rgba(255, 255, 255, 0.5);
-        background-position: center;
-        height: 100%; /* Ensure it takes the full height of the ContentBody */
-        display: flex;
-        position: relative;
+@page {
+    size: landscape;
+    margin: 0; 
 }
 
-#my-status-content {
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-color: rgba(255, 255, 255, 0.5);
-    background-position: center;
-    height: 100%; /* Ensure it takes the full height of the ContentBody */
+h1{
+    font-size: 35px;
+}
+
+
+body {
+    min-height: 100vh;
+    background: whitesmoke;
     display: flex;
-    position: relative;
+    flex-direction: column; /* Ensure flex items stack vertically */
+    justify-content: space-between; /* Push content to the top and footer to the bottom */   
+    padding-bottom: 30px; /* Space for footer */
+    margin: 0;
 }
-
-.Active{
-    position: absolute;
-    width: 20%;
-    height: 20%;
-    border-radius: 50%;
-    background-color: green;
-    top: 1px;
-    right: 1px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /*------ FONT RELATED -----*/
-    font-size: 2vh;
-    color: white;
-    font-weight: 600;
-}
-.not-active{
-    position: absolute;
-    width: 20%;
-    height: 20%;
-    border-radius: 50%;
-    background-color: orange;
-    top: 1px;
-    right: 1px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /*------ FONT RELATED -----*/
-    font-size: 2vh;
-    color: white;
-    font-weight: 600;
-}
-
-.canceled{
-    position: absolute;
-    width: 20%;
-    height: 20%;
-    border-radius: 50%;
-    background-color: red;
-    top: 1px;
-    right: 1px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /*------ FONT RELATED -----*/
-    font-size: 2vh;
-    color: white;
-    font-weight: 600;
-}
-
-.editanddeleteContainer {
-    position: absolute;
-    border-radius: 50%;
-    top: 1px;
-    left: 1;
-    display: flex;
-    align-items: first baseline;
-    width: 8%;
-    height: 8%;
-    /*------ FONT RELATED -----*/
-    font-size: 2vh;
-    color: white;
-    font-weight: 600;
-    gap: 5px;
-    margin: 5px 0 0 5px;
-}
-
-.editanddeleteContainer img {
-    width: 100%;
-    height: 100%;
-}
-.editanddeleteContainer button {
-    width: 30px;
-    height: 30px;
-    padding: 0; /* Remove padding to ensure the button fills the container */
-    border: none; /* Remove border */
-    background: transparent; /* Make background transparent */
-}
-
-.editanddeleteContainer form button img {
-    width: 100%;
-    height: 100%;
-}
-
-.editanddeleteContainer button:hover {
-    cursor: pointer;
-}
-
-
-.editanddeleteContainer img:hover {
-   cursor: pointer;
-} 
-.editanddeleteContainer form {
-    width: 100%;
-    height: 100%;
-}
-
-.indivisual-card-container{
-    display: flex;
-    flex-direction: column;
-}
-
-.events-save-button {
-    width: fit-content;
-    align-self: flex-end;
-    scale: 1.5;
-    background-color: #193635;
-    color: white;
-    padding: 5px;
-    border-radius: 5px;
-    margin-right: 30px;
-    display: none;
-}
-
-.upload {
-
-    position: absolute;
-    top:  -40px;
-    right: -135px;
-    display: none;
-}
-/* CSS for the modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 11111;
-    left: 0;
-    top: 0;
-    transform: translate(-50%,-50%);
-    width: 100%;
-    height: 100%;
-    height: 900px;
-    width: 500px;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.uploadBtn {
-    width: fit-content;
-    scale: 1.5;
-    background-color: #193635;
-    color: white;
-    padding: 5px;
-    border-radius: 5px;
-    margin-right: 30px;
-    z-index: 1001;
-    position: absolute;
-    bottom: 10px;
-    right: -10px;
-    display: none;
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-}
-
-.close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-
-
-.content-container {
-    display: flex;
-    justify-content: space-around;
-    position: relative;
-    margin-bottom: 30px ;
-}
-
-.content-containerManager{
-    display: flex;
-    justify-content: space-around;
-}
-
-.CLMNAMES {
-    display: flex;
-    flex-direction: column;
-    align-items: center;  
-    font-size: 1rem;
-    max-width: 300px;
-    justify-content: space-evenly;
-}
-
-.CLMNAMES img{
-  max-width: 100px;
-  border-radius: 50px;
-}
-
-.content-containerManager .CLMNAMES>h1{
-    text-align: center;
-}
-
-/*
-STYLES FOR TABLE IN STATUS
-*/
 
 main.table {
     width: 100%;
@@ -694,7 +195,7 @@ tbody tr.hide td img {
 }
 
 .status.approved {
-    background-color: #289e46;
+    background-color: green;
     color: white;
 }
 
@@ -722,7 +223,7 @@ thead th span.icon-arrow {
     border: 1.4px solid transparent;
     
     text-align: center;
-    font-size: 1.7rem;
+    font-size: 1rem;
     
     margin-left: .5rem;
     transition: .2s ease-in-out;
@@ -825,7 +326,7 @@ thead th.active,tbody td.active {
     height: auto;
 }
 
-.approve-button {
+.edit_button {
     height: 55px;
     width: 43%;
     color: #fff;
@@ -839,7 +340,7 @@ thead th.active,tbody td.active {
     display: inline-block; /* Ensure inline-block to set width */
     
 }
-.reject-button {
+.delete_button {
     height: 55px;
     width: 40%;
     color: #fff;
@@ -854,22 +355,135 @@ thead th.active,tbody td.active {
     
 }
 
-.details-button{
-    text-align: center;
-    width: 67px;
-    height: 60px;   
-    top: 0;
-    left: 0;
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+
+html{
+    font-size: 62.4%;
+    overflow-x: hidden;
+    scroll-padding-top: 6rem;
+    scroll-behavior: smooth;    
+}
+::selection{
+    background:var(--yellow);
+    color: #fff
+}
+
+:root{
+    --yellow: #FFD700;
+}
+
+* {
+    font-family: "Roboto Slab", serif;
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    text-transform: capitalize;
+    outline: none;
+    border: none;
+    transition: all .2s linear;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+header {
+    position: fixed;
+    height: 100px;
+    top:0; left:0; right:0;
+    background: #193635;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1%;
+}
+
+.logo-image {
+    width: 150px;
+    height: 150px;
+    margin-top: 80px;
+    margin-left:60px;
+}
+
+header .logo span{
+    color:var(--yellow);
+}
+
+header nav ul {
+    display: flex;
+}
+header nav ul li a {
+    display: inline-block;
+    color: #ffffff;
+    padding: 5px 0;
+    margin: 0 10px;
+    border: 3px solid transparent;
+    text-transform: uppercase;
+    transition: 0.2s;
+    font-size: 2rem; 
+    margin-right: 40px
+}
+
+header .navbar a:hover{
+    color:var(--yellow);
+}
+
+header nav ul li a.active {
+    border-bottom-color: var(--yellow);
+}
+
+header .icons i{
+    font-size: 2.5rem;
+    color:#fff;
     cursor: pointer;
-    background-color: #0ab3ad
-    
-    
-    
+    margin-right: 2rem;
 }
 
 
+header .icons i:hover{
+    color:var(--yellow);
+}
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+header .search-bar-container{
+    position: absolute;
+    top: 90%; left:500; right:0;
+    padding: 1.5rem;
+    background: #193635;
+    border-top: .1rem solid rgba(25,54,53,.2);
+    display: flex;
+    align-items: center;
+    z-index: 1001;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    width:300px;
+    
+}
+
+header .search-bar-container.active{
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    
+}
+
+header .search-bar-container #search-bar{ 
+    width:100%;
+    padding: 1rem;
+    text-transform: none;
+    color: #333;
+    font-size: 1.7rem;
+    border-radius: .5rem;
+    
+}
+
+header .search-bar-container label{
+    color:#fff;
+    cursor: pointer;
+    font-size: 3rem;
+    margin-left: 1.5rem;
+}
+
+header .search-bar-container label:hover{
+    color:var(--yellow)
+}
 
 .sideBar {
     cursor: pointer;
@@ -1091,8 +705,8 @@ footer{
     z-index: 9999; 
     width: 30%; 
     max-width: 800px; /* Adjust the maximum width */
-    height: 70%; /* Adjust the height */
-    max-height: 600px; /* Adjust the maximum height */
+    height: 30%; /* Adjust the height */
+    max-height: 400px; /* Adjust the maximum height */
     padding: 20px;
     border-radius: 10px;
     background-color: white; /* Add a background color */
@@ -1110,6 +724,41 @@ footer{
     bottom: 10px; /* Position the button 10px from the bottom */
     right: 10px; /* Position the button 10px from the right */
   }
+
+  
+
+  /* CSS for modal (pop-up) */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
   
   
   

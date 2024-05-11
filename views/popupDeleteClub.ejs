@@ -1,0 +1,28 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="../public/styles/popupDeleteClub.css">
+</head>
+
+<div class="popup-content">
+    <!-- Render the fetched popup content here -->
+    <h2>Edit Manager</h2>
+    <section>
+        <div class="wrapper">
+            <div class="flip-card">
+                <div>
+                    <%var clubId = clubId%>
+                    <%console.log("club Id from popuppp: " + clubId)%>
+                    <form action="/DeleteClubRequest?clubId=<%= clubId %>" method="POST" class="form" name="DeleteClub" id="DeleteClub" >
+                        <p>Are you sure you want to delete the club with id <%= clubId %> </p>
+                        <div class="buttonContainer">
+                            <button id="deleteButton" type="submit">Delete</button>
+                            
+
+                        </div>
+                    </form>
+                    <button id="cancelButton"  onclick="closePopup()">cancel</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="../public/scripts/clubManagerSks.js"></script>
+</div>

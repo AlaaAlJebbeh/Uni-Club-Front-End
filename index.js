@@ -1191,6 +1191,34 @@ app.post("/EditManagerRequest", (req, res) => {
     });
 });
 
+app.get("/popupDeleteClub", (req, res) => {
+    const buttonId = req.query.clubId;
+    console.log("Button Id" + buttonId);
+    const lastIndex = buttonId.lastIndexOf('_');
+    const clubId = buttonId.substring(lastIndex + 1); // Extract the substring after the last '_'
+    console.log("Club Id" + clubId);
+
+    // Get the button ID from the query string
+
+    console.log("club Id from pop up delete club is " + clubId);
+    // Fetch popup content based on button ID from the database or any other source
+    res.render('popupDeleteClub.ejs', {clubId });
+
+});
+
+app.post("/DeleteClubRequest", (req, res) => {
+    const clubId = req.query.clubId;
+    console.log("Entered the delete path. Club ID:", clubId);
+        connection.query('DELETE FROM club WHERE club_id = ?', [clubId], (err, result) => {
+        if (err) {
+            console.log("couldn't delete club");
+        }
+        else {
+            res.redirect('/clubManagerSks');
+        }
+    });
+});
+
 //listining to the port 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

@@ -25,8 +25,24 @@ function showPopup(buttonId) {
     .catch(error => console.error('Error fetching popup content:', error));
 }
 
+function showPopupdelete(buttonId) {
+    // Make a GET request to fetch the popup content for the given button ID
+    fetch(`/popupDeleteClub?clubId=${buttonId}`)
+    .then(response => response.text())
+    .then(data => {
+        // Insert the fetched popup content into the popup container
+        document.getElementById("popup").innerHTML = data;
+        // Display the popup
+        document.getElementById("popup").style.display = "block";
+    })
+    .catch(error => console.error('Error fetching popup content:', error));
+}
+
+
+
 // Function to close the popup card
 function closePopup() {
+    console.log("entered close function");
     document.getElementById("popup").style.display = "none";
 }
 

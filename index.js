@@ -332,7 +332,7 @@ app.get("/eventRequests", (req, res) => {
             console.log(events);
             res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events });
 
-        });
+        }); 
 
 
 
@@ -752,14 +752,14 @@ app.post("/rejectMessage", async (req, res) => {
 //Route Comparing 
 app.get("/comparing", (req, res) => {
     // Query to retrieve data from the 'TempPosts' table
-    connection.query("SELECT * FROM TempPosts", (err, TempPosts) => {
+    connection.query("SELECT * FROM tempposts", (err, TempPosts) => {
         if (err) {
             console.log(err.message);
             return res.status(500).send("Internal Server Error2");
         }
 
         // Query to retrieve data from the 'PostEditRequests' table
-        connection.query("SELECT * FROM PostEditRequests", (err, PostEditRequests) => {
+        connection.query("SELECT * FROM posteditrequests", (err, PostEditRequests) => {
             if (err) {
                 console.log(err.message);
                 return res.status(500).send("Internal Server Error2");
@@ -846,26 +846,30 @@ app.post("/approvePost", (req, res) => {
             const { PostID, clm_id, club_name, postText, postImageURL, notificationstatus } = post;
 
             // Insert the post into the Posts table
-            connection.query('INSERT INTO Posts (PostID, clm_id, club_name, postText, postImageURL, notificationstatus) VALUES (?, ?, ?, ?, ?, ?)',
+            connection.query('INSERT INTO posts (PostID, clm_id, club_name, postText, postImageURL, notificationstatus) VALUES (?, ?, ?, ?, ?, ?)',
                 [PostID, clm_id, club_name, postText, postImageURL, notificationstatus], (err, result) => {
                     if (err) {
                         console.error("Error inserting post data into Posts table:", err);
                         return res.status(500).send("Internal Server Error");
                     }
                     console.log("Post approved and moved to Posts table successfully!");
+                    res.status(200).send("<script>alert('Post approved successfully!');</script>");
+
                 });
 
             // Extract required data for insertion into History_post table
             const { club_id } = post;
 
             // Insert the post into the History_post table
-            connection.query('INSERT INTO History_post (PostID, clm_id, club_name, club_id, postText, postImageURL, Status) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            connection.query('INSERT INTO history_post (PostID, clm_id, club_name, club_id, postText, postImageURL, Status) VALUES (?, ?, ?, ?, ?, ?, ?)',
                 [PostID, clm_id, club_name, club_id, postText, postImageURL, 'approved'], (err, result) => {
                     if (err) {
                         console.error("Error inserting post data into History_post table:", err);
                         return res.status(500).send("Internal Server Error");
                     }
                     console.log("Post approved and moved to History_post table successfully!");
+                    
+
                 });
 
             // Delete the post from the tempposts table
@@ -1209,6 +1213,34 @@ app.post("/EditManagerRequest", (req, res) => {
             res.redirect('/clubManagerSks');
         }
 
+    });
+});
+
+app.get("/popupDeleteClub", (req, res) => {
+    const buttonId = req.query.clubId;
+    console.log("Button Id" + buttonId);
+    const lastIndex = buttonId.lastIndexOf('_');
+    const clubId = buttonId.substring(lastIndex + 1); // Extract the substring after the last '_'
+    console.log("Club Id" + clubId);
+
+    // Get the button ID from the query string
+
+    console.log("club Id from pop up delete club is " + clubId);
+    // Fetch popup content based on button ID from the database or any other source
+    res.render('popupDeleteClub.ejs', {clubId });
+
+});
+
+app.post("/DeleteClubRequest", (req, res) => {
+    const clubId = req.query.clubId;
+    console.log("Entered the delete path. Club ID:", clubId);
+        connection.query('DELETE FROM club WHERE club_id = ?', [clubId], (err, result) => {
+        if (err) {
+            console.log("couldn't delete club");
+        }
+        else {
+            res.redirect('/clubManagerSks');
+        }
     });
 });
 

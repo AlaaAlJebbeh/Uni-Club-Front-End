@@ -1,0 +1,51 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="../public/styles/popupEditManager.css">
+</head>
+
+<div class="popup-content">
+    <!-- Render the fetched popup content here -->
+    <h2>Edit Manager</h2>
+
+    <section>
+        <div class="wrapper">
+            <div class="flip-card">
+                <div>
+                    <%var clubId = clubId%>
+                    <%console.log("club Id from popuppp: " + clubId)%>
+                    <form action="/EditManagerRequest?clubId=<%= clubId %>" method="POST" class="form" name="EditManager" id="EditManager" >
+                        <div class="select-box">
+                            <select name="newManagerID" class="manager_choose">
+                                <option value="" disabled selected>New Manager Id</option>
+                                <%resultsClubManagers.forEach((item, index)=> {%>
+                                    <option>
+                                        <%=item.clm_id%>
+                                    </option>
+                                    <%})%>
+    
+                            </select>
+                        </div>
+                        <div>
+                        </div>
+                        <div class="buttonContainer">
+                            <button id="sendButton" type="submit">Edit Manager</button>
+                            <button id="closeButton" onclick="closePopup()">Close</button>
+                        
+                        </div>
+                        
+                    </form>
+                    
+
+                </div>
+            </div>
+        </div>
+        
+    </section>
+</div>
+
+
+
+</div>
+</section>
+
+
+</div>

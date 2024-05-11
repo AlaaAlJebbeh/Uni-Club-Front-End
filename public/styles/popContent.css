@@ -1,0 +1,139 @@
+.searchBox {
+    margin-left: 10%;
+    position: absolute;
+    background: #193635;
+    height: 40px;
+    border-radius: 40px;
+    
+
+}
+
+.searchBox:hover > .searchInput {
+    width: 240px;
+    padding: 0 6px;
+}
+
+.searchBox:hover > .searchButton {
+  background: white;
+  color : #193635;
+}
+
+.searchButton {
+    color: white;
+    float: right;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #193635;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s;
+}
+
+.searchInput {
+    border:none;
+    background: none;
+    outline:none;
+    float:left;
+    padding: 0;
+    color: white;
+    font-size: 16px;
+    transition: 0.4s;
+    line-height: 40px;
+    width: 0px;
+
+}
+
+@media screen and (max-width: 620px) {
+.searchBox:hover > .searchInput {
+    width: 150px;
+    padding: 0 6px;
+}
+}
+
+.div-01{
+    background-color: #193635;
+    color: white;
+    height: 40px;
+    padding-left: 15px;
+    padding-top: 5px;
+    border-top-left-radius: 15px ;
+    border-top-right-radius: 15px ;
+}
+
+.div-02{
+    height: 70px;
+    padding: 15px;
+}
+
+.img-01{
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+}
+
+.p-01{
+    font-weight: 400;
+    font-size: large;
+    padding-left: 10px;
+    padding-top: 15px;
+}
+
+.p-02{
+    width: 100px;
+    height: 30px;
+    border-radius: 25px;
+    font-weight: 400;
+    font-size: large;
+    padding-left: 18px;
+    background-color: goldenrod;
+    margin-top: 15px;
+}
+
+.btn-01{
+    background-color: green;
+    color: white;
+    height: 45px;
+    border-style: none;
+    width: 75px;
+    margin-top: 5px;
+}
+
+.btn-02{
+    background-color:  rgb(214, 60, 60);
+    color: white;
+    height: 45px;
+    border-style: none;
+    width: 70px;
+    margin-top: 5px;
+}
+
+.btn-03{
+    background-color: lightseagreen;
+    color: white;
+    height: 55px;
+    border-style: none;
+    width: 75px;
+    margin-left: 35px;
+}
+
+.overlay{
+    background-color: white;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 40px 20px 80px;
+    width: 100%;
+    height: 65%;
+    top: 1;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    transition: 0.3s;
+    transform: scale(0);
+  }
+  .contentBx:hover .overlay{
+    transform: scale(1);
+    
+  }

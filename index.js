@@ -385,7 +385,7 @@ app.post("/approveEvent", (req, res) => {
 
         console.log("Event approved successfully!");
         // Optionally, handle the result or send a response to the client
-    });
+
 
     connection.query('INSERT INTO history_event SET ?', [event], (err, result) => {
         if (err) {
@@ -397,13 +397,13 @@ app.post("/approveEvent", (req, res) => {
         // Optionally, handle the result or send a response to the client
    
 
-    connection.query("Delete FROM tempevents where event_id = ?", [eventId], (err, result) => {
-        if (err) {
-            console.error('Error deleting from  database:', error);
-            return res.status(500).send('Failed to delete');
-        } else {
-            res.redirect("/eventRequests");
-        }
+        connection.query("Delete FROM tempevents where event_id = ?", [eventId], (err, result) => {
+            if (err) {
+                console.error('Error deleting from  database:', error);
+                return res.status(500).send('Failed to delete');
+            } else {
+                res.redirect("/eventRequests.ejs");
+            }
     });
      
 });
@@ -411,7 +411,7 @@ app.post("/approveEvent", (req, res) => {
 });
 
     });
-
+});
 
 app.get("/statusClubManager", (req, res) => {
 
@@ -610,7 +610,7 @@ app.post("/rejectMessage", async (req, res) => {
                console.error("rejected event inserted into  history of events");
             });
 
-            connection.query('INSERT INTO history_event (comment) VALUES (?)', [rejectionReason], (err, result)=>{
+            connection.query('UPDATE history_event SET comment = ? where event_id=? ', [rejectionReason, eventId], (err, result)=>{
                 if(err){
                     console.log("error inserting rejection reason:", err);
                 }

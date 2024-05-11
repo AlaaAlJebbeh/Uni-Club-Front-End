@@ -540,6 +540,7 @@ app.post("/createEvent", async (req, res) => {
     const imgPath = __dirname + '/public/' + uploadImage1.name
     // Move the uploaded image to our upload folder
     uploadImage1.mv(imgPath);
+    const imageName  = uploadImage1.name;
 
     const email = req.session.email; // Retrieve email from request body
     const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category } = req.body;
@@ -565,7 +566,7 @@ app.post("/createEvent", async (req, res) => {
             connection.query(
                 `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imgPath],
+                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName],
                 (error, results, fields) => {
                     if (error) {
                         console.error('Error inserting event into database:', error);
@@ -582,7 +583,7 @@ app.post("/createEvent", async (req, res) => {
 
 app.post('/updateEvent', (req, res) => {
     // Extract data from the request body
-    console.log("event ID before parse: "+ req.body.eventID);
+    console.log(req.body);
     const eventID          = parseInt(req.body.eventID);
     const clubName         = req.body.clubName;
     const eventName        = req.body.eventName;
@@ -594,11 +595,33 @@ app.post('/updateEvent', (req, res) => {
     const eventDescription = req.body.eventDescription;
     const eventCapacity    = parseInt(req.body.eventCapacity);
     const eventNotes       = req.body.eventNotes;
-    const eventImage       = req.body.eventImage;
+    let imgName;
+    const userID           = req.session.userID;
+    const clubImage        =  req.body.clubImage;
+    if (req.files != null){
+        const { uploadImage1 } = req.files;
+        const imgPath = __dirname + '/public/' + uploadImage1.name
+         imgName = uploadImage1.name;
+        // Move the uploaded image to our upload folder
+        uploadImage1.mv(imgPath);
+    }else {
+         imgName = clubImage;
+    }
 
-    console.log(eventID, eventName, eventDate, eventTime, clubName, eventLocation, eventLanguage, eventGuest, eventDescription,eventCapacity,eventNotes,eventImage)
-    // Send back a response indicating success or failure
-    res.send('Event updated successfully!');
+    const queryString = `INSERT INTO tempeventedits (event_id, club_name, event_name, date, time, location, language, guest_name, description, capacity, notes, imageUrl, clm_id, status)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+
+    connection.query(queryString, [eventID, clubName, eventName, eventDate, eventTime, eventLocation, eventLanguage, eventGuest, eventDescription, eventCapacity, eventNotes, imgName, userID, 0 ], (error, results, fields) => {
+        if (error) {
+            console.error('Error inserting into tempeventedits table:', error);
+            return res.status(404).send("Internal Server Error");
+        }
+            // Send back a response indicating success or failure
+            res.redirect('/myclubpage');
+            console.log("Data inserted Successfully");
+        });
+
 });
 
 app.get("/createPost", (req, res) => {

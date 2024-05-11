@@ -673,7 +673,7 @@ footer{
     background-color: rgb(214, 60, 60);
 }
 
-#sendButton {
+.send-button {
     padding: 10px 20px;
     margin: 0 10px;
     cursor: pointer;

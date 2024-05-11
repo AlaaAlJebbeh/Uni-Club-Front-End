@@ -35,12 +35,29 @@
 <script>
     let searchBtn = document.querySelector('#search-btn');
     let searchBar = document.querySelector('.search-bar-container');
+    let eventNames = document.querySelectorAll('.event-name');
 
     searchBtn.addEventListener('click', ()=>{
         searchBtn.classList.toggle('fa-times');
         searchBar.classList.toggle('active');
     });
-</script> 
+
+    // Add event listener for keyup event on the search input
+    searchBar.addEventListener('keyup', (event) => {
+        let searchText = event.target.value.toLowerCase();
+
+        // Iterate through each event name and hide/show based on search text
+        eventNames.forEach((eventName) => {
+            let textContent = eventName.textContent.toLowerCase();
+            if (textContent.includes(searchText)) {
+                eventName.parentNode.parentNode.style.display = 'block';
+            } else {
+                eventName.parentNode.parentNode.style.display = 'none';
+            }
+        });
+    });
+</script>
+
     <main class="table" id="customers_table">
         <section class="table__header">
             <h1>Event Requests</h1>
@@ -63,53 +80,55 @@
                     </tr>
                 </thead>
                 <tbody>
-
                     <% var buttonId; %>
                     <% tempevents.forEach((item, index) => { %>
                     <tr>
-                        <td> <img src="/images/images/Zinzu Chan Lee.jpg" alt=""> <%=item.clm_id%><td>
-
-
-                        <td> 
+                        <td> <img src="/images/images/Zinzu Chan Lee.jpg" alt=""> <%=item.clm_id%></td>
+                         <td> 
                              <%=item.event_name%>
-                            
                         </td>
 
                         <td>
-                            <p id="status_<%= item.event_id %>" class="status pending">Pending </p>
-                            
-
-                        </td>
+                    
+                                <p id="status_<%= item.event_id %>" class="status pending">Pending</p>
+                         
+                       </td>
                        
+                       <td>
+                     
+                        
+                            <button class="approve-button" onclick="approveEvent('<%= item.event_id %>')" >Approve</button> 
+                            <button class="reject-button" onclick="rejectEvent('<%= item.event_id %>')">Reject</button>
+                      
+                        </td>
 
-                        <td>
-                          
-                            <button class="approve-button"  id="<%= buttonId %>" onclick="approveEvent('<%= item.event_id %>')" >Approve
-                            </button> 
-                            
-
-                            <button class="reject-button" id="<%=index%>" onclick="">Reject<button>
-                                
-                        <td>
                         <td>
                             <% console.log("event id" + item.event_id);%>
                             <%  buttonId = 'button_' + item.event_id; %>
+                          
 
-                            <!-- Create button element -->
+
+  <!-- Create button element -->
+                
+                       
                             <button id="<%= buttonId %>" class="details-button" onclick="showPopup('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>
                         </td>
-
-                    </tr>
-                    <form action="/rejectMessage?eventId=<%=item.event_id%>" method="POST" class="form">
+                        </tr>
+                        
+                        <% var eventID=parseInt(item.event_id); %>
+                        <%console.log("event Iddd" + eventID)%>
+                    <form action="/rejectMessage?eventId=<%= eventID%>" method="POST" class="form">
+                      
                         <div id="reject" class="reject-card1">
-                    
-                            <input type="text" name="rejectionReason" placeholder="Enter rejection reason...">
-                            <button type="submit" id="<%= buttonId %>" onclick="rejectEvent('<%= item.event_id %>')" >Send</button>
+                            <input type="text" id="rejectionReason_<%= eventID %>" name="rejectionReason" placeholder="Enter rejection reason...">
+                            <% var buttonId='button_' + item.event_id; %>
+                            <button class="send-button" id="<%= buttonId %>" onclick="rejecMessage('<%= eventID %>')">Send</button>
                             <button id="closeButton2" onclick="closePopup2()">Close</button>
+                            
                         </div>
                     </form>
+                  
                     <% }); %>
-                    
                 </tbody>
             </table>
         </section>

@@ -219,6 +219,7 @@
       <div id="my-events-content" class="content-section" style="display: none">
         <div class="card-container">
           <% event.forEach((item, index)=> { %>
+            <div class="indivisual-card-container">
             <div class="card">
               <div class="image-container">
                 <img src="../public/images/pixel.jpg" />
@@ -234,52 +235,77 @@
                 <% } else { %>
                   <div class="not-active">SOON</div>
                   <% } %>
+                <div class="editanddeleteContainer">
+                  <img src="../public/images/edit.png" alt="edit icon" class="edit-icon" data-eventid="<%= item.event_id %>"/>
+                  <% var eventID=parseInt(item.event_id); %>
+                  <form action="/deleteEvent?eventID=<%=eventID%>" method="post">
+                    <button type="submit" style="background-color: white; border:none;">
+                      <img src="../public/images/delete.png" alt="delete icon"/>
+                    </button>
+                  </form>
+                </div>
+              </div>
+              <!-- Inside the HTML template -->
+              <div class="text-container" id="text-container-<%= item.event_id %>">
+                  <form id="edit-form-<%= item.event_id %>" class="edit-form" method="POST" action="/updateEvent">
+                      <div class="card-details">
+                          <span>Club Name:</span>
+                          <span class="club-name"><%= clubInformation[0].club_name %></span>
+                          <input type="hidden" name="clubName" value="<%= clubInformation[0].club_name %>" />
+                      </div>
+                      <div class="card-details">
+                          <span>Event Name:</span>
+                          <span class="event-name"><%= item.event_name %></span>
+                          <input type="hidden" name="eventName" value="<%= item.event_name %>" />
+                      </div>
+                      <div class="card-details">
+                          <span>Date:</span>
+                          <span class="event-date"><%= item.date.toString().substring(0, 11) %></span>
+                          <input type="hidden" name="eventDate" value="<%= item.date.toString().substring(0, 11) %>" />
+                      </div>
+                      <div class="card-details">
+                          <span>Time:</span>
+                          <span class="event-time"><%= item.time %></span>
+                          <input type="hidden" name="eventTime" value="<%= item.time %>" />
+                      </div>
+                      <div class="card-details">
+                          <span>Location:</span>
+                          <span class="event-location"><%= item.location %></span>
+                          <input type="hidden" name="eventLocation" value="<%= item.location %>" />
+                      </div>
+                      <div class="card-details">
+                          <span>Language:</span>
+                          <span class="event-language"><%= item.language %></span>
+                          <input type="hidden" name="eventLanguage" value="<%= item.language %>" />
+                      </div>
+                      <div class="card-details">
+                          <span>Guest:</span>
+                          <span class="event-guest"><%= item.guest_name %></span>
+                          <input type="hidden" name="eventGuest" value="<%= item.guest_name %>" />
+                      </div>
+                      <div class="card-details">
+                          <span>Description:</span>
+                          <span class="event-description"><%= item.description %></span>
+                          <input type="hidden" name="eventDescription" value="<%= item.description %>" />
+                      </div>
+                      <div class="card-details">
+                          <span>Capacity:</span>
+                          <span class="event-capacity"><%= item.capacity %></span>
+                          <input type="hidden" name="eventCapacity" value="<%= item.capacity %>" />
+                      </div>
+                      <div class="card-details">
+                          <span>Notes:</span>
+                          <span class="event-notes"><%= item.notes %></span>
+                          <input type="hidden" name="eventNotes" value="<%= item.notes %>" />
+                      </div>
+                      <button type="button" class="events-save-button" data-eventid="<%= item.event_id %>">Save</button>
+                  </form>
+              </div>
             </div>
-            <div class="text-container">
-              <div class="card-details">
-                <span>Club Name:</span>
-                <%= clubInformation[0].club_name %>
-              </div>
-              <div class="card-details">
-                <span>Event Name:</span>
-                <%= item.event_name %>
-              </div>
-              <div class="card-details">
-                <span>Date:</span>
-                <%= item.date.toString().substring(0, 11) %>
-              </div>
-              <div class="card-details">
-                <span>Time:</span>
-                <%= item.time %>
-              </div>
-              <div class="card-details">
-                <span>Location:</span>
-                <%= item.location %>
-              </div>
-              <div class="card-details">
-                <span>Language:</span>
-                <%= item.language %>
-              </div>
-              <div class="card-details">
-                <span>guest:</span>
-                <%= item.guest_name %>
-              </div>
-              <div class="card-details">
-                <span>Description:</span>
-                <%= item.description %>
-              </div>3
-              <div class="card-details">3
-                <span>Capacity:</span>
-                <%= item.capacity %>
-              </div>
-              <div class="card-details">
-                <span>Notes:</span>
-                <%= item.notes %>
-              </div>
-            </div>
-        </div>
-        <% }); %>
-      </div>
+            <button type="button" class="events-save-button" data-eventid="<%= item.event_id %>">Save</button>
+          </div>
+          <% }); %>
+        </div>    
     </div>
     <div id="my-posts-content" class="content-section" style="display: none">
       <!-- POSTS SECTION -->
@@ -316,7 +342,7 @@
                         <p class="status approved">Approved</p>
                       </td>
                       <td>
-                        <% var eventID=parseInt(itemTs.event_id); %>
+                        <% var eventID=parseInt(item.event_id); %>
                         <%console.log("event Iddd" + eventID)%>
                           <form action="/ToShareEvent?eventId=<%= eventID %>" method="POST">
                             <% var buttonId='button_' + itemTs.event_id; %>
@@ -355,23 +381,14 @@
           </table>
         </section>
     </div>
-  </div>
+ 
   <div id="my-notification-content" class="content-section" style="display: none">
-    <!-- Notification Popup Modal -->
-    <div id="notificationModal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Notifications</h2>
-        <ul id="notificationList">
-          Notifications
-        </ul>
-      </div>
-    </div>
-    <script src="../public/scripts/myclubpage.js"></script>
+    NOtifications
+    
   </div>
   </div>
   </div>
-
+</div>
   <!-- Footer -->
   <footer><%- include("partials/footer.ejs") %></footer>
 

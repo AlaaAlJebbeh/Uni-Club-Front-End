@@ -213,3 +213,71 @@ details.addEventListener("click", (e) => {
 });
 
 
+function approvePost(PostId, RequestId) {
+    let endpoint = `/approvePost?postId=${PostId}`; // Default endpoint for regular posts
+
+    // Check if RequestId is defined
+    if (RequestId) {
+        endpoint = `/approvePostEditRequest?postId=${PostId}&requestId=${RequestId}`; // Use endpoint for post edit requests
+    }
+
+    fetch(endpoint, {
+        method: 'POST' // Assuming you're using POST method for updating data
+    })
+    .then(response => {
+        if (response.ok) {
+            const statusElement = document.getElementById(`Status_${PostId}_${RequestId}`); // Update status element ID
+            if (statusElement) {
+                statusElement.textContent = "Approved";
+            }
+            console.log('Event approved successfully!');
+            // Optionally, update the UI to reflect the approval
+        } else {
+            console.error('Failed to approve post:', response.statusText);
+        }
+    })
+    .catch(error => console.error('Error approving post:', error));
+}
+
+
+
+function rejectPost(postId, requestId) {
+    // Store PostID and RequestID in a global variable accessible by the sendRejectionReason function
+    window.selectedPostId = postId;
+    window.selectedRequestId = requestId;
+    showPopup2();
+  }
+
+  function sendRejectionReason() {
+    var rejectionReason = document.getElementById("rejectionReason").value;
+    fetch('/reject', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ postId: window.selectedPostId, rejectionReason: rejectionReason })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log("Rejection reason sent successfully");
+            closePopup2(); // Close the popup after sending rejection reason
+        } else {
+            console.error("Failed to send rejection reason", response.status);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+  }
+
+  // Function to display the popup
+  function showPopup2() {
+    var popup = document.getElementById("reject");
+    popup.style.display = "block";
+  }
+
+  // Function to close the popup
+  function closePopup2() {
+    var popup = document.getElementById("reject");
+    popup.style.display = "none";
+  }

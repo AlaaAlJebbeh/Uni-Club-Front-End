@@ -78,7 +78,7 @@
       });
     </script>
 
-    <main class="table" id="customers_table">
+    <main class="table" id="customers_table" >
       <section class="table__header">
         <h1>Content Management</h1>
         <div class="input-group">
@@ -100,9 +100,8 @@
           </thead>
           <tbody>
             <% let index; %> <% combinedData.forEach(function(item,index){ %> <%
-            let items = []; %> <% items.push(item); %>
-            <% var buttonId = 'approve-button' + index; %>
-
+            let items = []; %> <% items.push(item); %>            
+            <% var buttonId; %>
             <tr>
               <td>
                 <h4 style="color: black"><%=clubNames[index]%></h4>
@@ -111,9 +110,10 @@
               <td>
                 <p class="status pending">Pending</p>
               </td>
+              
               <td>
-                <button class="approve-button">Approve</button>
-                <button class="reject-button">Reject</button>
+                <button class="approve-button" id="<%= buttonId %>" onclick="approvePost('<%= item.PostID %>', '<%= item.RequestID %>')">Approve</button>
+                <button class="reject-button" id="<%= buttonId %>"  onclick="rejectPost('<%= item.PostID %>', '<%= item.RequestID %>')">Reject</button>
               </td> 
               <td>
                 <button
@@ -161,13 +161,11 @@
         <button id="closeButton" onclick="closePopup()">Close</button>
       </div>
 
+      
+
       <div id="reject" class="reject-card1">
-        <input
-          type="text"
-          id="rejectionReason"
-          placeholder="Enter rejection reason..."
-        />
-        <button id="sendButton">Send</button>
+        <input type="text" id="rejectionReason" name="rejectionReason" placeholder="Enter rejection reason...">
+        <button class="send-button" onclick="sendRejectionReason()">Send</button>
         <button id="closeButton2" onclick="closePopup2()">Close</button>
       </div>
 
@@ -232,93 +230,7 @@
         console.log(beforeText);
       </script>
 
-      <!-- Script for the Send button and cancel button in the reject request pop
-      up-->
-      <script>
-        function showPopup2() {
-          var popup = document.getElementById("reject");
-          popup.style.display = "block";
-        }
-
-        function closePopup2() {
-          var popup = document.getElementById("reject");
-          popup.style.display = "none";
-        }
-
-        
-        var sendButton = document.getElementById("sendButton");
-        sendButton.addEventListener("click", function () {
-            var rejectionReason = document.getElementById("rejectionReason").value;
-            console.log("rejection Reason:", rejectionReason);
-        
-            // Send the rejection reason to the server
-            fetch('/comparing', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ reason: rejectionReason })
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log("Rejection reason sent successfully");
-                } else {
-                    console.error("Failed to send rejection reason",response.status);
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-        });
-      // Get all elements with the class "reject-button"
-      var rejectButtons = document.querySelectorAll(".reject-button");
-
-      // Add event listener to each "Reject" button
-      rejectButtons.forEach(function (button) {
-          button.addEventListener("click", showPopup2);
-      });
-
-      // Check if rejectionReason is not empty
-          if (rejectionReason.trim() !== '') {
-            // If rejectionReason is not empty, insert it into the database
-            const sql = 'INSERT INTO history_event (comment) VALUES (?)';
-            connection.query(sql, [rejectionReason], (err, result) => {
-                if (err) {
-                    console.error('Error inserting rejection reason:', err);
-                } else {
-                    console.log('Rejection reason inserted successfully');
-                    closePopup2();
-                }
-            });
-          } else {
-            console.error('Rejection reason is empty');
-          }
-
-
-        showPopup2();
-      </script>
-
-    <!--Script for the approve button --> 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-          const approveButton = document.querySelector('.approve-button');
-          approveButton.addEventListener('click', async () => {
-              try {
-                  const response = await fetch('/approve', {
-                      method: 'POST',
-                      headers: {
-                          'Content-Type': 'application/json'
-                      },
-                      body: JSON.stringify({ data: 'your data to send to the server' })
-                  });
-                  const result = await response.text();
-                  console.log(result);
-              } catch (error) {
-                  console.error('Error:', error);
-              }
-          });
-      });
-  </script>
+      
 
 
     </main>

@@ -85,6 +85,7 @@ app.post('/login', (req, res) => {
                 req.session.loggedIn = true;
                 req.session.email = email;
                 req.session.role = results[0].role; // Add this line
+                req.session.userID = results[0].user_id; // Add this line
                 console.log(req.session.email);
                 res.render('home', { loggedIn: true, role: results[0].role, email: req.session.email });
             } else {
@@ -222,6 +223,19 @@ app.get("/myclubpage", (req, res) => {
     });
 });
 
+app.post("/deleteEvent", (req, res) => {
+
+    const eventID = parseInt(req.query.eventID);
+    connection.query("DELETE From event WHERE event_id = ?",[eventID], (err, resultsToDelete) => {
+        if(err) {
+            console.log("Error deleting row " + err.message);
+            res.status(500).send("Internal Error");
+        }
+
+        res.redirect("/myclubpage");
+    });
+});
+
 app.post("/ToShareEvent", (req, res) => {
     const eventId = req.query.eventId;
     console.log("To share " + eventId);
@@ -286,6 +300,9 @@ app.get("/socialmedia/:link/:link2", (req, res) => {
 //Route eventRequests 
 
 app.get("/eventRequests", (req, res) => {
+    
+
+
     connection.query(`SELECT * FROM tempevents`, (err, results) => {
         if (err) {
             console.error("Error fetching temp events:", err);
@@ -306,6 +323,23 @@ app.get("/eventRequests", (req, res) => {
             res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events });
 
         });
+
+       connection.query(`SELECT * FROM event WHERE event_id IN (?)`, [eventIds], (err, events) => {
+            if (err) {
+                console.error("Error fetching events:", err);
+                return res.status(500).send("Internal Server Error");
+            }
+            console.log(events);
+            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events });
+
+        });
+
+
+
+    });
+
+
+
     });
 });
 
@@ -406,7 +440,26 @@ app.post("/approveEvent", (req, res) => {
                         console.error("Error inserting event data into toshareevents:", err);
                         return res.status(500).send("Internal Server Error");
                     }
+   
+    results.forEach(event => {
+     // Loop through the results array
+        event.status = 1; 
+    // Insert each event from the results array into the toshareevents table
+    connection.query('INSERT INTO toshareevents SET ?', [event], (err, result) => {
+        if (err) {
+            console.error("Error inserting event data into toshareevents:", err);
+            return res.status(500).send("Internal Server Error");
+        }
 
+        console.log("Event approved successfully!");
+        // Optionally, handle the result or send a response to the client
+    });
+
+    connection.query('INSERT INTO history_event SET ?', [event], (err, result) => {
+        if (err) {
+            console.error("Error inserting event data into history of events", err);
+            return res.status(500).send("Internal Server Error");
+        }
                     console.log("Event approved successfully!");
                     // Optionally, handle the result or send a response to the client
                 });
@@ -419,6 +472,20 @@ app.post("/approveEvent", (req, res) => {
                         return res.status(500).send("Internal Server Error");
                     }
 
+        console.log("Event approved successfully!");
+        // Optionally, handle the result or send a response to the client
+   
+
+    connection.query("Delete FROM tempevents where event_id = ?", [eventId], (err, result) => {
+        if (err) {
+            console.error('Error deleting from  database:', error);
+            return res.status(500).send('Failed to delete');
+        } else {
+            res.redirect("/eventRequests");
+        }
+    });
+     
+});
                     console.log("Event approved successfully!");
                     // Optionally, handle the result or send a response to the client
                 });
@@ -429,6 +496,9 @@ app.post("/approveEvent", (req, res) => {
 
     });
 });
+
+    });
+
 
 app.get("/statusClubManager", (req, res) => {
 
@@ -459,6 +529,7 @@ app.get("/statusClubManager", (req, res) => {
 
 
 app.get("/createEvent", (req, res) => {
+    console.log(req.session.userID);
     res.render('createEvent.ejs');
 });
 
@@ -474,16 +545,7 @@ app.post("/createEvent", async (req, res) => {
     const { eventName, guestName, eventDate, eventTime, eventLocation, capacity, description, notes, category } = req.body;
     const language = req.body.language; // Get the selected language
 
-    connection.query("SELECT user_id FROM users WHERE email = ?", [email], (err, userResult) => {
-        if (err) {
-            console.error("Error fetching userID:", err);
-            return res.status(500).send("Internal Server Error");
-        }
-        if (userResult.length === 0) {
-            return res.status(404).send("User not found");
-        }
-
-        const userId = userResult[0].user_id;
+        const userId = req.session.userID;
         console.log("\n\nuser id", userId);
 
         connection.query("SELECT club_name FROM club WHERE clm_id = ?", [userId], (err, resultClubName) => {
@@ -501,9 +563,9 @@ app.post("/createEvent", async (req, res) => {
                 const clubId = clubResult[0].club_id;
 
                 connection.query(
-                    `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id, club_name, imageUrl)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                    [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, clubName, imgPath],
+                    `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imgPath],
                     (error, results, fields) => {
                         if (error) {
                             console.error('Error inserting event into database:', error);
@@ -516,8 +578,6 @@ app.post("/createEvent", async (req, res) => {
 
         });
 
-
-    });
 });
 
 app.get("/createPost", (req, res) => {
@@ -611,12 +671,64 @@ app.post("/clubform", async (req, res) => {
 
 app.post("/rejectMessage", async (req, res) => {
     const rejectionReason = req.body.rejectionReason;
-    const eventid = req.query.eventid;
-    console.log(rejectionReason);
-    console.log(eventid);
+    const eventId = req.query.eventId;
+    console.log("To share " + eventId);
 
-    connection.query('SELECT sks_id from sks_admin WHERE email=?', [req.session.email], (err, result) => {
+    connection.query("SELECT * FROM tempevents where event_id = ?", [eventId], (err, result) => {
+        console.log("the selected result is");
+        console.log(result);
         if (err) {
+            console.log("error selecting from temporary event");
+        } 
+
+
+        result.forEach(event => {
+            // Loop through the results array
+            
+               event.status = 0; 
+           // Insert each event from the results array into the toshareevents table
+          
+       
+           connection.query('INSERT INTO history_event SET ?', [event], (err, result) => {
+               if (err) {
+                   console.error("Error inserting event data into history of events", err);
+                   return res.status(500).send("Internal Server Error");
+               }
+               console.error("rejected event inserted into  history of events");
+            });
+
+            connection.query('INSERT INTO history_event (comment) VALUES (?)', [rejectionReason], (err, result)=>{
+                if(err){
+                    console.log("error inserting rejection reason:", err);
+                }
+                console.error("rejection reason inserted into  history of events");
+                console.log("rejected event summary: ", result)
+            })
+
+           });
+            
+       
+          
+           connection.query("Delete FROM tempevents where event_id = ?", [eventId], (err, result) => {
+            if (err) {
+                console.error('Error deleting from  database:', error);
+                return res.status(500).send('Failed to delete');
+            } else {
+                res.redirect("/eventRequests");
+            }
+        });
+});
+});
+
+
+
+
+
+
+
+        
+      
+    
             console.error("Error getting sks id:", error);
             res.status(500).send("Error creating club");
             return;
@@ -761,6 +873,161 @@ app.get("/comparing", (req, res) => {
     });
 });
 
+// Route to handle approving a new post
+app.post("/approvePost", (req, res) => {
+    const postId = req.query.postId; // Retrieve postId from the query string
+
+    console.log("Received postId:", postId);
+
+    // Fetch the post data from the tempposts table based on the postId
+    connection.query('SELECT * FROM tempposts WHERE PostID = ?', [postId], (err, results) => {
+        if (err) {
+            console.error('Error fetching post data:', err);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        console.log("Fetched post data:", results);
+        
+        // Iterate over the fetched results
+        results.forEach(post => {
+            // Update the status of each post to 'approved'
+            post.Status = 'approved';
+
+            // Extract required data for insertion into Posts table
+            const { PostID, clm_id, club_name, postText, postImageURL, notificationstatus } = post;
+
+            // Insert the post into the Posts table
+            connection.query('INSERT INTO Posts (PostID, clm_id, club_name, postText, postImageURL, notificationstatus) VALUES (?, ?, ?, ?, ?, ?)',
+                [PostID, clm_id, club_name, postText, postImageURL, notificationstatus], (err, result) => {
+                if (err) {
+                    console.error("Error inserting post data into Posts table:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                console.log("Post approved and moved to Posts table successfully!");
+            });
+
+            // Extract required data for insertion into History_post table
+            const { club_id } = post;
+
+            // Insert the post into the History_post table
+            connection.query('INSERT INTO History_post (PostID, clm_id, club_name, club_id, postText, postImageURL, Status) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                [PostID, clm_id, club_name, club_id, postText, postImageURL, 'approved'], (err, result) => {
+                if (err) {
+                    console.error("Error inserting post data into History_post table:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                console.log("Post approved and moved to History_post table successfully!");
+            });
+
+            // Delete the post from the tempposts table
+            connection.query('DELETE FROM tempposts WHERE PostID = ?', [postId], (err, result) => {
+                if (err) {
+                    console.error("Error deleting post from tempposts table:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                console.log("Post deleted from tempposts table successfully!");
+            });
+        });
+    });
+});
+
+// Route to handle approving a post edit request
+app.post("/approvePostEditRequest", (req, res) => {
+    const requestId = req.query.requestId; // Retrieve requestId from the query string
+
+    console.log("Received requestId:", requestId);
+
+    // Fetch the edit request data from posteditrequests based on the requestId
+    connection.query('SELECT * FROM posteditrequests WHERE RequestID = ?', [requestId], (err, results) => {
+        if (err) {
+            console.error('Error fetching post edit request data:', err);
+            return res.status(500).send("Internal Server Error");
+        }
+        console.log("Fetched post edit request data:", results);
+        // Iterate over the fetched results
+        results.forEach(request => {
+            // Extract required data for insertion into tempprofile table
+            const { club_id, newImage, newBio, newPhone, newEmail, newSC1, newSC2, newSC3, requestType, clm_id } = request;
+
+            // Insert the edit request data into the tempprofile table
+            connection.query('INSERT INTO tempprofile (club_id, newImage, newBio, newPhone, newEmail, newSC1, newSC2, newSC3, requestType, clm_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [club_id, newImage, newBio, newPhone, newEmail, newSC1, newSC2, newSC3, requestType, clm_id], (err, result) => {
+                if (err) {
+                    console.error("Error inserting edit request data into tempprofile table:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                console.log("Post edit request approved and moved to tempprofile table successfully!");
+            });
+
+            // Delete the edit request from posteditrequests table
+            connection.query('DELETE FROM posteditrequests WHERE RequestID = ?', [requestId], (err, result) => {
+                if (err) {
+                    console.error("Error deleting edit request from posteditrequests table:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                console.log("Post edit request deleted from posteditrequests table successfully!");
+            });
+        });
+    });
+});
+
+
+app.post('/reject', (req, res) => {
+    const postId = req.body.postId;
+    const rejectionReason = req.body.rejectionReason;
+
+    // Update the post status to 'rejected' in History_post table
+    const rejectQuery = `INSERT INTO history_post (PostID, Status, rejectionReason)
+                         VALUES (?, 'rejected', ?);
+                        `;
+
+    // Move post from TempPosts to History_post
+    const movePostQuery = `
+    INSERT INTO history_post (PostID, clm_id, club_id, club_name, postText, postImageURL, Status, rejectionReason)
+    SELECT PostID, clm_id, club_id, club_name, postText, postImageURL, 'rejected', ? FROM TempPosts WHERE PostID = ?;
+    `;
+
+
+    connection.beginTransaction(err => {
+        if (err) {
+            console.error('Error starting transaction:', err);
+            res.status(500).send('Error rejecting post');
+            return;
+        }
+
+        connection.query(movePostQuery, [rejectionReason, postId], (err, results) => {
+            if (err) {
+                console.error('Error moving post to History_post:', err);
+                connection.rollback(() => {
+                    res.status(500).send('Error rejecting post');
+                });
+            } else {
+                connection.query(`DELETE FROM TempPosts WHERE PostID = ?`, [postId], (err, results) => {
+                    if (err) {
+                        console.error('Error deleting post from TempPosts:', err);
+                        connection.rollback(() => {
+                            res.status(500).send('Error rejecting post');
+                        });
+                    } else {
+                        connection.commit(err => {
+                            if (err) {
+                                console.error('Error committing transaction:', err);
+                                connection.rollback(() => {
+                                    res.status(500).send('Error rejecting post');
+                                });
+                            } else {
+                                console.log('Post rejected and deleted successfully');
+                                res.status(200).send('Post rejected and deleted successfully');
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+});
+
+  
 
 app.get("/ezz", (req, res) => {
     connection.query("select * from event where clm_id = 1", (err, result) => {
@@ -899,24 +1166,6 @@ app.post('/updateProfile', (req, res) => {
     });
 });
 
-app.post('/comparing', (req, res) => {
-    // Assuming you're receiving the rejection reason as JSON data in the request body
-    const rejectionReason = req.body.reason;
-    console.log('incoming req body:', req.body);
-
-    // Insert the rejection reason into the database
-    const sql = 'INSERT INTO history_event (comment) VALUES (?)';
-    console.log('SQL query:', sql);
-    connection.query(sql, [rejectionReason], (err, result) => {
-        if (err) {
-            console.error('Error inserting rejection reason:', err);
-            res.status(500).send('Error inserting rejection reason');
-            return;
-        }
-        console.log('Rejection reason inserted successfully');
-        res.status(200).send('Rejection reason inserted successfully');
-    });
-});
 
 app.get("/notifications", (req, res) => {
     const email = req.session.email;

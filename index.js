@@ -509,13 +509,7 @@ app.post("/approveEvent", (req, res) => {
     });
 });
 
-        });
-    });
-
-});
-    });
-});
-
+    
 app.get("/statusClubManager", (req, res) => {
 
     connection.query("SELECT club_id FROM club_manager WHERE email = ?", [email], (err, userResult) => {
@@ -759,6 +753,11 @@ app.post("/rejectMessage", async (req, res) => {
 
             connection.query('INSERT INTO history_event (comment) VALUES (?)', [rejectionReason], (err, result) => {
                 if (err) {
+
+                    console.log("error inserting rejection reason:", err);
+
+                  }
+
             connection.query('UPDATE history_event SET comment = ? where event_id=? ', [rejectionReason, eventId], (err, result)=>{
                 if(err){
                     console.log("error inserting rejection reason:", err);
@@ -769,8 +768,8 @@ app.post("/rejectMessage", async (req, res) => {
 
         });
 
-
-
+    });
+ });
         connection.query("Delete FROM tempevents where event_id = ?", [eventId], (err, result) => {
             if (err) {
                 console.error('Error deleting from  database:', error);
@@ -778,9 +777,14 @@ app.post("/rejectMessage", async (req, res) => {
             } else {
                 res.redirect("/eventRequests");
             }
+
         });
+
+
+
     });
-});
+
+
 
 
 

@@ -240,28 +240,44 @@ function approvePost(PostId, RequestId) {
 }
 
 
-/*function rejectPost(buttonId) {
-    const rejectionReason = document.getElementById(`rejectionReason_${buttonId}`).value;
 
-    fetch(`/PostRejectMessage?buttonId=${buttonId}`, {
-        method: 'POST'
+function rejectPost(postId, requestId) {
+    // Store PostID and RequestID in a global variable accessible by the sendRejectionReason function
+    window.selectedPostId = postId;
+    window.selectedRequestId = requestId;
+    showPopup2();
+  }
+
+  function sendRejectionReason() {
+    var rejectionReason = document.getElementById("rejectionReason").value;
+    fetch('/reject', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ postId: window.selectedPostId, rejectionReason: rejectionReason })
     })
     .then(response => {
         if (response.ok) {
-            const statusElement = document.getElementById(`Status_${buttonId}`);
-            statusElement.textContent = "Rejected";
-            console.log('post rejected successfully!');
-            // Optionally, update the UI to reflect the approval
+            console.log("Rejection reason sent successfully");
+            closePopup2(); // Close the popup after sending rejection reason
         } else {
-            console.error('Failed to reject post:', response.statusText);
+            console.error("Failed to send rejection reason", response.status);
         }
     })
-    .catch(error => console.error('Error rejecting post:', error));
+    .catch(error => {
+        console.error("Error:", error);
+    });
+  }
 
-    const statusElement = document.getElementById(`Status_${eventId}`);
-    if (statusElement) {
-        statusElement.textContent = "Rejected";
-    }
-    
-}*/
+  // Function to display the popup
+  function showPopup2() {
+    var popup = document.getElementById("reject");
+    popup.style.display = "block";
+  }
 
+  // Function to close the popup
+  function closePopup2() {
+    var popup = document.getElementById("reject");
+    popup.style.display = "none";
+  }

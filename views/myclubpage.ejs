@@ -347,7 +347,7 @@
                         <p class="status approved">Approved</p>
                       </td>
                       <td>
-                        <% var eventID=parseInt(itemTs.event_id); %>
+                        <% var eventID=parseInt(item.event_id); %>
                         <%console.log("event Iddd" + eventID)%>
                           <form action="/ToShareEvent?eventId=<%= eventID %>" method="POST">
                             <% var buttonId='button_' + itemTs.event_id; %>

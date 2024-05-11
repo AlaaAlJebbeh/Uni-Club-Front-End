@@ -481,6 +481,27 @@ app.post("/createEvent", async (req, res) => {
 
 });
 
+app.post('/updateEvent', (req, res) => {
+    // Extract data from the request body
+    console.log("event ID before parse: "+ req.body.eventID);
+    const eventID          = parseInt(req.body.eventID);
+    const clubName         = req.body.clubName;
+    const eventName        = req.body.eventName;
+    const eventDate        = req.body.eventDate;
+    const eventTime        = req.body.eventTime;
+    const eventLocation    = req.body.eventLocation;
+    const eventLanguage    = req.body.eventLanguage;
+    const eventGuest       = req.body.eventGuest;
+    const eventDescription = req.body.eventDescription;
+    const eventCapacity    = parseInt(req.body.eventCapacity);
+    const eventNotes       = req.body.eventNotes;
+    const eventImage       = req.body.eventImage;
+
+    console.log(eventID, eventName, eventDate, eventTime, clubName, eventLocation, eventLanguage, eventGuest, eventDescription,eventCapacity,eventNotes,eventImage)
+    // Send back a response indicating success or failure
+    res.send('Event updated successfully!');
+});
+
 app.get("/createPost", (req, res) => {
     res.render('createPost.ejs');
 });

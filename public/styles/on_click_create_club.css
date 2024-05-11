@@ -200,18 +200,16 @@ body {
 .container {
   position: relative;
   max-width: 700px;
-  width: calc(100% - 40px); /* Adjusted width */
   background: #0AB3AD;
   padding: 25px;
   border-radius: 8px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   font-weight: 500;
   font-weight: bold;
-  margin: 100px auto 200px;
+  margin: 0px 0px 0px 0px;
   z-index: 999;
   overflow-y: auto;
   max-height: calc(100vh - 230px);
-  margin-bottom: 300px;
 }
 .container header {
   font-size: 25px;
@@ -223,7 +221,7 @@ body {
   margin: -40px auto -30px;
   left: 0;
   right: 0;
-  width: fit-content;
+  width: 900px;
   
 }
 .container .form {
@@ -425,6 +423,12 @@ body {
         max-height: 100px;
     }
     
+}
+
+.btne-01{
+    width: 600px;
+    font-size: xx-large;
+    text-align: center;
 }
 
 

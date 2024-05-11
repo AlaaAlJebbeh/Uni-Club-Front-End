@@ -108,10 +108,9 @@
                 </h1>
                 <h1>
                   Category:
-                  <stro
-                  ng contenteditable="<%= loggedIn %>" id="categoryField">
+                  <strong contenteditable="<%= loggedIn %>" id="categoryField">
                     <%= clubInformation[0].category %>
-                  </stro>
+                  </strong>
                   <input type="hidden" name="category_field" value="category" />
                   <input type="hidden" name="category_content" id="categoryContent" />
                 </h1>
@@ -258,62 +257,134 @@
               <div class="text-container" id="text-container-<%= item.event_id %>">
                   <form id="edit-form-<%= item.event_id %>" class="text-container" method="POST" action="/updateEvent">
                     <input type="hidden" name="eventID" value="<%= item.event_id %>">
-                      <div class="card-details">
-                          <span>Club Name:</span>
-                          <span class="club-name"><%= clubInformation[0].club_name %></span>
-                          <input type="hidden" name="clubName" value="<%= clubInformation[0].club_name %>" />
-                      </div>
-                      <div class="card-details">
-                          <span>Event Name:</span>
-                          <span class="event-name"><%= item.event_name %></span>
-                          <input type="hidden" name="eventName" value="<%= item.event_name %>" />
-                      </div>
-                      <div class="card-details">
-                          <span>Date:</span>
-                          <span class="event-date"><%= item.date.toString().substring(0, 11) %></span>
-                          <input type="hidden" name="eventDate" value="<%= item.date.toString().substring(0, 11) %>" />
-                      </div>
-                      <div class="card-details">
-                          <span>Time:</span>
-                          <span class="event-time"><%= item.time %></span>
-                          <input type="hidden" name="eventTime" value="<%= item.time %>" />
-                      </div>
-                      <div class="card-details">
-                          <span>Location:</span>
-                          <span class="event-location"><%= item.location %></span>
-                          <input type="hidden" name="eventLocation" value="<%= item.location %>" />
-                      </div>
-                      <div class="card-details">
-                          <span>Language:</span>
-                          <span class="event-language"><%= item.language %></span>
-                          <input type="hidden" name="eventLanguage" value="<%= item.language %>" />
-                      </div>
-                      <div class="card-details">
-                          <span>Guest:</span>
-                          <span class="event-guest"><%= item.guest_name %></span>
-                          <input type="hidden" name="eventGuest" value="<%= item.guest_name %>" />
-                      </div>
-                      <div class="card-details">
-                          <span>Description:</span>
-                          <span class="event-description"><%= item.description %></span>
-                          <input type="hidden" name="eventDescription" value="<%= item.description %>" />
-                      </div>
-                      <div class="card-details">
-                          <span>Capacity:</span>
-                          <span class="event-capacity"><%= item.capacity %></span>
-                          <input type="hidden" name="eventCapacity" value="<%= item.capacity %>" />
-                      </div>
-                      <div class="card-details">
-                          <span>Notes:</span>
-                          <span class="event-notes"><%= item.notes %></span>
-                          <input type="hidden" name="eventNotes" value="<%= item.notes %>" />
-                      </div>
-                      <button type="button" class="events-save-button" data-eventid="<%= item.event_id %>">Save</button>
+                    <div class="card-details">
+                      <span>Club Name:</span>
+                      <span class="club-name" contenteditable="true" id="clubName_<%= item.event_id %>"><%= clubInformation[0].club_name %></span>
+                      <input type="hidden" name="clubName" value="<%= clubInformation[0].club_name %>" id="clubNameInput_<%= item.event_id %>" />
+                  </div>
+                  <div class="card-details">
+                      <span>Event Name:</span>
+                      <span class="event-name" contenteditable="true" id="eventName_<%= item.event_id %>"><%= item.event_name %></span>
+                      <input type="hidden" name="eventName" value="<%= item.event_name %>" id="eventNameInput_<%= item.event_id %>" />
+                  </div>
+                  <div class="card-details">
+                      <span>Date:</span>
+                      <span class="event-date" contenteditable="true" id="eventDate_<%= item.event_id %>"><%= item.date.toString().substring(0, 11) %></span>
+                      <input type="hidden" name="eventDate" value="<%= item.date.toString().substring(0, 11) %>" id="eventDateInput_<%= item.event_id %>" />
+                  </div>
+                  <div class="card-details">
+                      <span>Time:</span>
+                      <span class="event-time" contenteditable="true" id="eventTime_<%= item.event_id %>"><%= item.time %></span>
+                      <input type="hidden" name="eventTime" value="<%= item.time %>" id="eventTimeInput_<%= item.event_id %>" />
+                  </div>
+              
+                  <!-- Location -->
+                  <div class="card-details">
+                      <span>Location:</span>
+                      <span class="event-location" contenteditable="true" id="eventLocation_<%= item.event_id %>"><%= item.location %></span>
+                      <input type="hidden" name="eventLocation" value="<%= item.location %>" id="eventLocationInput_<%= item.event_id %>" />
+                  </div>
+              
+                  <!-- Language -->
+                  <div class="card-details">
+                      <span>Language:</span>
+                      <span class="event-language" contenteditable="true" id="eventLanguage_<%= item.event_id %>"><%= item.language %></span>
+                      <input type="hidden" name="eventLanguage" value="<%= item.language %>" id="eventLanguageInput_<%= item.event_id %>" />
+                  </div>
+              
+                  <!-- Guest -->
+                  <div class="card-details">
+                      <span>Guest:</span>
+                      <span class="event-guest" contenteditable="true" id="eventGuest_<%= item.event_id %>"><%= item.guest_name %></span>
+                      <input type="hidden" name="eventGuest" value="<%= item.guest_name %>" id="eventGuestInput_<%= item.event_id %>" />
+                  </div>
+              
+                  <!-- Description -->
+                  <div class="card-details">
+                      <span>Description:</span>
+                      <span class="event-description" contenteditable="true" id="eventDescription_<%= item.event_id %>"><%= item.description %></span>
+                      <input type="hidden" name="eventDescription" value="<%= item.description %>" id="eventDescriptionInput_<%= item.event_id %>" />
+                  </div>
+              
+                  <!-- Capacity -->
+                  <div class="card-details">
+                      <span>Capacity:</span>
+                      <span class="event-capacity" contenteditable="true" id="eventCapacity_<%= item.event_id %>"><%= item.capacity %></span>
+                      <input type="hidden" name="eventCapacity" value="<%= item.capacity %>" id="eventCapacityInput_<%= item.event_id %>" />
+                  </div>
+              
+                  <!-- Notes -->
+                  <div class="card-details">
+                      <span>Notes:</span>
+                      <span class="event-notes" contenteditable="true" id="eventNotes_<%= item.event_id %>"><%= item.notes %></span>
+                      <input type="hidden" name="eventNotes" value="<%= item.notes %>" id="eventNotesInput_<%= item.event_id %>" />
+                  </div>
+                  <button type="button" class="events-save-button" data-eventid="<%= item.event_id %>">Save</button>
                   
               </div>
             </div>
             <button type="submit" class="events-save-button" data-eventid="<%= item.event_id %>" id="save-button-<%= item.event_id %>">Save</button>
           </form>
+          
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      const saveButtons = document.querySelectorAll('.events-save-button');
+      saveButtons.forEach(button => {
+          button.addEventListener('click', function() {
+              const eventID = this.getAttribute('data-eventid');
+              console.log("Event ID: " + eventID);
+
+              // Get the form corresponding to the event ID
+              const form = document.getElementById(`edit-form-${eventID}`);
+
+              // Update club name
+              const clubName = document.getElementById(`clubName_${eventID}`).innerText;
+              document.getElementById(`clubNameInput_${eventID}`).value = clubName;
+
+              // Update event name
+              const eventName = document.getElementById(`eventName_${eventID}`).innerText;
+              document.getElementById(`eventNameInput_${eventID}`).value = eventName;
+
+              // Update event date
+              const eventDate = document.getElementById(`eventDate_${eventID}`).innerText;
+              document.getElementById(`eventDateInput_${eventID}`).value = eventDate;
+
+              // Update event time
+              const eventTime = document.getElementById(`eventTime_${eventID}`).innerText;
+              document.getElementById(`eventTimeInput_${eventID}`).value = eventTime;
+
+              // Repeat similar steps for other fields
+               // Update location
+            const eventLocation = document.getElementById(`eventLocation_${eventID}`).innerText;
+            document.getElementById(`eventLocationInput_${eventID}`).value = eventLocation;
+
+            // Update language
+            const eventLanguage = document.getElementById(`eventLanguage_${eventID}`).innerText;
+            document.getElementById(`eventLanguageInput_${eventID}`).value = eventLanguage;
+
+            // Update guest
+            const eventGuest = document.getElementById(`eventGuest_${eventID}`).innerText;
+            document.getElementById(`eventGuestInput_${eventID}`).value = eventGuest;
+
+            // Update description
+            const eventDescription = document.getElementById(`eventDescription_${eventID}`).innerText;
+            document.getElementById(`eventDescriptionInput_${eventID}`).value = eventDescription;
+
+            // Update capacity
+            const eventCapacity = document.getElementById(`eventCapacity_${eventID}`).innerText;
+            document.getElementById(`eventCapacityInput_${eventID}`).value = eventCapacity;
+
+            // Update notes
+            const eventNotes = document.getElementById(`eventNotes_${eventID}`).innerText;
+            document.getElementById(`eventNotesInput_${eventID}`).value = eventNotes;
+
+
+              // Submit the form
+              form.submit();
+          });
+      });
+  });
+</script>
           </div>
           <% }); %>
         </div>    

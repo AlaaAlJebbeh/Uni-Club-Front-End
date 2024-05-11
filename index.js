@@ -580,6 +580,27 @@ app.post("/createEvent", async (req, res) => {
 
 });
 
+app.post('/updateEvent', (req, res) => {
+    // Extract data from the request body
+    console.log("event ID before parse: "+ req.body.eventID);
+    const eventID          = parseInt(req.body.eventID);
+    const clubName         = req.body.clubName;
+    const eventName        = req.body.eventName;
+    const eventDate        = req.body.eventDate;
+    const eventTime        = req.body.eventTime;
+    const eventLocation    = req.body.eventLocation;
+    const eventLanguage    = req.body.eventLanguage;
+    const eventGuest       = req.body.eventGuest;
+    const eventDescription = req.body.eventDescription;
+    const eventCapacity    = parseInt(req.body.eventCapacity);
+    const eventNotes       = req.body.eventNotes;
+    const eventImage       = req.body.eventImage;
+
+    console.log(eventID, eventName, eventDate, eventTime, clubName, eventLocation, eventLanguage, eventGuest, eventDescription,eventCapacity,eventNotes,eventImage)
+    // Send back a response indicating success or failure
+    res.send('Event updated successfully!');
+});
+
 app.get("/createPost", (req, res) => {
     res.render('createPost.ejs');
 });
@@ -1192,6 +1213,34 @@ app.post("/EditManagerRequest", (req, res) => {
             res.redirect('/clubManagerSks');
         }
 
+    });
+});
+
+app.get("/popupDeleteClub", (req, res) => {
+    const buttonId = req.query.clubId;
+    console.log("Button Id" + buttonId);
+    const lastIndex = buttonId.lastIndexOf('_');
+    const clubId = buttonId.substring(lastIndex + 1); // Extract the substring after the last '_'
+    console.log("Club Id" + clubId);
+
+    // Get the button ID from the query string
+
+    console.log("club Id from pop up delete club is " + clubId);
+    // Fetch popup content based on button ID from the database or any other source
+    res.render('popupDeleteClub.ejs', {clubId });
+
+});
+
+app.post("/DeleteClubRequest", (req, res) => {
+    const clubId = req.query.clubId;
+    console.log("Entered the delete path. Club ID:", clubId);
+        connection.query('DELETE FROM club WHERE club_id = ?', [clubId], (err, result) => {
+        if (err) {
+            console.log("couldn't delete club");
+        }
+        else {
+            res.redirect('/clubManagerSks');
+        }
     });
 });
 

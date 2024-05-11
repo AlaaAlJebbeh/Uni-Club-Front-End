@@ -108,9 +108,10 @@
                 </h1>
                 <h1>
                   Category:
-                  <strong contenteditable="<%= loggedIn %>" id="categoryField">
+                  <stro
+                  ng contenteditable="<%= loggedIn %>" id="categoryField">
                     <%= clubInformation[0].category %>
-                  </strong>
+                  </stro>
                   <input type="hidden" name="category_field" value="category" />
                   <input type="hidden" name="category_content" id="categoryContent" />
                 </h1>
@@ -236,6 +237,7 @@
                   <div class="not-active">SOON</div>
                   <% } %>
                 <div class="editanddeleteContainer">
+                  <% console.log("Event ID: " + item.event_id) %>
                   <img src="../public/images/edit.png" alt="edit icon" class="edit-icon" data-eventid="<%= item.event_id %>"/>
                   <% var eventID=parseInt(item.event_id); %>
                   <form action="/deleteEvent?eventID=<%=eventID%>" method="post">
@@ -244,10 +246,12 @@
                     </button>
                   </form>
                 </div>
+                <button type="button" class="uploadBtn" id="upload-button-<%=item.event_id%>">upload</button>
               </div>
               <!-- Inside the HTML template -->
               <div class="text-container" id="text-container-<%= item.event_id %>">
-                  <form id="edit-form-<%= item.event_id %>" class="edit-form" method="POST" action="/updateEvent">
+                  <form id="edit-form-<%= item.event_id %>" class="text-container" method="POST" action="/updateEvent">
+                    <input type="hidden" name="eventID" value="<%= item.event_id %>">
                       <div class="card-details">
                           <span>Club Name:</span>
                           <span class="club-name"><%= clubInformation[0].club_name %></span>
@@ -299,10 +303,11 @@
                           <input type="hidden" name="eventNotes" value="<%= item.notes %>" />
                       </div>
                       <button type="button" class="events-save-button" data-eventid="<%= item.event_id %>">Save</button>
-                  </form>
+                  
               </div>
             </div>
-            <button type="button" class="events-save-button" data-eventid="<%= item.event_id %>">Save</button>
+            <button type="submit" class="events-save-button" data-eventid="<%= item.event_id %>" id="save-button-<%= item.event_id %>">Save</button>
+          </form>
           </div>
           <% }); %>
         </div>    

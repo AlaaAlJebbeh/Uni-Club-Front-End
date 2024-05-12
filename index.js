@@ -94,7 +94,7 @@ app.post('/login', (req, res) => {
                 req.session.role = results[0].role; // Add this line
                 req.session.userID = results[0].user_id; // Add this line
                 console.log(req.session.email);
-                res.render('home', { loggedIn: true, role: results[0].role, email: req.session.email });
+                res.redirect("/");
             } else {
                 res.send('Incorrect email and/or password!');
             }

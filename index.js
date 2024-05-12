@@ -1387,13 +1387,26 @@ app.post("/DeleteClubRequest", (req, res) => {
 });
 
 app.get("/clubs", (req, res) => {
-    connection.query("SELECT category FROM club" , (error, resultCategories) =>{
-        if(error){
-            console.log("Error fetching categories");
-        } else{
-            res.render("clubs.ejs", {resultCategories});
-        }
-    });
+    if (!req.session.loggedIn) {
+        connection.query("SELECT category, clubImageUrl, club_name, bio, club_id FROM club", (error, resultClubs) => {
+            if (error) {
+                console.log("Error fetching categories");
+            } else {
+                res.render("clubs.ejs", { loggedIn: false, role: null, email: null, resultClubs });
+            }
+        });
+    }
+    else{
+        connection.query("SELECT category, clubImageUrl, club_name, bio, club_id FROM club", (error, resultClubs) => {
+            if (error) {
+                console.log("Error fetching categories");
+            } else {
+                res.render("clubs.ejs", { role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, resultClubs });
+            }
+        });
+
+    }
+    
 });
 
 app.get("/homepage", (req, res) => {

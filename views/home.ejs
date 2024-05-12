@@ -54,18 +54,26 @@
 
     <% } %>
 
-    <br>
     <br><br>
+    <div class="container-fluid">
+        <form style="margin-left: 80%;" id="event-search-form">
+          <input type="text" id="event-search-input" placeholder="Search by event name">
+          <button class="searchButton" type="submit">
+            <span class="material-symbols-outlined">
+              search
+              </span>
+          </button>
+        </form>
+    </div>
+
+    <br /><br /><br>
     <div class="container" style="padding: 25px; border-style: solid">
       <div class="col-sm-12">
-          <h2 style="text-align: center;color: #000">Up Coming Events</h2>
+        <h2 style="text-align: center; color: #000">Up Coming Events</h2>
       </div>
     </div>
 
-    <form id="event-search-form">
-        <input type="text" id="event-search-input" placeholder="Search by event name">
-        <button type="submit">Search</button>
-    </form>
+    
 
     <div class="container">
       <div class="wrapper">
@@ -140,17 +148,38 @@
                   filter_alt
                 </span>
                 <ul class="dropdown-menu">
-                  <li class="dropdown-item">
-                    <a href="#">comic</a>
+                  <li class="dropdown-item" style="font-weight: bold">
+                    Filter By Category:
                   </li>
-                  <li class="dropdown-item">
-                    <a href="#">romantic</a>
+                  <li class="dropdown-item" onclick="filterEvents('Fun')">
+                    <a href="#">Fun</a>
                   </li>
-                  <li class="dropdown-item">
-                    <a href="#">action</a>
+                  <li
+                    class="dropdown-item"
+                    onclick="filterEvents('Computer Science')"
+                  >
+                    Computer Science
                   </li>
-                  <li class="dropdown-item">
-                    <a href="#">nothing from above</a>
+                  <li
+                    class="dropdown-item"
+                    onclick="filterEvents('Psychology')"
+                  >
+                    Psychology
+                  </li>
+                  <li class="dropdown-item" onclick="filterEvents('Math')">
+                    Math
+                  </li>
+                  <li class="dropdown-item" onclick="filterEvents('Language')">
+                    Language
+                  </li>
+                  <li class="dropdown-item" onclick="filterEvents('Medicine')">
+                    Medicine
+                  </li>
+                  <li class="dropdown-item" onclick="filterEvents('Chemistry')">
+                    Chemistry
+                  </li>
+                  <li class="dropdown-item" onclick="filterEvents('all')">
+                    All
                   </li>
                 </ul>
               </div>
@@ -158,6 +187,30 @@
           </div>
         </div>
       </div>
+      <script>
+        function filterEvents(category) {
+          const allCards = document.querySelectorAll(".col-sm-6");
+          allCards.forEach((card) => {
+            const categorySpan = card.querySelector(
+              ".content .category #categorySpan"
+            );
+
+            console.log(
+              "Category Selected: " +
+                category +
+                " Category in card: " +
+                categorySpan.textContent.trim()
+            );
+
+            const cardCategory = categorySpan.textContent.trim().toLowerCase();
+            if (category === "all" || cardCategory === category.toLowerCase()) {
+              card.style.display = "block"; // Show card
+            } else {
+              card.style.display = "none"; // Hide card
+            }
+          });
+        }
+      </script>
 
       <div class="col-sm-12">
         <div class="row">
@@ -192,7 +245,13 @@
                   <h6>Time: <span><%= event.time%></span></h6>
                   <h6>Location: <span><%= event.location%></span></h6>
                   <h6>Language: <span><%= event.language%></span></h6>
-                  <h6>Guest: <span><%= event.guest%></span></h6>
+                  <h6>Guest: <span><%= event.guest_name%></span></h6>
+                  <h6>
+                    <div class="category">
+                      Category:
+                      <span id="categorySpan"><%= event.category %></span>
+                    </div>
+                  </h6>
                   <h6>Capacity: <span><%= event.capacity%></span></h6>
                   <h6>Notes: <span><%= event.notes%></span></h6>
                 </div>

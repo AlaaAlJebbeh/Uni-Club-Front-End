@@ -465,8 +465,7 @@ app.post("/approveEvent", (req, res) => {
                         });
 
 
-        console.log("Event approved successfully!");
-        // Optionally, handle the result or send a response to the client
+                        console.log("Event approved successfully!");
 
 
                         connection.query('INSERT INTO history_event SET ?', [event], (err, result) => {
@@ -486,30 +485,31 @@ app.post("/approveEvent", (req, res) => {
                                 } else {
                                     res.redirect("/eventRequests");
                                 }
+
+                                console.log("Event approved successfully!");
+                                // Optionally, handle the result or send a response to the client
+
+                                connection.query("Delete FROM tempevents where event_id = ?", [eventId], (err, result) => {
+                                    if (err) {
+                                        console.error('Error deleting from  database:', error);
+                                        return res.status(500).send('Failed to delete');
+                                    } else {
+                                        res.redirect("/eventRequests.ejs");
+                                    }
+                                });
                             });
 
                         });
-                        console.log("Event approved successfully!");
-                        // Optionally, handle the result or send a response to the client
+
                     });
-
-
                 });
             });
-        connection.query("Delete FROM tempevents where event_id = ?", [eventId], (err, result) => {
-            if (err) {
-                console.error('Error deleting from  database:', error);
-                return res.status(500).send('Failed to delete');
-            } else {
-                res.redirect("/eventRequests.ejs");
-            }
-    });
-     
-});
+
+        });
     });
 });
 
-    
+
 app.get("/statusClubManager", (req, res) => {
 
     connection.query("SELECT club_id FROM club_manager WHERE email = ?", [email], (err, userResult) => {
@@ -723,73 +723,59 @@ app.post("/clubform", async (req, res) => {
         });
 });
 
-app.post("/rejectMessage", async (req, res) => {
+app.post('/rejectMessage', (req, res) => {
+    const eventId = req.body.eventId;
     const rejectionReason = req.body.rejectionReason;
-    const eventId = req.query.eventId;
-    console.log("To share " + eventId);
 
-    connection.query("SELECT * FROM tempevents where event_id = ?", [eventId], (err, result) => {
-        console.log("the selected result is");
-        console.log(result);
+    // Update the event status to 'rejected' in history_event table
+    const rejectQuery = `
+        INSERT INTO history_event (event_id, clm_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, status, comment)
+        SELECT event_id, clm_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, '0',  ? FROM tempevents WHERE event_id = ?;
+    `;
+
+    // Delete the event from the event table
+    const deleteEventQuery = `
+        DELETE FROM tempevents WHERE event_id = ?;
+    `;
+
+    connection.beginTransaction(err => {
         if (err) {
-            console.log("error selecting from temporary event");
+            console.error('Error starting transaction:', err);
+            res.status(500).send('Error rejecting event');
+            return;
         }
 
-
-        result.forEach(event => {
-            // Loop through the results array
-
-            event.status = 0;
-            // Insert each event from the results array into the toshareevents table
-
-
-            connection.query('INSERT INTO history_event SET ?', [event], (err, result) => {
-                if (err) {
-                    console.error("Error inserting event data into history of events", err);
-                    return res.status(500).send("Internal Server Error");
-                }
-                console.error("rejected event inserted into  history of events");
-            });
-
-            connection.query('INSERT INTO history_event (comment) VALUES (?)', [rejectionReason], (err, result) => {
-                if (err) {
-
-                    console.log("error inserting rejection reason:", err);
-
-                  }
-
-            connection.query('UPDATE history_event SET comment = ? where event_id=? ', [rejectionReason, eventId], (err, result)=>{
-                if(err){
-                    console.log("error inserting rejection reason:", err);
-                }
-                console.error("rejection reason inserted into  history of events");
-                console.log("rejected event summary: ", result)
-            })
-
-        });
-
-    });
- });
-        connection.query("Delete FROM tempevents where event_id = ?", [eventId], (err, result) => {
+        connection.query(rejectQuery, [rejectionReason, eventId], (err, results) => {
             if (err) {
-                console.error('Error deleting from  database:', error);
-                return res.status(500).send('Failed to delete');
+                console.error('Error moving event to history_event:', err);
+                connection.rollback(() => {
+                    res.status(500).send('Error rejecting event');
+                });
             } else {
-                res.redirect("/eventRequests");
+                connection.query(deleteEventQuery, [eventId], (err, results) => {
+                    if (err) {
+                        console.error('Error deleting event:', err);
+                        connection.rollback(() => {
+                            res.status(500).send('Error rejecting event');
+                        });
+                    } else {
+                        connection.commit(err => {
+                            if (err) {
+                                console.error('Error committing transaction:', err);
+                                connection.rollback(() => {
+                                    res.status(500).send('Error rejecting event');
+                                });
+                            } else {
+                                console.log('Event rejected and deleted successfully');
+                                res.status(200).send('Event rejected and deleted successfully');
+                            }
+                        });
+                    }
+                });
             }
-
         });
-
-
-
     });
-
-
-
-
-
-
-
+});
 
 
 
@@ -1288,6 +1274,21 @@ app.post("/DeleteClubRequest", (req, res) => {
         }
     });
 });
+
+app.get("/homepage", (req, res) => {
+   
+   
+    connection.query('SELECT * FROM event ', (err, contents) => {
+        if (err) {
+            console.log('didnt get', err);
+        }
+        console.log({ contents });
+
+        res.render('home.ejs', {contents});
+    });
+
+});
+
 
 //listining to the port 
 app.listen(port, () => {

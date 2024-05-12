@@ -42,7 +42,6 @@
 
       <div class="icons">
         <div class="icons" style="display: flex">
-          <i class="fas fa-search" id="search-btn"></i>
           <% if (loggedIn) { %>
           <!-- If user is logged in, show logout button -->
           <form action="/logout" method="GET">
@@ -59,10 +58,7 @@
           <% } %>
         </div>
 
-        <form action="" class="search-bar-container">
-          <input type="search" id="search-bar" placeholder="search here..." />
-          <label for="search-bar" class="fas fa-search"></label>
-        </form>
+    
       </div>
 
       <div class="mainContainer">
@@ -129,5 +125,7 @@
         <div></div>
       </label>
     </header>
+    <script src="../public/scripts/logIn.js"></script>
+
   </body>
 </html>

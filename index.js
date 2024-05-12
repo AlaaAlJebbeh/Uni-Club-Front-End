@@ -728,7 +728,7 @@ app.post("/clubform", async (req, res) => {
 });
 
 app.post('/rejectMessage', (req, res) => {
-    const eventId = req.body.eventId;
+    const event_id = req.body.event_id;
     const rejectionReason = req.body.rejectionReason;
 
     // Update the event status to 'rejected' in history_event table
@@ -749,14 +749,14 @@ app.post('/rejectMessage', (req, res) => {
             return;
         }
 
-        connection.query(rejectQuery, [rejectionReason, eventId], (err, results) => {
+        connection.query(rejectQuery, [rejectionReason, event_id], (err, results) => {
             if (err) {
                 console.error('Error moving event to history_event:', err);
                 connection.rollback(() => {
                     res.status(500).send('Error rejecting event');
                 });
             } else {
-                connection.query(deleteEventQuery, [eventId], (err, results) => {
+                connection.query(deleteEventQuery, [event_id], (err, results) => {
                     if (err) {
                         console.error('Error deleting event:', err);
                         connection.rollback(() => {

@@ -20,10 +20,24 @@ function hideAllContentSections() {
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    addClickListener("my-events-link", "my-events-content");
-    addClickListener("my-posts-link", "my-posts-content");
-    addClickListener("my-status-link", "my-status-content");
-    addClickListener("my-profile-link", "my-profile-content");
+    const myEventsLink = document.getElementById("my-events-link");
+    const myPostsLink = document.getElementById("my-posts-link");
+    const myStatusLink = document.getElementById("my-status-link");
+    const myProfileLink = document.getElementById("my-profile-link");;
+
+    if (myEventsLink){
+        addClickListener("my-events-link", "my-events-content");
+    }
+    if (myPostsLink){
+        addClickListener("my-posts-link", "my-posts-content");
+    }
+    if (myStatusLink){
+        addClickListener("my-status-link", "my-status-content");
+    }
+    if (myProfileLink){
+        addClickListener("my-profile-link", "my-profile-content");
+    }
+
 
     // Notification modal functionality
     const notificationLink = document.getElementById("club-notifications-link");

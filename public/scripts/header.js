@@ -1,5 +1,5 @@
 
-const container = document.getElementById('containerh');
+const container = document.getElementById('container');
 const registerBtn = document.getElementById('register');
 const loginBtn = document.getElementById('login');
 
@@ -12,7 +12,7 @@ loginBtn.addEventListener('click', () => {
 });
 
 let searchBtn = document.querySelector('#search-btn');
-let searchBar = document.querySelector('.search-bar-containerh');
+let searchBar = document.querySelector('.search-bar-container');
 
 let loginButton = document.querySelector('#log-btn');
 let popup = document.querySelector(".popup");

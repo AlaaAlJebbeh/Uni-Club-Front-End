@@ -1,11 +1,7 @@
 
-const container = document.getElementById('container');
-const learnMoreBtn = document.getElementById('learnMore');
+const container = document.getElementById('containerc');
 const loginBtn = document.getElementById('login');
 
-learnMoreBtn.addEventListener('click', () => {
-    container.classList.add("active");
-});
 
 loginBtn.addEventListener('click', () => {
     container.classList.remove("active");
@@ -42,3 +38,13 @@ $(document).ready(function(){
       $(".popupN").hide();
     });
 });
+
+$(document).ready(function() {
+  // Add click event listener to all buttons with the class 'post-button'
+  $('.club_info_button').click(function() {
+      // Retrieve the post ID from the button's ID
+      var clubIdId = parseInt($(this).attr('id').split('_')[1]);
+      console.log('Button clicked for clubIdId ID:', clubIdId);
+      // Perform further actions if needed
+  });
+})

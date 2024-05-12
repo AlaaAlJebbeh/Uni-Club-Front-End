@@ -32,11 +32,9 @@
                                 <div class="description">
                                         <%if(itemEN.status == 1){%>
                                             <p>Your Event "<%=eventName%>" Request has been approved</p>
-                                            <p id="notif-time">1m ago</p>
                                         <%} else if(itemEN.status == 0){%>
                                             <p>Your Event "<%=eventName%>" Request has not been approved</p>
                                             <p>Rejection Reason "<%=eventComment%>"</p>
-                                            <p id="notif-time">1m ago</p>
                                             <%}%>
                                 </div>
                             </div>
@@ -48,11 +46,50 @@
                             <div class="description">
                                     <%if(itemEN.status == 1){%>
                                         <p>Your Event "<%=eventName%>" Request has been approved</p>
-                                        <p id="notif-time">1m ago</p>
                                     <%} else if(itemEN.status == 0){%>
                                         <p>Your Event "<%=eventName%>" Request has not been approved</p>
                                         <p>Rejection Reason "<%=eventComment%>"</p>
-                                        <p id="notif-time">1m ago</p>
+                                        <%}%>
+                            </div>
+                        </div>
+                        <%}%>
+                <%})%>
+
+                <!--Notifications For  Create Posts-->
+                <% resultsHistoryPostNot.forEach((itemHP, index)=> { %>
+                    <% var postComment = itemHP.rejectionReason; %>
+                    <% var PostID=parseInt(itemHP.PostID); %>
+                    <% var divId='button_' + itemHP.PostID; %>
+                    
+                    <%if (itemHP.notificationstatus == 0){%>
+                        <%console.log("notificationn posts" + PostID)%>
+                        <%console.log("status" + itemHP.Status)%>
+
+                        <form id="readNotificationFormPosts" action="/changeNotificationStatusPosts?PostID=<%= PostID%>" method="POST">
+                            <div class="notificationCard unread2 read-notification" id="<%= divId %>">
+                                <img alt="photo" src="../public/images/pixel.jpg" />
+                                <div class="description">
+                                        <%if(itemHP.Status == "approved"){%>
+                                            <%console.log("approved post print")%>
+
+                                            <p>Your Post Request has been approved</p>
+                                        <%} else if(itemHP.Status == "rejected"){%>
+                                            <p>Your Post Request has not been approved</p>
+                                            <p>Rejection Reason "<%=postComment%>"</p>
+                                            <%}%>
+                                </div>
+                            </div>
+                        </form>
+                        
+                    <%} else if((itemHP.notificationstatus == 1)){%>
+                        <div class="notificationCard">
+                            <img alt="photo" src="../public/images/pixel.jpg" />
+                            <div class="description">
+                                    <%if(itemHP.Status == "approved"){%>
+                                        <p>Your Post Request has been approved</p>
+                                    <%} else if(itemHP.Status == "rejected"){%>
+                                        <p>Your Post Request has not been approved</p>
+                                        <p>Rejection Reason "<%=postComment%>"</p>
                                         <%}%>
                             </div>
                         </div>

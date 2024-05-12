@@ -10,18 +10,14 @@ loginBtn.addEventListener('click', () => {
     container.classList.remove("active");
 });
 
-let searchBtn = document.querySelector('#search-btn');
-let searchBar = document.querySelector('.search-bar-container');
 
 let loginButton = document.querySelector('#log-btn');
 let popup = document.querySelector(".popup");
 
-searchBtn.addEventListener('click', ()=>{
-    searchBtn.classList.toggle('fa-times');
-    searchBar.classList.toggle('active');
-});
 
-loginButton.addEventListener('click', ()=>{
+loginButton.addEventListener('click', () => {
     popup.classList.add("open-popup");
 });
+
+
 

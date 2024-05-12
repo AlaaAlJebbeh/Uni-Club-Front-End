@@ -1,44 +1,50 @@
 
-const container = document.getElementById('container');
-const learnMoreBtn = document.getElementById('learnMore');
-const loginBtn = document.getElementById('login');
+$(document).ready(function() {
+  // Add click event listener to all buttons with the class 'post-button'
+  $('.club_info_button').click(function() {
+      // Retrieve the post ID from the button's ID
+      var clubIdId = parseInt($(this).attr('id').split('_')[1]);
+      console.log('Button clicked for clubIdId ID:', clubIdId);
+      // Perform further actions if needed
+  });
+})
 
-learnMoreBtn.addEventListener('click', () => {
-    container.classList.add("active");
-});
+document.addEventListener('DOMContentLoaded', function() {
+  const clubSearchForm = document.getElementById('club-search-form');
+  const clubCards = document.querySelectorAll('.cardc');
 
-loginBtn.addEventListener('click', () => {
-    container.classList.remove("active");
-});
+  if (clubSearchForm && clubCards) {
+      clubSearchForm.addEventListener('submit', function(event) {
+          event.preventDefault(); // Prevent form submission
 
-let searchBtn = document.querySelector('#search-btn');
-let searchBar = document.querySelector('.search-bar-container');
+          const searchTerm = document.getElementById('club-search-input').value.trim().toLowerCase();
 
-let loginButton = document.querySelector('#log-btn');
-let popup = document.querySelector(".popup");
+          // Filter club cards based on search term
+          clubCards.forEach(function(card) {
+              const clubNameElement = card.querySelector('.namec');
+              if (clubNameElement) {
+                  const clubName = clubNameElement.textContent.trim().toLowerCase();
 
-searchBtn.addEventListener('click', ()=>{
-    searchBtn.classList.toggle('fa-times');
-    searchBar.classList.toggle('active');
-});
+                  // Show or hide club cards based on search term
+                  if (clubName.includes(searchTerm)) {
+                      card.style.display = 'block'; // Show the club card
+                  } else {
+                      card.style.display = 'none'; // Hide the club card
+                  }
+              }
+          });
 
-loginButton.addEventListener('click', ()=>{
-    popup.classList.add("open-popup");
-});
+          // Move matching cards to the top of the container
+          const container = document.querySelector('.div-01');
+          container.innerHTML = ''; // Clear existing content
 
-
-$(document).ready(function(){
-    $(".notifications .icon_wrap").click(function(){
-      $(this).parent().toggleClass("active");
-       $(".profile").removeClass("active");
-    });
-
-    $(".show_all .link").click(function(){
-      $(".notifications").removeClass("active");
-      $(".popupN").show();
-    });
-
-    $(".close").click(function(){
-      $(".popupN").hide();
-    });
+          clubCards.forEach(function(card) {
+              if (card.style.display !== 'none') {
+                  container.appendChild(card); // Append matching cards to the container
+              }
+          });
+      });
+  } else {
+      console.error('club-search-form or cardc elements not found.');
+  }
 });

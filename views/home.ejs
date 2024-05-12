@@ -62,6 +62,11 @@
       </div>
     </div>
 
+    <form id="event-search-form">
+        <input type="text" id="event-search-input" placeholder="Search by event name">
+        <button type="submit">Search</button>
+    </form>
+
     <div class="container">
       <div class="wrapper">
         <i id="left" class="fa-solid fa-angle-left"></i>
@@ -93,7 +98,7 @@
                     <% } %>
                     <h2><%= event.club_name %></h2>
                     <br />
-                    <h2><%= event.event_name%></h2>
+                    <h2 class="name"><%= event.event_name%></h2>
                     <br />
                     <h6>
                       Date:
@@ -223,7 +228,7 @@
                   <% } %>
                   <h2><%= event.club_name %></h2>
                   <br />
-                  <h2><%= event.event_name%></h2>
+                  <h2 class="nameE"><%= event.event_name%></h2>
                   <br />
                   <h6>
                     Date:

@@ -82,3 +82,37 @@ document.addEventListener("mouseup", dragStop);
 carousel.addEventListener("scroll", infiniteScroll);
 wrapper.addEventListener("mouseenter", () => clearTimeout(timeoutId));
 wrapper.addEventListener("mouseleave", autoPlay);
+
+document.addEventListener('DOMContentLoaded', function() {
+    const eventSearchForm = document.getElementById('event-search-form');
+    const eventCards = document.querySelectorAll('.col-sm-6');
+
+    if (eventSearchForm && eventCards) {
+        eventSearchForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const searchTerm = document.getElementById('event-search-input').value.trim().toLowerCase();
+
+            // Filter event cards based on search term
+            eventCards.forEach(function(card) {
+                const eventNameElement = card.querySelector('.nameE');
+                if (eventNameElement) {
+                    const eventName = eventNameElement.textContent.trim().toLowerCase();
+                    const matchesSearch = eventName.includes(searchTerm);
+
+                    // Show or hide the card based on whether it matches the search term
+                    card.style.display = matchesSearch ? 'block' : 'none';
+                }
+            });
+
+            // Scroll to the top of the page to view search results
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    } else {
+        console.error('event-search-form or card elements not found.');
+    }
+});
+
+
+
+

@@ -11,9 +11,6 @@
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
     font-family: "Roboto Slab", serif;
 }
 
@@ -38,7 +35,7 @@ main {
     border-radius: 5rem;
 }
 
-.card {
+.cardc {
     position: relative;
     width: 100%;
     max-width: var(--card-width);
@@ -52,7 +49,7 @@ main {
     
 }
 
-.card .image {
+.cardc .imagec {
     position: relative;
     width: 170px;
     height: 170px ;
@@ -65,39 +62,39 @@ main {
     transition: 0.4s;
 }
 
-.card .image img {
+.cardc .imagec img {
     width: 100%;
     border-radius: 50%;
     border: 3px solid var(--primary);
     transition: 0.4s;
 }
 
-.card .name {
+.cardc .namec {
     color: var(--grey);
     font-size: 1.5rem;
     transition: 0.4s;
 }
 
-.card .content {
+.cardc .contentc {
     max-height: 0;
     opacity: 0;
     overflow: hidden;
     transition: 0.4s;
 }
 
-.card .content p{
+.cardc .contentc p{
     color: var(--grey);
     font-size: 1.5rem;
 }
 
-.card .content .buttons {
+.cardc .contentc .buttonsc {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 1.5rem;
 }
 
-.card .content .buttons button {
+.cardc .contentc .buttonsc button {
     appearance: none;
     border: none;
     outline: none;
@@ -115,28 +112,28 @@ main {
     transition: 0.4s;
 }
 
-.card .content .buttons button:hover {
+.cardc .contentc .buttonsc button:hover {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
     transform: translateY(-0.5rem) scale(1.15);
 }
 
-.card:hover {
+.cardc:hover {
     --card-width: 480px;
     --image-width: calc(var(--card-width) / 2);
 }
 
-.card:hover .image {
+.cardc:hover .image {
     margin-top: -8rem;
     width: 170px;
     height: 170px;
     
 }
 
-.card:hover .name {
+.cardc:hover .namec {
     margin-bottom: 1.5rem;
 }
 
-.card:hover .content {
+.cardc:hover .contentc {
     max-height: 300px;
     opacity: 1;
     overflow: visible;

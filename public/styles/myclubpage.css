@@ -278,7 +278,6 @@ a:active {
     left: 20px;
     top: 5px;
 }
-
 .image-container{
     width: 100%;
     height: 65%;
@@ -390,8 +389,8 @@ a:active {
     left: 1;
     display: flex;
     align-items: first baseline;
-    width: 8%;
-    height: 8%;
+    width: 13%;
+    height: 13%;
     /*------ FONT RELATED -----*/
     font-size: 2vh;
     color: white;

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clubs Page</title>
+
+    <link rel="stylesheet" href="../public/styles/clubs.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body style="background-color: #dfecff;">
+
+    
+
+    <!--club page-->
+
+    <div class="container-fluid" style="background-color: #dfecff; padding: 25px">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-10">
+                    <h2 style="margin-left: 150px; color: #000;">Our clubs</h2>
+                </div>
+                <div class="col-sm-2">
+                    <div class="dropdown">
+                        <span style="margin-left: 100px; color: #000;" type="button" class="material-symbols-outlined" data-bs-toggle="dropdown"> filter_alt </span>
+                        <ul class="dropdown-menu">
+                            <%resultCategories.forEach((itemcategory, index)=>{%>
+                                <li class="dropdown-item">
+                                    <%console.log("category" + itemcategory.category)%>
+                                    <%itemcategory.category%>
+                                </li>
+                            <%})%>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    
+    <div class="h"></div>
+    
+    <br><br><br>
+
+    <div class="container div-01">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-4">
+                    <main>
+                        <div class="card" style="background-color: #fff;">
+                            <div class="image">
+                                <img src="img/sks.png" alt="">
+                            </div>
+                            <div class="name"> sks </div>
+                            <div class="content">
+                                <p>Description</p>
+                                <div class="buttons">
+                                    <button style="background-color: #7bd3d1;">Category</button>
+                                <button>Club Info</button>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+                <div class="col-sm-4">
+                    <main>
+                        <div class="card" style="background-color: #fff;">
+                            <div class="image">
+                                <img src="img/sks.png" alt="">
+                            </div>
+                            <div class="name"> sks </div>
+                            <div class="content">
+                                <p>Description</p>
+                                <div class="buttons">
+                                    <button>Category</button>
+                                <button>Club Info</button>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+                <div class="col-sm-4">
+                    <main>
+                        <div class="card" style="background-color: #fff;">
+                            <div class="image">
+                                <img src="img/sks.png" alt="">
+                            </div>
+                            <div class="name"> sks </div>
+                            <div class="content">
+                                <p>Description</p>
+                                <div class="buttons">
+                                    <button>Category</button>
+                                <button>Club Info</button>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container div-01">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-4">
+                    <main>
+                        <div class="card" style="background-color: #fff;">
+                            <div class="image">
+                                <img src="img/sks.png" alt="">
+                            </div>
+                            <div class="name"> sks </div>
+                            <div class="content">
+                                <p>Description</p>
+                                <div class="buttons">
+                                    <button>Category</button>
+                                <button>Club Info</button>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+                <div class="col-sm-4">
+                    <main>
+                        <div class="card" style="background-color: #fff;">
+                            <div class="image">
+                                <img src="img/sks.png" alt="">
+                            </div>
+                            <div class="name"> sks </div>
+                            <div class="content">
+                                <p>Description</p>
+                                <div class="buttons">
+                                    <button>Category</button>
+                                <button>Club Info</button>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+                <div class="col-sm-4">
+                    <main>
+                        <div class="card" style="background-color: #fff;">
+                            <div class="image">
+                                <img src="img/sks.png" alt="">
+                            </div>
+                            <div class="name"> sks </div>
+                            <div class="content">
+                                <p>Description</p>
+                                <div class="buttons">
+                                    <button>Category</button>
+                                <button>Club Info</button>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../public/scripts/clubs.js"></script>
+
+    
+</body>
+</html>

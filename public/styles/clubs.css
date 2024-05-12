@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Trade+Winds&display=swap');
+
+:root{
+    --yellow: #FFD700;
+    --primary: #193635;
+    --grey: #193635;
+
+    --card-width: 320px;
+    --image-width: calc(var(--card-width) / 1.5);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto Slab", serif;
+}
+
+.div-01 {
+    padding: 50px;
+}
+
+li a{
+    text-decoration: none;
+    color: #1a1a1a;
+    font-family:Tajawal ;
+    border-right: 1px white solid;
+}
+
+main {
+    min-height: 50vh;
+    /*background-image: linear-gradient(to bottom right, #0ab3ad, #0ab3ad);*/
+    background-color: #dfecff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5rem;
+}
+
+.card {
+    position: relative;
+    width: 100%;
+    max-width: var(--card-width);
+    /*background-color: #000;
+    color: #000;*/
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: 0.4s;
+    
+}
+
+.card .image {
+    position: relative;
+    width: 170px;
+    height: 170px ;
+    border-radius: 50%;
+    box-shadow:  0 3px 6px rgba(0, 0, 0, 0.1);
+    margin: -8rem auto 1.5rem;
+    padding: 0.05rem;
+    overflow: hidden;
+    background-color: #000;
+    transition: 0.4s;
+}
+
+.card .image img {
+    width: 100%;
+    border-radius: 50%;
+    border: 3px solid var(--primary);
+    transition: 0.4s;
+}
+
+.card .name {
+    color: var(--grey);
+    font-size: 1.5rem;
+    transition: 0.4s;
+}
+
+.card .content {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: 0.4s;
+}
+
+.card .content p{
+    color: var(--grey);
+    font-size: 1.5rem;
+}
+
+.card .content .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+.card .content .buttons button {
+    appearance: none;
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+
+    display: block;
+    padding: 0.5rem 1rem;
+    min-width: 160px;
+    background-color: var(--primary);
+    color: #fff;
+    font-size: 1.rem;
+    border-radius: 0.5rem;
+    margin: 0 0.5rem;
+    transition: 0.4s;
+}
+
+.card .content .buttons button:hover {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-0.5rem) scale(1.15);
+}
+
+.card:hover {
+    --card-width: 480px;
+    --image-width: calc(var(--card-width) / 2);
+}
+
+.card:hover .image {
+    margin-top: -8rem;
+    width: 170px;
+    height: 170px;
+    
+}
+
+.card:hover .name {
+    margin-bottom: 1.5rem;
+}
+
+.card:hover .content {
+    max-height: 300px;
+    opacity: 1;
+    overflow: visible;
+}
+
+.h{
+    color: #193635;
+    background-color: #193635;
+    width: 90%;
+    height: 5px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+
+
+
+
+
+

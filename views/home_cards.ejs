@@ -1,6 +1,6 @@
-<div class="popup-content">
+<div class="home-content">
     <!-- Render the fetched popup content here -->
-    <h2>Popup Content</h2>
+    <h2>Home Page cards</h2>
     <link rel="stylesheet" href="../public/styles/popContent.css">
     <link
       rel="stylesheet"
@@ -15,7 +15,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
     />
-    <% results.forEach((item) => { %>
+
+
+    
+    <% contents.forEach((item) => { %>
 
         <section>
             
@@ -39,9 +42,7 @@
                     </div>
                 </div>
             </div>
-   
-    <button id="closeButton" onclick="closePopup()">Close</button >
-    </div>
+       </div>
 </section>
 
     <% }); %>

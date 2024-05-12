@@ -84,6 +84,16 @@ a:active {
     gap: 5px;
 }
 
+.logo-side1{
+    display: flex;
+    margin-top: 30px;
+    position: absolute;
+    flex-direction: column;
+    top: -60px;
+    left: 3;
+    gap: 5px;
+}
+
 
 .cnt6{
     display: flex;
@@ -96,7 +106,7 @@ a:active {
    border: 1px solid black;
    border-radius: 5px;
    scale: 1.5;
-   width: 100px;
+   width: 80px;
    background-color: #193635;
    color: white;
 }

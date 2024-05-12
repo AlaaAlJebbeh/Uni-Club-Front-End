@@ -150,7 +150,9 @@ main {
     margin-left: auto;
 }
 
-
+.dropdown-item{ 
+    font-size: 16px;
+}
 
 
 

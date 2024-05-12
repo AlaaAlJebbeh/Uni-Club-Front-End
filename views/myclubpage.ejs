@@ -72,16 +72,13 @@
         <div class="cnt1">
           <div class="logo-side">
             <img src="../public/images/pixel.jpg" alt="Image not loading" />
-            <% if (loggedIn) { %>
-              <button>Upload</button>
-              <% } %>
+            
           </div>
         </div>
 
         <% if (loggedIn) { %>
           <div class="cnt6">
             <div class="logo-side">
-              <% console.log("in create event href" + clubInformation[0].club_id) %>
                 <a href="/createevent"><button>Create Event</button></a>
                 <p></p>
                 <a href="/notifications"><button>Notifications</button></a>
@@ -96,7 +93,12 @@
               Club Information
             </h1>
 
-            <form id="profileForm" method="POST" action="/updateProfile" class="content-container" target="/myclubpage">
+            <form id="profileForm" method="POST" action="/updateProfile" class="content-container" target="/myclubpage" enctype="multipart/form-data">
+              <% if (loggedIn) { %>
+                <div class="profileImage">
+                  <input type="file" name="uploadImage1" id="clubprofileimage"/>
+                </div>
+                <% } %>
               <div class="cnt2">
                 <h1>
                   <span style="color: #193635">Club Name:</span>
@@ -145,11 +147,16 @@
                 $("#saveButton").on("click", function () {
                   var hasChanges = false; // Flag to track if there are any edits
 
+                  // Check if an image is uploaded
+                  var fileInput = document.getElementById("clubprofileimage");
+                  if (fileInput.files.length > 0) {
+                    console.log("inside")
+                    hasChanges = true;
+                  } 
                   // Update club name content (check for changes)
                   var clubNameContent = $("#clubNameField").text();
                   var originalClubNameContent = $("#clubNameField").attr("data-original-content");
                   if (clubNameContent !== originalClubNameContent) {
-                    console.log(clubNameContent);
                     $("#clubNameContent").val(clubNameContent);
                     hasChanges = true;
                   } else {
@@ -206,7 +213,7 @@
             <div class="content-containerManager">
               <% name.forEach((item)=> { %>
                 <div class="CLMNAMES">
-                  <img src="../public/images/images/Alson GC.jpg" />
+                  <img src="<../public/images/images/Alson GC.jpg>" />
                   <h1>
                     <span style="color: #193635">Club Manager Name:</span><br />
                     <%=item.name%>
@@ -217,14 +224,14 @@
       </div>
 
       <div id="my-events-content" class="content-section" style="display: none">
+        <h1 style="text-align: center; font-size: 36px">Events</h1>
         <div class="card-container">
           <% event.forEach((item, index)=> { %>
             <div class="indivisual-card-container">
             <div class="card">
               <div class="image-container">
-                <img src="../public/images/pixel.jpg" />
-                <% console.log("today date: " + new Date() + " event day: " +
-                item.date) %> <% const currentDate = new Date();
+                <img src="../public/<%=item.imageURL  %>" id="clubImage-<%=item.event_id  %>"/>
+                <% const currentDate = new Date();
                 currentDate.setHours(0, 0, 0, 0); const eventDate = new
                 Date(item.date); eventDate.setHours(0, 0, 0, 0); if
                 (currentDate.getTime() === eventDate.getTime()) { %>
@@ -235,9 +242,10 @@
                 <% } else { %>
                   <div class="not-active">SOON</div>
                   <% } %>
+
+                <% if(loggedIn) { %>
                 <div class="editanddeleteContainer">
-                  <% console.log("Event ID: " + item.event_id) %>
-                  <img src="../public/images/edit.png" alt="edit icon" class="edit-icon" data-eventid="<%= item.event_id %>"/>
+                  <img src="../public/images/edit.png" alt="edit icon" class="edit-icon" data-eventid="<%= item.event_id %>" style="background-color: aliceblue;"/>
                   <% var eventID=parseInt(item.event_id); %>
                   <form action="/deleteEvent?eventID=<%=eventID%>" method="post">
                     <button type="submit" style="background-color: white; border:none;">
@@ -245,18 +253,16 @@
                     </button>
                   </form>
                 </div>
-                
-
-                <div class="upload image">
-                  <input type="file" name="uploadImage1" />
-                </div>
-                <button type="button" class="uploadBtn" id="upload-button-<%=item.event_id%>">upload</button>
-                
+                <% } %>
               </div>
               <!-- Inside the HTML template -->
               <div class="text-container" id="text-container-<%= item.event_id %>">
-                  <form id="edit-form-<%= item.event_id %>" class="text-container" method="POST" action="/updateEvent">
+                  <form id="edit-form-<%= item.event_id %>" class="text-container" method="POST" action="/updateEvent" enctype="multipart/form-data">
+                    <div class="upload image" id="upload-button-<%= item.event_id %>">
+                      <input type="file" name="uploadImage1" />
+                    </div>
                     <input type="hidden" name="eventID" value="<%= item.event_id %>">
+                    <input type="hidden" name="clubImage" value="" id="clubimageInput_<%= item.event_id %>">
                     <div class="card-details">
                       <span>Club Name:</span>
                       <span class="club-name" contenteditable="true" id="clubName_<%= item.event_id %>"><%= clubInformation[0].club_name %></span>
@@ -332,7 +338,6 @@
       saveButtons.forEach(button => {
           button.addEventListener('click', function() {
               const eventID = this.getAttribute('data-eventid');
-              console.log("Event ID: " + eventID);
 
               // Get the form corresponding to the event ID
               const form = document.getElementById(`edit-form-${eventID}`);
@@ -378,6 +383,8 @@
             const eventNotes = document.getElementById(`eventNotes_${eventID}`).innerText;
             document.getElementById(`eventNotesInput_${eventID}`).value = eventNotes;
 
+            const clubImage = document.getElementById(`clubImage-${eventID}`).getAttribute('src');
+            document.getElementById(`clubimageInput_${eventID}`).value = clubImage;
 
               // Submit the form
               form.submit();
@@ -390,7 +397,33 @@
         </div>    
     </div>
     <div id="my-posts-content" class="content-section" style="display: none">
-      <!-- POSTS SECTION -->
+      <div class="container-fluid">
+        <div class="row">
+          <%  %>
+            <div class="col-sm-3">
+                <div class="card">
+                    <div style="background-color: black; height: 60px;" class="card-header">
+                        <img style="border-radius: 100%; width: 50px; height: 50px;" src="../public/download (1).jpg" alt="">
+                        <span style="color: white;">fuck homsi</span>
+                        <span style="float: right; font-size: xx-large; color: white;" class="material-symbols-outlined">
+                            delete
+                            </span>
+                            <span style="float: right; font-size: xx-large; color: white;" class="material-symbols-outlined">
+                                edit
+                                </span>
+                    </div>
+                    <div style="background-color: black;" class="card-body">
+                        <img width="100%" height="100%" src="../public/download (1).jpg" alt="">
+                    </div>
+                    <div style="background-color: black;" class="card-footer">
+                        <span style="color: white;">
+                            Description : wooooooow
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
   
     <div id="my-status-content" class="content-section" style="display: none">
@@ -424,8 +457,7 @@
                         <p class="status approved">Approved</p>
                       </td>
                       <td>
-                        <% var eventID=parseInt(item.event_id); %>
-                        <%console.log("event Iddd" + eventID)%>
+                        <% var eventID=parseInt(itemTs.event_id); %>
                           <form action="/ToShareEvent?eventId=<%= eventID %>" method="POST">
                             <% var buttonId='button_' + itemTs.event_id; %>
                               <p><button id="<%= buttonId %>" class="approve-button" type="submit">Share</button></p>

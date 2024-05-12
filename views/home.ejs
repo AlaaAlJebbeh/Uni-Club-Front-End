@@ -26,302 +26,173 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
   </head>
   <body style="background-color: #dfecff">
-
-
     <% if (role === 'sks') { %>
-      <div class="container">
-        <div class="col-sm-12">
-          <button style=" float: right; width: 150px ; height: 50px; border-radius: 5px; margin-top: 20px; font-size: large; font-weight: bold; border-color: #000; color: #000; background-color: #193635;">
-    
-            <a style="text-decoration:none; font-weight: 300; color: #fff;" href="/createclub">Create Club</a>
-         
+    <div class="container">
+      <div class="col-sm-12">
+        <button
+          style="
+            float: right;
+            width: 150px;
+            height: 50px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: large;
+            font-weight: bold;
+            border-color: #000;
+            color: #000;
+            background-color: #193635;
+          "
+        >
+          <a
+            style="text-decoration: none; font-weight: 300; color: #fff"
+            href="/createclub"
+            >Create Club</a
+          >
         </button>
-        </div>
       </div>
-    
+    </div>
 
     <% } %>
 
     <div class="container">
       <div class="wrapper">
-          <i id="left" class="fa-solid fa-angle-left"></i>
-          <ul class="carousel">
-            <li class="card">
-              <div class="img">
-                  <div class="card">
-                      <div class="imgBx">
-                        <img src="img/1.avif" alt="" />
-                      </div>
-                      <div class="contentBx">
-                        <div class="content">
-                          <div class="statu-01">
-                            <p>active</p>
-                        </div>
-                          <h2>Club Name</h2>
-                          <br />
-                          <h2>Event Name</h2>
-                          <br />
-                          <h6>Date: <span>01.01.2024</span></h6>
-                          <h6>Time: <span>16:00</span></h6>
-                          <h6>Location: <span>A Block</span></h6>
-                          <h6>Language: <span>English</span></h6>
-                          <h6>Guest: <span>Dr...</span></h6>
-                          <h6>Capacity: <span>100</span></h6>
-                          <h6>Notes: <span>...</span></h6>
-                        </div>
-                        <div class="overlay">
-                          <h6>Description: <span>jxnjdnjdnjdsncjdnjvnjdsdn</span></h6>
-                      </div>
-                      </div>
+        <i id="left" class="fa-solid fa-angle-left"></i>
+        <ul class="carousel">
+          <% Events.forEach((event) => { %> <% const currentDate = new Date();
+          currentDate.setHours(0, 0, 0, 0); const eventDate = new
+          Date(event.date); eventDate.setHours(0, 0, 0, 0); if
+          (currentDate.getTime() < eventDate.getTime()) { %>
+          <li class="card">
+            <div class="img">
+              <div class="card">
+                <div class="imgBx">
+                  <img src="../public/<%= event.imageURL %>" alt="" />
+                </div>
+                <div class="contentBx">
+                  <div class="content">
+                    <% const currentDate = new Date(); currentDate.setHours(0,
+                    0, 0, 0); const eventDate = new Date(event.date);
+                    eventDate.setHours(0, 0, 0, 0); if (currentDate.getTime()
+                    === eventDate.getTime()) { %>
+                    <div class="statu-00">
+                      <p>Active</p>
                     </div>
-              </div>
-            </li>
-            <li class="card">
-              <div class="img">
-                  <div class="card">
-                      <div class="imgBx">
-                        <img src="img/2.webp" alt="" />
-                      </div>
-                      <div class="contentBx">
-                        <div class="content">
-                          <div class="statu-01">
-                            <p>active</p>
-                        </div>
-                          <h2>Club Name</h2>
-                          <br />
-                          <h2>Event Name</h2>
-                          <br />
-                          <h6>Date: <span>01.01.2024</span></h6>
-                          <h6>Time: <span>16:00</span></h6>
-                          <h6>Location: <span>A Block</span></h6>
-                          <h6>Language: <span>English</span></h6>
-                          <h6>Guest: <span>Dr...</span></h6>
-                          <h6>Capacity: <span>100</span></h6>
-                          <h6>Notes: <span>...</span></h6>
-                        </div>
-                        <div class="overlay">
-                          <h6>Description: <span>...</span></h6>
-                      </div>
-                      </div>
+                    <% } else if (currentDate.getTime()> eventDate.getTime()) {
+                    %>
+                    <div class="statu-01"><p>Finished</p></div>
+                    <% } else { %>
+                    <div class="statu-02"><p>Soon</p></div>
+                    <% } %>
+                    <h2><%= event.club_name %></h2>
+                    <br />
+                    <h2><%= event.event_name%></h2>
+                    <br />
+                    <h6>
+                      Date:
+                      <span><%= event.date.toString().substring(0, 11) %></span>
+                    </h6>
+                    <h6>Time: <span><%= event.time%></span></h6>
+                    <h6>Location: <span><%= event.location%></span></h6>
+                    <h6>Language: <span><%= event.language%></span></h6>
+                    <h6>Guest: <span><%= event.guest%></span></h6>
+                    <h6>Capacity: <span><%= event.capacity%></span></h6>
+                    <h6>Notes: <span><%= event.notes%></span></h6>
                   </div>
-              </div>
-            </li>
-            <li class="card">
-              <div class="img">
-                  <div class="card">
-                      <div class="imgBx">
-                        <img src="img/3.jpg" alt="" />
-                      </div>
-                      <div class="contentBx">
-                        <div class="content">
-                          <div class="statu-01">
-                            <p>active</p>
-                        </div>
-                          <h2>Club Name</h2>
-                          <br />
-                          <h2>Event Name</h2>
-                          <br />
-                          <h6>Date: <span>01.01.2024</span></h6>
-                          <h6>Time: <span>16:00</span></h6>
-                          <h6>Location: <span>A Block</span></h6>
-                          <h6>Language: <span>English</span></h6>
-                          <h6>Guest: <span>Dr...</span></h6>
-                          <h6>Capacity: <span>100</span></h6>
-                          <h6>Notes: <span>...</span></h6>
-                        </div>
-                        <div class="overlay">
-                          <h6>Description: <span>...</span></h6>
-                      </div>
-                      </div>
+                  <div class="overlay">
+                    <h6>Description: <span><%= event.description%></span></h6>
                   </div>
+                </div>
               </div>
-            </li>
-            <li class="card">
-              <div class="img">
-                  <div class="card">
-                      <div class="imgBx">
-                        <img src="img/4.webp" alt="" />
-                      </div>
-                      <div class="contentBx">
-                        <div class="content">
-                          <div class="statu-01">
-                            <p>active</p>
-                        </div>
-                          <h2>Club Name</h2>
-                          <br />
-                          <h2>Event Name</h2>
-                          <br />
-                          <h6>Date: <span>01.01.2024</span></h6>
-                          <h6>Time: <span>16:00</span></h6>
-                          <h6>Location: <span>A Block</span></h6>
-                          <h6>Language: <span>English</span></h6>
-                          <h6>Guest: <span>Dr...</span></h6>
-                          <h6>Capacity: <span>100</span></h6>
-                          <h6>Notes: <span>...</span></h6>
-                        </div>
-                        <div class="overlay">
-                          <h6>Description: <span>...</span></h6>
-                      </div>
-                      </div>
-                    </div>
+            </div>
+          </li>
+          <% }%> <% }); %>
+        </ul>
+        <i id="right" class="fa-solid fa-angle-right"></i>
+      </div>
+
+      <div class="container-fluid" style="padding: 25px; border-style: solid">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-10">
+              <h2 style="margin-left: 150px; color: #000">Up Coming Events</h2>
+            </div>
+            <div class="col-sm-2">
+              <div class="dropdown">
+                <span
+                  style="margin-left: 100px; color: #000; font-size: xxx-large"
+                  type="button"
+                  class="material-symbols-outlined"
+                  data-bs-toggle="dropdown"
+                >
+                  filter_alt
+                </span>
+                <ul class="dropdown-menu">
+                  <li class="dropdown-item">
+                    <a href="#">comic</a>
+                  </li>
+                  <li class="dropdown-item">
+                    <a href="#">romantic</a>
+                  </li>
+                  <li class="dropdown-item">
+                    <a href="#">action</a>
+                  </li>
+                  <li class="dropdown-item">
+                    <a href="#">nothing from above</a>
+                  </li>
+                </ul>
               </div>
-            </li>
-          </ul>
-          <i id="right" class="fa-solid fa-angle-right"></i>
+            </div>
+          </div>
         </div>
-
-        <div class="container-fluid" style=" padding: 25px; border-style: solid;">
-          <div class="col-sm-12">
-              <div class="row">
-                  <div class="col-sm-10">
-                      <h2 style="margin-left: 150px; color: #000;">Up Coming Events</h2>
-                  </div>
-                  <div class="col-sm-2">
-                      <div class="dropdown">
-                          <span style="margin-left: 100px; color: #000; font-size: xxx-large;" type="button" class="material-symbols-outlined" data-bs-toggle="dropdown"> filter_alt </span>
-                          <ul class="dropdown-menu">
-                              <li class="dropdown-item">
-                                  <a href="#">comic</a>
-                              </li>
-                              <li class="dropdown-item">
-                                  <a href="#">romantic</a>
-                              </li>
-                              <li class="dropdown-item">
-                                  <a href="#">action</a>
-                              </li>
-                              <li class="dropdown-item">
-                                  <a href="#">nothing from above</a>
-                              </li>
-                          </ul>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-        
-
-      <div class="col-sm-12">
-          <div class="row">
-              <div class="col-sm-6">
-                  <div class="card">
-                  <div class="imgBx">
-                    <img src="img/1.avif" alt="" />
-                  </div>
-                  <div class="contentBx">
-                    <div class="content">
-                      <div class="statu-00">
-                        <p>active</p>
-                    </div>
-                      <h2>Club Name</h2>
-                      <br />
-                      <h2>Event Name</h2>
-                      <br />
-                      <h6>Date: <span>01.01.2024</span></h6>
-                      <h6>Time: <span>16:00</span></h6>
-                      <h6>Location: <span>A Block</span></h6>
-                      <h6>Language: <span>English</span></h6>
-                      <h6>Guest: <span>Dr...</span></h6>
-                      <h6>Capacity: <span>100</span></h6>
-                      <h6>Notes: <span>...</span></h6>
-                    </div>
-                    <div class="overlay">
-                      <h6>Description: <span>...</span></h6>
-                  </div>
-                  </div>
-                </div></div>
-              <div class="col-sm-6">
-                  <div class="card">
-                      <div class="imgBx">
-                        <img src="img/2.webp" alt="" />
-                      </div>
-                      <div class="contentBx">
-                        <div class="content">
-                          <div class="statu-00">
-                            <p>active</p>
-                        </div>
-                          <h2>Club Name</h2>
-                          <br />
-                          <h2>Event Name</h2>
-                          <br />
-                          <h6>Date: <span>01.01.2024</span></h6>
-                          <h6>Time: <span>16:00</span></h6>
-                          <h6>Location: <span>A Block</span></h6>
-                          <h6>Language: <span>English</span></h6>
-                          <h6>Guest: <span>Dr...</span></h6>
-                          <h6>Capacity: <span>100</span></h6>
-                          <h6>Notes: <span>...</span></h6>
-                        </div>
-                        <div class="overlay">
-                          <h6>Description: <span>...</span></h6>
-                      </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
       </div>
 
       <div class="col-sm-12">
-          <div class="row">
-              <div class="col-sm-6">
-                  <div class="card">
-                      <div class="imgBx">
-                        <img src="img/3.jpg" alt="" />
-                      </div>
-                      <div class="contentBx">
-                        <div class="content">
-                          <div class="statu-00">
-                            <p>active</p>
-                        </div>
-                          <h2>Club Name</h2>
-                          <br />
-                          <h2>Event Name</h2>
-                          <br />
-                          <h6>Date: <span>01.01.2024</span></h6>
-                          <h6>Time: <span>16:00</span></h6>
-                          <h6>Location: <span>A Block</span></h6>
-                          <h6>Language: <span>English</span></h6>
-                          <h6>Guest: <span>Dr...</span></h6>
-                          <h6>Capacity: <span>100</span></h6>
-                          <h6>Notes: <span>...</span></h6>
-                        </div>
-                        <div class="overlay">
-                          <h6>Description: <span>...</span></h6>
-                      </div>
-                      </div>
-                    </div>
+        <div class="row">
+          <% Events.forEach((event) => { %>
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="imgBx">
+                <img src="../public/<%= event.imageURL %>" alt="" />
               </div>
-              <div class="col-sm-6">
-                  <div class="card">
-                      <div class="imgBx">
-                        <img src="img/4.webp" alt="" />
-                      </div>
-                      <div class="contentBx">
-                        <div class="content">
-                          <div class="statu-00">
-                            <p>active</p>
-                        </div>
-                          <h2>Club Name</h2>
-                          <br />
-                          <h2>Event Name</h2>
-                          <br />
-                          <h6>Date: <span>01.01.2024</span></h6>
-                          <h6>Time: <span>16:00</span></h6>
-                          <h6>Location: <span>A Block</span></h6>
-                          <h6>Language: <span>English</span></h6>
-                          <h6>Guest: <span>Dr...</span></h6>
-                          <h6>Capacity: <span>100</span></h6>
-                          <h6>Notes: <span>...</span></h6>
-                        </div>
-                        <div class="overlay">
-                          <h6>Description: <span>...</span></h6>
-                      </div>
-                      </div>
-                    </div>
+              <div class="contentBx">
+                <div class="content">
+                  <% const currentDate = new Date(); currentDate.setHours(0, 0,
+                  0, 0); const eventDate = new Date(event.date);
+                  eventDate.setHours(0, 0, 0, 0); if (currentDate.getTime() ===
+                  eventDate.getTime()) { %>
+                  <div class="statu-00">
+                    <p>Active</p>
+                  </div>
+                  <% } else if (currentDate.getTime()> eventDate.getTime()) { %>
+                  <div class="statu-01"><p>Finished</p></div>
+                  <% } else { %>
+                  <div class="statu-02"><p>Soon</p></div>
+                  <% } %>
+                  <h2><%= event.club_name %></h2>
+                  <br />
+                  <h2><%= event.event_name%></h2>
+                  <br />
+                  <h6>
+                    Date:
+                    <span><%= event.date.toString().substring(0, 11) %></span>
+                  </h6>
+                  <h6>Time: <span><%= event.time%></span></h6>
+                  <h6>Location: <span><%= event.location%></span></h6>
+                  <h6>Language: <span><%= event.language%></span></h6>
+                  <h6>Guest: <span><%= event.guest%></span></h6>
+                  <h6>Capacity: <span><%= event.capacity%></span></h6>
+                  <h6>Notes: <span><%= event.notes%></span></h6>
+                </div>
+                <div class="overlay">
+                  <h6>Description: <span><%= event.description %></span></h6>
+                </div>
               </div>
+            </div>
           </div>
+          <% }); %>
+        </div>
       </div>
-  
-  </div>
+    </div>
   </body>
   <footer><%- include("partials/footer.ejs") %></footer>
 </html>

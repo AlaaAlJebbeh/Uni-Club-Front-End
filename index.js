@@ -59,15 +59,27 @@ app.use(session({
 app.use(fileUpload());
 
 app.get('/', (req, res) => {
-    if (req.session.loggedIn) {
-        if (req.session.role === 'club') {
-            res.render('home', { loggedIn: true, role: "club", email: req.session.email });
-        } else if (req.session.role === 'sks') {
-            res.render('home', { loggedIn: true, role: "sks", email: req.session.email });
+
+    connection.query("select * from event", (err, Events) => {
+
+        if(err){
+
+            console.log("Error fetching events for homepage: " + err.message);
+            return res.status(404).send("Internal Server Error");
         }
-    } else {
-        res.render('home', { loggedIn: false, role: null, email: null });
-    }
+        if (req.session.loggedIn) {
+            if (req.session.role === 'club') {
+                res.render('home', { loggedIn: true, role: "club", email: req.session.email, Events });
+            } else if (req.session.role === 'sks') {
+                res.render('home', { loggedIn: true, role: "sks", email: req.session.email, Events });
+            }
+        } else {
+            res.render('home', { loggedIn: false, role: null, email: null, Events });
+        }
+
+    });
+
+  
 });
 
 app.post('/login', (req, res) => {
@@ -101,8 +113,11 @@ app.get('/logout', (req, res) => {
         if (err) {
             console.log(err);
         } else {
+            req.session.loggedIn = false;
+            req.session.role = null;
+            req.session.email = null;
             // Redirect to the login page
-            res.render('home', { loggedIn: false, role: null, email: null });
+            res.redirect("/");
         }
     });
 });
@@ -563,9 +578,9 @@ app.post("/createEvent", async (req, res) => {
             const clubId = clubResult[0].club_id;
 
             connection.query(
-                `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName],
+                `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl, club_name)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName, clubName],
                 (error, results, fields) => {
                     if (error) {
                         console.error('Error inserting event into database:', error);

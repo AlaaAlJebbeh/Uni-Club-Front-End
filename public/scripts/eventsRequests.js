@@ -59,15 +59,44 @@ function approveEvent(eventId) {
 }
 
 
-$(document).ready(function() {
-    // Add click event listener to all buttons with the class 'post-button'
-    $('.reject-button').click(function() {
-        // Retrieve the post ID from the button's ID
-        var eventId = parseInt($(this).attr('id').split('_')[1]);
-        console.log('Button clicked for eventToShareId ID:', eventId);
-        // Perform further actions if needed
+
+function reject(postId, requestId) {
+    // Store PostID and RequestID in a global variable accessible by the sendRejectionReason function
+    window.selectedPostId = postId;
+    window.selectedRequestId = requestId;
+    showPopup2();
+  }
+
+  function sendRejectionReason() {
+    var rejectionReason = document.getElementById("rejectionReason").value;
+    fetch('/rejectMessage', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ postId: window.selectedPostId, rejectionReason: rejectionReason })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log("Rejection reason sent successfully");
+            closePopup2(); // Close the popup after sending rejection reason
+        } else {
+            console.error("Failed to send rejection reason", response.status);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
     });
-});
+  }
 
+  // Function to display the popup
+  function showPopup2() {
+    var popup = document.getElementById("reject");
+    popup.style.display = "block";
+  }
 
-
+  // Function to close the popup
+  function closePopup2() {
+    var popup = document.getElementById("reject");
+    popup.style.display = "none";
+  }

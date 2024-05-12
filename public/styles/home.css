@@ -197,13 +197,13 @@ li a{
 }
 
 .container .card .contentBx h2{
-    font-size: 30px;
+    font-size: 20px;
     color: #000;
     z-index: 1;
 }
 
 .container .card .contentBx h6{
-    font-size: 25px;
+    font-size: 20px;
     color: #000;
     margin-top: 10px;
     font-weight: bold;
@@ -213,13 +213,13 @@ li a{
 {
     margin-top: 10px;
     color: #fff;
-    font-size: 17.5px;
+    font-size: 12.5px;
 }
 
 .container .card .contentBx span
 {
     margin-top: 10px;
-    font-size: 20px;
+    font-size: 15px;
     color: #000;
     font-weight: normal;
 }
@@ -271,11 +271,11 @@ li a{
   align-items: center;
   padding: 20px 40px 20px 80px;
   width: 100%;
-  height: 95%;
-  top: 10;
+  height: 85%;
+  top: 30;
   right: 0;
   left: 0;
-  bottom: 5;
+  bottom: -30px;
   transition: 0.3s;
   transform: scale(0);
 }
@@ -287,17 +287,43 @@ li a{
 .statu-00{
   position: absolute;
   bottom: 340px;
-  left: 295px;
+  left: 275px;
   background-color: green;
   border-radius: 50%;
   z-index: 1;
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .statu-01{
   position: absolute;
   bottom: 340px;
   left: 275px;
-  background-color: green;
+  background-color: red;
   border-radius: 50%;
   z-index: 1;
+  width: 55px;
+  height: 55px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.statu-02{
+  position: absolute;
+  bottom: 340px;
+  left: 275px;
+  background-color: orange;
+  border-radius: 50%;
+  z-index: 1;
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

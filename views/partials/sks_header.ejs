@@ -51,6 +51,8 @@
 
       <div class="icons">
         <div class="icons" style="display: flex">
+          <% if (loggedIn) { %>
+          <!-- If user is logged in, show logout button -->
           <form action="/logout" method="GET">
             <button
               type="submit"
@@ -59,7 +61,13 @@
               <i class="fa fa-sign-out" id="log-out"></i>
             </button>
           </form>
+          <% } else { %>
+          <!-- If user is not logged in, show login button -->
+          <i class="fas fa-user" id="log-btn"></i>
+          <% } %>
         </div>
+
+    
       </div>
 
       <div class="mainContainer">
@@ -112,7 +120,7 @@
                   <p>
                     Welcome to your gateway to enjoyable learning experiences!
                   </p>
-                  <button class="hidden" id="register">Learn more</button>
+                  <a href="/" id="register" class="buttonHome">Home</a>
                 </div>
               </div>
             </div>
@@ -126,5 +134,7 @@
         <div></div>
       </label>
     </header>
+    <script src="../public/scripts/logIn.js"></script>
+
   </body>
 </html>

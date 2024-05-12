@@ -47,7 +47,7 @@
         <div class="icons" style="display: flex">
           <% if (loggedIn) { %>
           <!-- If user is logged in, show logout button -->
-          <form action="/logout" method="GET" style="display: flex">
+          <form action="/logout" method="GET">
             <button
               type="submit"
               style="background-color: transparent; border: none"
@@ -61,6 +61,7 @@
           <% } %>
         </div>
 
+    
       </div>
 
       <div class="mainContainer">
@@ -113,7 +114,7 @@
                   <p>
                     Welcome to your gateway to enjoyable learning experiences!
                   </p>
-                  <button class="hidden" id="register">Learn more</button>
+                  <a href="/" id="register" class="buttonHome">Home</a>
                 </div>
               </div>
             </div>
@@ -127,5 +128,7 @@
         <div></div>
       </label>
     </header>
+    <script src="../public/scripts/logIn.js"></script>
+
   </body>
 </html>

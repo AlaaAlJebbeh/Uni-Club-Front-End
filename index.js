@@ -108,14 +108,14 @@ app.post('/login', (req, res) => {
 
 // Add a logout route
 app.get('/logout', (req, res) => {
+    req.session.loggedIn = false;
+    req.session.role = null;
+    req.session.email = null;
     // Clear the session
     req.session.destroy(err => {
         if (err) {
             console.log(err);
         } else {
-            req.session.loggedIn = false;
-            req.session.role = null;
-            req.session.email = null;
             // Redirect to the login page
             res.redirect("/");
         }

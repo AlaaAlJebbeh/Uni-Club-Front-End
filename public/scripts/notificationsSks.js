@@ -13,7 +13,7 @@ unReadMessages.forEach((message) => {
 
         unReadMessages.forEach((button) => {
             button.addEventListener('click', () => {
-                const form = document.getElementById('readNotificationForm');
+                const form = document.getElementById('readNotificationFormNewEvent');
                 if (form) {
                     form.submit();
                 }
@@ -28,7 +28,7 @@ markAll.addEventListener('click', () => {
     unReadMessages.forEach((message) => {
         message.classList.remove('unread');
     });
-    const newUnreadMessages = document.querySelectorAll('.unread, .unread2');
+    const newUnreadMessages = document.querySelectorAll('.unread');
     unReadMessagesCount.innerHTML = newUnreadMessages.length;
 
     

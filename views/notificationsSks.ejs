@@ -18,26 +18,30 @@
                 <p id="mark-as-read">Mark as All Read</p>
             </header>
             <main>
-                <% resultNotiNewEvent.forEach((itemNE, index) => { %>
-                    <%console.log("the images from ejs")%>
-                    <%console.log(images)%>
-
+                    <% resultNotiNewEvent.forEach((itemNE, index) => { %>
                         <% var clubName = itemNE.club_name; %>
                         <% var notificationType = itemNE.notificationType%>
-                        <% var notifID = parseInt(itemNE.notify_id); %>
+                        <% var notify_id = parseInt(itemNE.notify_id); %>
                         <% var divId='button_' + itemNE.notify_id; %>
-
+    
                         <%if(itemNE.status_notification == 0){%>
-                            <form id="readNotificationFormNewEvent" action="/changeNotificationStatusNewEvent?notifID=<%= notifID%>" method="POST">
+                            <form id="readNotificationFormNewEvent" action="/changeNotificationStatusSks?notify_id=<%= notify_id%>" method="POST">
                                 <div class="notificationCard unread read-notification" id="<%= divId %>">
-                                    <img src="../public/images/<%=images[index]%>"/>
-                                    <div class="description">
-                                        <p>Your Have a new Create Event Request From "<%=clubName%>"</p>       
+                                    <img src="../public/images/<%=itemNE.clubImageUrl%>"/>
+                                     <div class="description">
+                                        <p>Your Have <%=itemNE.notificationType%> From "<%=clubName%>"</p>       
                                     </div>
                                 </div>
                             </form>
-                        <%}%>
-                <%})%> 
+                        <%}else if(itemNE.status_notification == 1){%>
+                            <div class="notificationCard">
+                                <img src="../public/images/<%=itemNE.clubImageUrl%>"/>
+                                 <div class="description">
+                                    <p>Your Have <%=itemNE.notificationType%> From "<%=clubName%>"</p>       
+                                </div>
+                            </div>
+                            <%}%>
+                    <%})%> 
                 
                         
                

@@ -314,7 +314,12 @@
                       <span class="event-guest" contenteditable="true" id="eventGuest_<%= item.event_id %>"><%= item.guest_name %></span>
                       <input type="hidden" name="eventGuest" value="<%= item.guest_name %>" id="eventGuestInput_<%= item.event_id %>" />
                   </div>
-              
+                  <!-- Category -->
+                  <div class="card-details">
+                      <span>Category:</span>
+                      <span class="event-category" contenteditable="true" id="eventCategory_<%= item.event_id %>"><%= item.category %></span>
+                      <input type="hidden" name="eventCategory" value="<%= item.category %>" id="eventCategoryInput_<%= item.event_id %>" />
+                  </div>
                   <!-- Description -->
                   <div class="card-details">
                       <span>Description:</span>
@@ -395,6 +400,9 @@
 
             const clubImage = document.getElementById(`clubImage-${eventID}`).getAttribute('src');
             document.getElementById(`clubimageInput_${eventID}`).value = clubImage;
+
+            const eventCategory = document.getElementById(`eventCategory_${eventID}`).innerText;
+            document.getElementById(`eventCategoryInput_${eventID}`).value = eventCategory;
 
               // Submit the form
               form.submit();

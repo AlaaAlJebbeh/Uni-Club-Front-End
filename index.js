@@ -356,8 +356,6 @@ app.get("/socialmedia/:link/:link2", (req, res) => {
 
 app.get("/eventRequests", (req, res) => {
 
-
-
     connection.query(`SELECT * FROM tempevents`, (err, results) => {
         if (err) {
             console.error("Error fetching temp events:", err);
@@ -595,19 +593,15 @@ app.post("/createEvent", async (req, res) => {
             const clubId = clubResult[0].club_id;
 
             connection.query(
-                `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl, club_name)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName, clubName],
+                `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl, club_name, request_type, status)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName, clubName, "New Event", 0],
                 (error, results, fields) => {
                     if (error) {
                         console.error('Error inserting event into database:', error);
                         return res.status(500).send('Failed to insert');
                     }
-                    else{
-                        connection.query("INSERT INTO notifications_sks(notificationType, club_name, club_id,   )")
-                        res.redirect("/myclubpage");
-
-                    }
+                    res.redirect("/myclubpage");
                     
                 });
 
@@ -631,6 +625,7 @@ app.post('/updateEvent', (req, res) => {
     const eventDescription = req.body.eventDescription;
     const eventCapacity    = parseInt(req.body.eventCapacity);
     const eventNotes       = req.body.eventNotes;
+    const eventCategory    = req.body.eventCategory;
     let imgName;
     const userID           = req.session.userID;
     const clubImage        =  req.body.clubImage;
@@ -644,11 +639,11 @@ app.post('/updateEvent', (req, res) => {
          imgName = clubImage;
     }
 
-    const queryString = `INSERT INTO tempeventedits (event_id, club_name, event_name, date, time, location, language, guest_name, description, capacity, notes, imageUrl, clm_id, status)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const queryString = `INSERT INTO tempeventedits (event_id, club_name, event_name, date, time, location, language, guest_name, description, capacity, notes, imageUrl, clm_id, status, request_type, category)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
 
-    connection.query(queryString, [eventID, clubName, eventName, eventDate, eventTime, eventLocation, eventLanguage, eventGuest, eventDescription, eventCapacity, eventNotes, imgName, userID, 0 ], (error, results, fields) => {
+    connection.query(queryString, [eventID, clubName, eventName, eventDate, eventTime, eventLocation, eventLanguage, eventGuest, eventDescription, eventCapacity, eventNotes, imgName, userID, 0, "Event Edits", eventCategory], (error, results, fields) => {
         if (error) {
             console.error('Error inserting into tempeventedits table:', error);
             return res.status(404).send("Internal Server Error");

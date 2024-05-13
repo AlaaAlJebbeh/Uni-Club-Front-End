@@ -596,15 +596,24 @@ app.post("/createEvent", async (req, res) => {
                 `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl, club_name, request_type, status)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName, clubName, "New Event", 0],
+                `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl, club_name, request_type, status)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName, clubName, "New Event", 0],
                 (error, results, fields) => {
                     if (error) {
                         console.error('Error inserting event into database:', error);
                         return res.status(500).send('Failed to insert');
                     }
-                    res.redirect("/myclubpage");
-                    
-                });
-
+                    else{
+                        connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)" , [notificationType, clubName, clubId], (err) =>{
+                            if(err){
+                                console.log("error inseting to notifications: " + err.message);
+                            } else{
+                                res.redirect("/myclubpage");
+                            }
+                        });
+                    }
+            });
         });
 
     });
@@ -648,10 +657,17 @@ app.post('/updateEvent', (req, res) => {
             console.error('Error inserting into tempeventedits table:', error);
             return res.status(404).send("Internal Server Error");
         }
-            // Send back a response indicating success or failure
-            res.redirect('/myclubpage');
-            console.log("Data inserted Successfully");
+        const notificationType = "Edit Event Request";
+        connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)" , [notificationType, clubName, req.session.clubID], (err) =>{
+            if(err){
+                console.log("error inseting to notifications: " + err.message);
+            } else{
+                res.redirect("/myclubpage");
+            }
         });
+            // Send back a response indicating success or failure
+            
+    });
 
 });
 
@@ -705,8 +721,16 @@ app.post("/createPost", async (req, res) => {
                             console.error('Error inserting event into database:', error);
                             return res.status(500).send('Failed to insert');
                         }
-                        res.redirect("/myclubpage");
-                    });
+                        const notificationType = "Create New Post";
+                        connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)" , [notificationType, clubName, clubId], (err) =>{
+                            if(err){
+                                console.log("error inserting to notification");
+                            } else{
+                                res.redirect("/myclubpage");
+                            }
+                        
+                        });
+                });
 
             });
 
@@ -1234,7 +1258,7 @@ app.post('/updateProfile', (req, res) => {
 });
 
 
-app.get("/notifications", (req, res) => {
+app.get("/notificationsClub", (req, res) => {
     const email = req.session.email;
     connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
         if (err) {
@@ -1269,7 +1293,6 @@ app.get("/notifications", (req, res) => {
 });
 
 app.post("/changeNotificationStatusEvents", (req, res) => {
-    console.log("form has been sent");
     const email = req.session.email;
     const eventID = req.query.eventId;
 
@@ -1569,6 +1592,39 @@ app.post('/singleclubpage', (req, res) => {
         });
     });
 });
+
+app.get("/notificationsSks", (req, res) =>{
+    const email = req.session.email;
+    
+    connection.query("SELECT n.notificationType, n.club_name, n.notify_id, n.club_id, n.status_notification,c.clubImageUrl FROM notifications_sks n JOIN club c ON n.club_id = c.club_id", (err, resultNotiNewEvent)=>{
+        if(err){
+            console.log("error with join");
+        } else{
+            res.render("notificationsSks.ejs", { loggedIn: true, role: "sks", email: email, resultNotiNewEvent});
+        }
+    });
+});
+
+app.post("/changeNotificationStatusSks", (req, res) =>{
+    console.log("Entered the notificatio edit sks");
+    const email = req.session.email;
+    const notify_id = req.query.notify_id;
+
+    connection.query("UPDATE notifications_sks SET status_notification = 1 WHERE notify_id = ?", [notify_id], (err) => {
+        if(err){
+            console.log("Error notification updated" + err.message);
+        }else{
+            connection.query("SELECT n.notificationType, n.club_name, n.notify_id, n.club_id, n.status_notification,c.clubImageUrl FROM notifications_sks n JOIN club c ON n.club_id = c.club_id", (err, resultNotiNewEvent)=>{
+                if(err){
+                    console.log("error with join");
+                } else{
+                    res.render("notificationsSks.ejs", { loggedIn: true, role: "sks", email: email, resultNotiNewEvent});
+                }
+            });
+        }  
+    });
+});
+
 
 //listining to the port 
 app.listen(port, () => {

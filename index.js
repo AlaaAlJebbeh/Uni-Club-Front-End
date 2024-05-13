@@ -457,6 +457,22 @@ app.get("/popupContent", (req, res) => {
 
 });
 
+app.get("/album", (req, res) => {
+    const event_id = req.query.event_id;
+   
+    console.log(event_id);
+    // Fetch popup content based on button ID from the database or any other source
+    console.log("this is the button id" + event_id);
+    connection.query('SELECT * FROM event_album where event_id = ?', [event_id], (err, results) => {
+        if (err) {
+            console.log('didnt get', err);
+        }
+        console.log({ results });
+        res.render('album.ejs', { results });
+    });
+
+});
+
 
 app.post("/approveEvent", (req, res) => {
     const eventId = req.query.eventId; // Retrieve eventId from the query string

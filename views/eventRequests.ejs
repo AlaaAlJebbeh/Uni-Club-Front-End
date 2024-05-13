@@ -100,7 +100,9 @@
                             <%= item.request_type%>
                             </td>
                         <td>
-                            <button class="approve-button" onclick="approveEvent('<%= item.event_id %>')" >Approve</button> 
+                            <form style="all:initial" action="/approveEventedit?eventID=<%=item.event_id%>" method="POST">
+                            <button class="approve-button">Approve</button>
+                            </form> 
                             <button  class="reject-button" onclick="reject('<%= item.event_id %>')">Reject</button>
                             </td>   
                             <td>    

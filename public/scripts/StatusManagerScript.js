@@ -230,7 +230,7 @@ function approvePost(PostId, RequestId) {
             if (statusElement) {
                 statusElement.textContent = "Approved";
             }
-            console.log('Event approved successfully!');
+            console.log('post approved successfully!');
             // Optionally, update the UI to reflect the approval
         } else {
             console.error('Failed to approve post:', response.statusText);

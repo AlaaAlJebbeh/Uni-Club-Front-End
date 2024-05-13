@@ -114,30 +114,25 @@
                         <input type="text" id="rejectionReason" name="rejectionReason" placeholder="Enter rejection reason...">
                         <button class="send-button" onclick="sendRejectionReason()">Send</button>
                         <button id="closeButton2" onclick="closePopup2()">Close</button>
-                      </div>
-                
-                  
-                    
-                   
-                            
+                      </div>      
                 </tbody>
             </table>
         </section>
        
         <section>
-            <div id="popup" class="popup-card" style="display: none;"></div>
+            <div id="popupedit" class="popup-card" style="display: none;"></div>
         </section>
         
 
         <script>
             // Function to show the popup card
             function showPopup() {
-                document.getElementById("popup").style.display = "block"    
+                document.getElementById("popupedit").style.display = "block"      
             }
         
             // Function to close the popup card
             function closePopup() {
-                document.getElementById("popup").style.display = "none";
+                document.getElementById("popupedit").style.display = "none";
             }
         
             // Attach click event listener to the button

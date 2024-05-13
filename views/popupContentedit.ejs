@@ -4,95 +4,75 @@
 <div class="popup-content">
   <div class="mainContainer">
     <div class="leftSide">
+      <h1 style="text-align: center; text-decoration: underline">old Event</h1>
       <% oldEvent.forEach((event) => { %>
-      <div class="card">
-        <div class="imgBx">
-          <img src="../public/images/<%= event.imageURL %>" alt="" />
-        </div>
-        <div class="contentBx">
-          <div class="content">
-            <% const currentDate = new Date(); currentDate.setHours(0, 0, 0, 0);
-            const eventDate = new Date(event.date); eventDate.setHours(0, 0, 0,
-            0); if (currentDate.getTime() === eventDate.getTime()) { %>
-            <div class="statu-00">
-              <p>Active</p>
-            </div>
-            <% } else if (currentDate.getTime()> eventDate.getTime()) { %>
-            <div class="statu-01"><p>Finished</p></div>
-            <% } else { %>
-            <div class="statu-02"><p>Soon</p></div>
-            <% } %>
-            <h2><%= event.club_name %></h2>
-            <br />
-            <h2 class="nameE"><%= event.event_name%></h2>
-            <br />
-            <h6>
-              Date:
-              <span><%= event.date.toString().substring(0, 11) %></span>
-            </h6>
-            <h6>Time: <span><%= event.time%></span></h6>
-            <h6>Location: <span><%= event.location%></span></h6>
-            <h6>Language: <span><%= event.language%></span></h6>
-            <h6>Guest: <span><%= event.guest_name%></span></h6>
-            <h6>
-              <div class="category">
-                Category:
-                <span id="categorySpan"><%= event.category %></span>
-              </div>
-            </h6>
-            <h6>Capacity: <span><%= event.capacity%></span></h6>
-            <h6>Notes: <span><%= event.notes%></span></h6>
+      <div class="imgBx">
+        <img src="../public/images/<%= event.imageURL %>" alt="" />
+      </div>
+      <div class="contentBx">
+        <div class="content">
+          <% const currentDate = new Date(); currentDate.setHours(0, 0, 0, 0);
+          const eventDate = new Date(event.date); eventDate.setHours(0, 0, 0,
+          0); if (currentDate.getTime() === eventDate.getTime()) { %>
+          <div class="statu-00">
+            <p>Active</p>
           </div>
-          <div class="overlay">
-            <h6>Description: <span><%= event.description %></span></h6>
-          </div>
+          <% } else if (currentDate.getTime()> eventDate.getTime()) { %>
+          <div class="statu-01"><p>Finished</p></div>
+          <% } else { %>
+          <div class="statu-02"><p>Soon</p></div>
+          <% } %>
+          <h2><%= event.club_name %></h2>
+          <h2 class="nameE"><%= event.event_name%></h2>
+          <h2>
+            Date:<span><%= event.date.toString().substring(0, 11) %></span>
+          </h2>
+          <h2>Time: <span><%= event.time%></span></h2>
+          <h2>Location: <span><%= event.location%></span></h2>
+          <h2>Language: <span><%= event.language%></span></h2>
+          <h2>Guest: <span><%= event.guest_name%></span></h2>
+          <h2>Category: <span><%= event.category %></span></h2>
+          <h2>Capacity: <span><%= event.capacity%></span></h2>
+          <h2>Notes: <span><%= event.notes%></span></h2>
+          <h2>Description: <span><%= event.description %></span></h2>
         </div>
       </div>
       <% }); %>
     </div>
+    <div class="vl"></div>
     <div class="rightSide">
+      <h1 style="text-align: center; text-decoration: underline">New Event</h1>
       <% newEvent.forEach((event) => { %>
-      <div class="card">
-        <div class="imgBx">
-          <img src="../public/images/<%= event.imageURL %>" alt="" />
-        </div>
-        <div class="contentBx">
-          <div class="content">
-            <% const currentDate = new Date(); currentDate.setHours(0, 0, 0, 0);
-            const eventDate = new Date(event.date); eventDate.setHours(0, 0, 0,
-            0); if (currentDate.getTime() === eventDate.getTime()) { %>
-            <div class="statu-00">
-              <p>Active</p>
-            </div>
-            <% } else if (currentDate.getTime()> eventDate.getTime()) { %>
-            <div class="statu-01"><p>Finished</p></div>
-            <% } else { %>
-            <div class="statu-02"><p>Soon</p></div>
-            <% } %>
-            <h2><%= event.club_name %></h2>
-            <br />
-            <h2 class="nameE"><%= event.event_name%></h2>
-            <br />
-            <h6>
-              Date:
-              <span><%= event.date.toString().substring(0, 11) %></span>
-            </h6>
-            <h6>Time: <span><%= event.time%></span></h6>
-            <h6>Location: <span><%= event.location%></span></h6>
-            <h6>Language: <span><%= event.language%></span></h6>
-            <h6>Guest: <span><%= event.guest_name%></span></h6>
-            <h6>
-              <div class="category">
-                Category:
-                <span id="categorySpan"><%= event.category %></span>
-              </div>
-            </h6>
-            <h6>Capacity: <span><%= event.capacity%></span></h6>
-            <h6>Notes: <span><%= event.notes%></span></h6>
+      <div class="imgBx">
+        <img src="../public/images/<%= event.imageUrl %>" alt="" />
+      </div>
+      <div class="contentBx">
+        <div class="content">
+          <% const currentDate = new Date(); currentDate.setHours(0, 0, 0, 0);
+          const eventDate = new Date(event.date); eventDate.setHours(0, 0, 0,
+          0); if (currentDate.getTime() === eventDate.getTime()) { %>
+          <div class="statu-00">
+            <p>Active</p>
           </div>
-          <div class="overlay">
-            <h6>Description: <span><%= event.description %></span></h6>
-          </div>
+          <% } else if (currentDate.getTime()> eventDate.getTime()) { %>
+          <div class="statu-01"><p>Finished</p></div>
+          <% } else { %>
+          <div class="statu-02"><p>Soon</p></div>
+          <% } %>
+          <h2 <% if(event.club_name !== oldEvent[0].club_name) {%> style = "background-color: yellow" <%}%>><%= event.club_name %></h2>
+          
+          <h2 <% if(event.event_name !== oldEvent[0].event_name) {%> style = "background-color: yellow" <%}%>><%= event.event_name%></h2>
+          <h2 <% if(event.date !== oldEvent[0].date) {%> style = "background-color: yellow" <%}%>>
+            Date:<span><%= event.date.toString().substring(0, 11) %></span>
+          </h2>
+          <h2 <% if(event.time !== oldEvent[0].time) {%> style = "background-color: yellow" <%}%>>Time: <span><%= event.time%></span></h2>
+          <h2 <% if(event.location !== oldEvent[0].location) {%> style = "background-color: yellow" <%}%>>Location: <span><%= event.location%></span></h2>
+          <h2 <% if(event.language !== oldEvent[0].language) {%> style = "background-color: yellow" <%}%>>Language: <span><%= event.language%></span></h2>
+          <h2 <% if(event.guest_name !== oldEvent[0].guest_name) {%> style = "background-color: yellow" <%}%>>Guest: <span><%= event.guest_name%></span></h2>
+          <h2 <% if(event.category !== oldEvent[0].category) {%> style = "background-color: yellow" <%}%>>Category: <span><%= event.category %></span></h2>
+          <h2 <% if(event.capacity !== oldEvent[0].capacity) {%> style = "background-color: yellow" <%}%>>Capacity: <span><%= event.capacity%></span></h2>
+          <h2 <% if(event.notes !== oldEvent[0].notes) {%> style = "background-color: yellow" <%}%>>Notes: <span><%= event.notes%></span></h2>
+          <h2 <% if(event.description !== oldEvent[0].description) {%> style = "background-color: yellow" <%}%>>Description: <span><%= event.description %></span></h2>
         </div>
       </div>
       <% }); %>

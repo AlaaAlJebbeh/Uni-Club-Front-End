@@ -463,11 +463,15 @@ app.get("/popupContentedit", (req, res) => {
             console.log('error fetching old event ', err);
             return res.status(404).send("Internal Server Error");
         }
+        console.log("NEW EVENT:");
+            console.log(newEvent);
         connection.query("Select * from event where event_id = ?", [eventId], (err,oldEvent) =>{
             if (err) {
                 console.log('error fetching new event ', err);
                 return res.status(404).send("Internal Server Error");
             }
+            console.log("OLD EVENT:");
+            console.log(oldEvent);
             res.render('popupContentedit.ejs', { newEvent,  oldEvent});
         });
         
@@ -1645,7 +1649,6 @@ app.post("/changeNotificationStatusSks", (req, res) =>{
         }  
     });
 });
-
 
 //listining to the port 
 app.listen(port, () => {

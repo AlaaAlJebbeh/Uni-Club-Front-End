@@ -458,12 +458,12 @@ app.get("/popupContent", (req, res) => {
 });
 
 app.get("/album", (req, res) => {
-    const event_id = req.query.event_id;
+    const eventID = req.query.event_id;
    
-    console.log(event_id);
+    console.log(eventID);
     // Fetch popup content based on button ID from the database or any other source
-    console.log("this is the button id" + event_id);
-    connection.query('SELECT * FROM event_album where event_id = ?', [event_id], (err, results) => {
+    console.log("this is the button id" + eventID);
+    connection.query('SELECT * FROM event_album where event_id = ?', [eventID], (err, results) => {
         if (err) {
             console.log('didnt get', err);
         }

@@ -257,8 +257,8 @@
                   </form>
 
                   <form action="/album?eventID=<%=eventID%>" method="get"> 
-                  <button onclick="showPop()"> 
-                  <img src="../public/images/add_icon.png" style="background-color: aliceblue;">
+                  <button id="<%= eventID%>" > 
+                    <a  href="/album" > <img src="../public/images/add_icon.png" style="background-color: aliceblue;"></a> 
                   </button>
                 </form>
                 <% } %>

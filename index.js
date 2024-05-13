@@ -211,7 +211,7 @@ app.get("/myclubpage", (req, res) => {
             if (clubInformation.length === 0) {
                 return res.status(500).send("Club Dosent Exist");
             }
-            connection.query("select name from club_manager where club_id = ?", [clubID], (err, name) => {
+            connection.query("select * from club_manager where club_id = ?", [clubID], (err, clubManager) => {
                 if (err) {
                     console.error("Error fetching Club manager name:", err);
                     return res.status(500).send("Internal Server Error");
@@ -240,7 +240,14 @@ app.get("/myclubpage", (req, res) => {
                                     console.error("Error fetching temp events:", err);
                                     return res.status(500).send("Internal Server Error");
                                 }
-                                res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, event, resultsTemp, resultsHistory, resultsToShare });
+                                connection.query("Select * from posts where club_id = ?", [clubID], (err,Posts) => {
+                                    if(err){
+                                        console.log("Error fetching posts: " + err.message);
+                                        return res.status(404).send("Internal Server Error");
+                                    }
+                                    res.render("myclubpage.ejs", { clubInformation, clubManager, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, event, resultsTemp, resultsHistory, resultsToShare, Posts });
+                                });
+                                
                             });
                         });
 
@@ -539,7 +546,7 @@ app.get("/createEvent", (req, res) => {
 
 app.post("/createEvent", async (req, res) => {
     const { uploadImage1 } = req.files;
-    const imgPath = __dirname + '/public/' + uploadImage1.name
+    const imgPath = __dirname + '/public/images' + uploadImage1.name
     // Move the uploaded image to our upload folder
     uploadImage1.mv(imgPath);
     const imageName  = uploadImage1.name;
@@ -639,9 +646,10 @@ app.post("/createPost", async (req, res) => {
     console.log("The requuest is");
     const { ImagePost } = req.files;
 
-    const imgPath = __dirname + '/public/' + ImagePost.name
+    const imgPath = __dirname + '/public/images' + ImagePost.name
     // Move the uploaded image to our upload folder
     ImagePost.mv(imgPath);
+    const imgName = ImagePost.name;
 
     const email = req.session.email; // Retrieve email from request body
     const postText = req.body.postText;
@@ -674,7 +682,7 @@ app.post("/createPost", async (req, res) => {
 
                 connection.query(
                     `INSERT INTO tempposts (clm_id, club_id, club_name, postText, postImageUrl) VALUES (?, ?, ?, ?, ?)`,
-                    [userId, clubId, clubName, postText, imgPath],
+                    [userId, clubId, clubName, postText, imgName],
                     (error, results, fields) => {
                         if (error) {
                             console.error('Error inserting event into database:', error);
@@ -706,6 +714,14 @@ app.post("/clubform", async (req, res) => {
     const media2 = req.body.media2;
     const media3 = req.body.media3;
     const email = req.body.email;
+
+    const { ImagePost } = req.files;
+    const imgPath = __dirname + '/public/images' + ImagePost.name
+    // Move the uploaded image to our upload folder
+    ImagePost.mv(imgPath);
+    const imgName = ImagePost.name;
+
+
 
 
     connection.query('INSERT INTO club(club_name, category, clm_id, bio, contact, social_media1, social_media2, social_media3, email) VALUES(?,?,?,?,?,?,?,?,?)',
@@ -1089,40 +1105,32 @@ app.get('/singleclubpage', (req, res) => {
             if (clubInformation.length === 0) {
                 return res.status(500).send("Club Dosent Exist");
             }
-            console.log(clubInformation + "club info")
             connection.query("select name from club_manager where club_id = ?", [clubID], (err, name) => {
                 if (err) {
                     console.error("Error fetching Club manager name:", err);
                     return res.status(500).send("Internal Server Error");
                 }
-                console.log(clubInformation);
                 connection.query("select * from event where club_id = ?", [clubID], (err, event) => {
                     if (err) {
                         console.error("Error fetching events:", err);
                         return res.status(500).send("Internal Server Error");
                     }
-
                     connection.query(`SELECT event_name FROM tempevents WHERE club_id = ?`, [clubID], (err, resultsTemp) => {
                         if (err) {
                             console.error("Error fetching temp events:", err);
                             return res.status(500).send("Internal Server Error");
                         }
-                        console.log(resultsTemp);
                         // Extracting event IDs from the results of the first query
-
                         connection.query(`SELECT event_name, status, event_id FROM history_event WHERE club_id = ?`, [clubID], (err, resultsHistory) => {
                             if (err) {
                                 console.error("Error fetching temp events:", err);
                                 return res.status(500).send("Internal Server Error");
                             }
-                            console.log(resultsHistory);
-
                             connection.query(`SELECT event_name, event_id FROM toshareevents WHERE club_id = ?`, [clubID], (err, resultsToShare) => {
                                 if (err) {
                                     console.error("Error fetching temp events:", err);
                                     return res.status(500).send("Internal Server Error");
                                 }
-                                console.log(resultsToShare);
                                 res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: false, event, resultsTemp, resultsHistory, resultsToShare });
                             });
                         });

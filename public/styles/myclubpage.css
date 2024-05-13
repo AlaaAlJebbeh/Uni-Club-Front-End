@@ -730,6 +730,12 @@ tbody tr.hide td img {
     }
 }
 
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
 thead th span.icon-arrow {
     display: inline-block;
     width: 1.3rem;

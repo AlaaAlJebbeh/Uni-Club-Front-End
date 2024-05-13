@@ -226,6 +226,19 @@ function showPopup(buttonId) {
     .catch(error => console.error('Error fetching popup content:', error));
 }
 
+function showPopupedit(buttonId) {
+    // Make a GET request to fetch the popup content for the given button ID
+    fetch(`/popupContent?buttonId=${buttonId}`)
+    .then(response => response.text())
+    .then(data => {
+        // Insert the fetched popup content into the popup container
+        document.getElementById("popup").innerHTML = data;
+        // Display the popup
+        document.getElementById("popup").style.display = "block";
+    })
+    .catch(error => console.error('Error fetching popup content:', error));
+}
+
 // Inside eventsRequests.js
 $(document).ready(function() {
     // Add click event listener to all buttons with the class 'post-button'

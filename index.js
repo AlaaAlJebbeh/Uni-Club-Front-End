@@ -372,19 +372,17 @@ app.get("/eventRequests", (req, res) => {
                 console.error("Error fetching events:", err);
                 return res.status(500).send("Internal Server Error");
             }
-            console.log(events);
-            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events });
+            connection.query("Select * from tempeventedits", (err, tempeventedits) => {
+                if (err){
+                    console.error("Error fetching temp event Edits:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
 
-        });
+                res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events, tempeventedits });
 
-        connection.query(`SELECT * FROM event WHERE event_id IN (?)`, [eventIds], (err, events) => {
-            if (err) {
-                console.error("Error fetching events:", err);
-                return res.status(500).send("Internal Server Error");
-            }
-            console.log(events);
-            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events });
+            });
 
+           
         }); 
 
 

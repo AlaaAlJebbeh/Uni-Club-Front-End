@@ -372,19 +372,17 @@ app.get("/eventRequests", (req, res) => {
                 console.error("Error fetching events:", err);
                 return res.status(500).send("Internal Server Error");
             }
-            console.log(events);
-            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events });
+            connection.query("Select * from tempeventedits", (err, tempeventedits) => {
+                if (err){
+                    console.error("Error fetching temp event Edits:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
 
-        });
+                res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events, tempeventedits });
 
-        connection.query(`SELECT * FROM event WHERE event_id IN (?)`, [eventIds], (err, events) => {
-            if (err) {
-                console.error("Error fetching events:", err);
-                return res.status(500).send("Internal Server Error");
-            }
-            console.log(events);
-            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events });
+            });
 
+           
         }); 
 
 
@@ -454,6 +452,29 @@ app.get("/popupContent", (req, res) => {
     });
 
 });
+
+app.get("/popupContentedit", (req, res) => {
+    const buttonId = req.query.buttonId;
+    const lastIndex = buttonId.lastIndexOf('_');
+    const eventId = buttonId.substring(lastIndex + 1); // Extract the substring after the last '_'
+
+    connection.query('SELECT * FROM tempeventedits where event_id = ?', [eventId], (err, newEvent) => {
+        if (err) {
+            console.log('error fetching old event ', err);
+            return res.status(404).send("Internal Server Error");
+        }
+        connection.query("Select * from event where event_id = ?", [eventId], (err,oldEvent) =>{
+            if (err) {
+                console.log('error fetching new event ', err);
+                return res.status(404).send("Internal Server Error");
+            }
+            res.render('popupContentedit.ejs', { newEvent,  oldEvent});
+        });
+        
+    });
+
+});
+
 
 app.get("/album", (req, res) => {
     const event_id = req.query.event_id;

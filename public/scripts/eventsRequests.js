@@ -228,7 +228,7 @@ function showPopup(buttonId) {
 
 function showPopupedit(buttonId) {
     // Make a GET request to fetch the popup content for the given button ID
-    fetch(`/popupContent?buttonId=${buttonId}`)
+    fetch(`/popupContentedit?buttonId=${buttonId}`)
     .then(response => response.text())
     .then(data => {
         // Insert the fetched popup content into the popup container

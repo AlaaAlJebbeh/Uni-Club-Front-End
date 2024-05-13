@@ -26,7 +26,7 @@
                     
                     <%if (itemEN.notificationstatus == 0){%>
                         <%console.log("notificationn " + eventID + "Event Name" + eventName)%>
-                        <form id="readNotificationForm" action="/changeNotificationStatus?eventId=<%= eventID%>" method="POST">
+                        <form id="readNotificationForm" action="/changeNotificationStatusEvents?eventId=<%= eventID%>" method="POST">
                             <div class="notificationCard unread read-notification" id="<%= divId %>">
                                 <img alt="photo" src="../public/images/pixel.jpg" />
                                 <div class="description">
@@ -95,6 +95,49 @@
                         </div>
                         <%}%>
                 <%})%>
+
+                <!--Notifications For  Edit Posts-->
+                <% resultsHistoryPostEditsNot.forEach((itemHEP, index)=> { %>
+                    <% var postEditRejectionReason = itemHEP.rejectionReason; %>
+                    <% var edit_id=parseInt(itemHEP.edit_id); %>
+                    <% var divId='button_' + itemHEP.edit_id; %>
+                    
+                    <%if (itemHEP.notificationstatus == 0){%>
+                        <%console.log("notificationn posts" + edit_id)%>
+                        <%console.log("status" + itemHEP.status)%>
+
+                        <form id="readNotificationFormPostsEdits" action="/changeNotificationStatusPostEdits?edit_id=<%= edit_id%>" method="POST">
+                            <div class="notificationCard unread3 read-notification" id="<%= divId %>">
+                                <img alt="photo" src="../public/images/pixel.jpg" />
+                                <div class="description">
+                                        <%if(itemHEP.status == 1){%>
+                                            <%console.log("approved post print")%>
+
+                                            <p>Your Post Edit Request <%=itemHEP.requestType%> has been approved</p>
+                                        <%} else if(itemHEP.status == 0){%>
+                                                <p>Your Post Edit Request <%=itemHEP.requestType%> has not been approved</p>
+                                                <p>Rejection Reason "<%=postEditRejectionReason%>"</p>
+                                            <%}%>
+                                </div>
+                            </div>
+                        </form>
+                        
+                    <%} else if((itemHEP.notificationstatus == 1)){%>
+                        <div class="notificationCard">
+                            <img alt="photo" src="../public/images/pixel.jpg" />
+                            <div class="description">
+                                    <%if(itemHEP.status == 1){%>
+                                        <p>Your Post Edit Request <%=itemHEP.requestType%> has been approved</p>
+                                        <%} else if(itemHEP.status == 0){%>
+                                            <p>Your Post Edit Request <%=itemHEP.requestType%> has not been approved</p>
+                                            <p>Rejection Reason "<%=postEditRejectionReason%>"</p>
+                                        <%}%>
+                            </div>
+                        </div>
+                        <%}%>
+                <%})%>
+
+
                 
             </main>
         </div>

@@ -280,6 +280,7 @@ function reject(event_id) {
     })
     .then(response => {
         if (response.ok) {
+            
             console.log("Rejection reason sent successfully");
             closePopup2(); // Close the popup after sending rejection reason
         } else {
@@ -289,6 +290,12 @@ function reject(event_id) {
     .catch(error => {
         console.error("Error:", error);
     });
+
+    const statusElement = document.getElementById(`status_${eventId}`);
+    if (statusElement) {
+        statusElement.textContent = "Rejected";
+    }
+    
   }
 
   // Function to display the popup

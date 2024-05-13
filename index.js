@@ -87,36 +87,64 @@ app.post('/login', (req, res) => {
     const password = req.body.password;
     if (email && password) {
         connection.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (err, results) => {
+            if (err) {
+                console.log("Error occurred: " + err.message);
+                return res.status(500).send("Internal Server Error");
+            }
             if (results.length > 0) {
                 req.session.loggedIn = true;
-                req.session.loggedIn = true;
                 req.session.email = email;
-                req.session.role = results[0].role; // Add this line
-                req.session.userID = results[0].user_id; // Add this line
-                console.log(req.session.email);
-                res.redirect("/");
+                req.session.role = results[0].role;
+                req.session.userID = results[0].user_id;
+                if (req.session.role === 'club') {
+                    connection.query("select * from club_manager where clm_id = ?", [req.session.userID], (err, results) => {
+                        if (err) {
+                            console.log("Error fetching club manager information: " + err.message);
+                            return res.status(500).send("Internal Server Error");
+                        }
+                        req.session.clubID = results[0].club_id;
+                        const clubID = req.session.clubID;
+                        connection.query("select * from club where club_id = ?", [clubID], (err, result) => {
+                            if (err) {
+                                console.log("Error fetching imageURL: " + err.message);
+                                return res.status(500).send("Internal Server Error");
+                            }
+                            if (!result[0].clubImageUrl) {
+                                console.log("This club doesn't have an image and it will be set to null");
+                                req.session.ImageURL = null;
+                            } else {
+                                req.session.ImageURL = result[0].clubImageUrl;
+                            }
+                            req.session.clubName = result[0].club_name;
+                            console.log(req.session.email + req.session.ImageURL + req.session.clubName);
+                            res.redirect("/");
+                        });
+                    });
+                } else {
+                    res.redirect("/");
+                }
             } else {
                 res.send('Incorrect email and/or password!');
             }
-            res.end();
         });
     } else {
         res.send('Please enter email and password!');
-        res.end();
     }
 });
 
+
 // Add a logout route
 app.get('/logout', (req, res) => {
+            req.session.loggedIn = false;
+            req.session.role = null;
+            req.session.email = null;
+            // Redirect to the login page
     // Clear the session
     req.session.destroy(err => {
         if (err) {
             console.log(err);
         } else {
-            req.session.loggedIn = false;
-            req.session.role = null;
-            req.session.email = null;
-            // Redirect to the login page
+            
             res.redirect("/");
         }
     });

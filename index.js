@@ -575,13 +575,15 @@ app.post("/createEvent", async (req, res) => {
                         return res.status(500).send('Failed to insert');
                     }
                     else{
-                        connection.query("INSERT INTO notifications_sks(notificationType, club_name, club_id,   )")
-                        res.redirect("/myclubpage");
-
+                        connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)" , [notificationType, clubName, clubId], (err) =>{
+                            if(err){
+                                console.log("error inseting to notifications: " + err.message);
+                            } else{
+                                res.redirect("/myclubpage");
+                            }
+                        });
                     }
-                    
-                });
-
+            });
         });
 
     });
@@ -1207,7 +1209,7 @@ app.post('/updateProfile', (req, res) => {
 });
 
 
-app.get("/notifications", (req, res) => {
+app.get("/notificationsClub", (req, res) => {
     const email = req.session.email;
     connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
         if (err) {
@@ -1541,6 +1543,37 @@ app.post('/singleclubpage', (req, res) => {
             });
         });
     });
+});
+
+app.get("/notificationsSks", (req, res) =>{
+    const email = req.session.email;
+    
+    connection.query("SELECT  notificationType, club_name, notify_id, club_id, status_notification FROM notifications_sks", (err, resultNotiNewEvent)=>{
+        if(err){
+            console.log("Error fetching notification new event");
+        } 
+            var club_id = [];
+            resultNotiNewEvent.forEach((club)=>{
+                
+                club_id.push(club.club_id);
+            });
+
+            var images = [];
+
+
+                for( var i = 0; i< club_id.length; i++){
+                    connection.query("SELECT clubImageUrl FROM club WHERE club_id = ?", club_id[i], (err, resultsClubImages)=>{
+                        
+                        if(err){
+                            console.log("error fetching images" + err.message);
+                        }
+                        resultsClubImages.push(resultsClubImages[0]);
+                        console.log(resultsClubImages);
+                        
+                    });
+                }
+            res.render("notificationsSks.ejs", { loggedIn: true, role: "sks", email: email, resultNotiNewEvent, images});           
+    });   
 });
 
 //listining to the port 

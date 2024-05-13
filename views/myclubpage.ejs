@@ -257,8 +257,8 @@
                   </form>
 
                   <form action="/album?eventID=<%=eventID%>" method="get"> 
-                  <button > 
-                    <a  href="/album" > <img src="../public/images/add_icon.png" style="background-color: aliceblue;"></a> 
+                  <button onclick="showPop()"> 
+                  <img src="../public/images/add_icon.png" style="background-color: aliceblue;">
                   </button>
                 </form>
                 <% } %>
@@ -518,6 +518,7 @@
   </div>
   </div>
 </div>
+
   <!-- Footer -->
   <footer><%- include("partials/footer.ejs") %></footer>
 

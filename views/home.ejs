@@ -54,26 +54,26 @@
 
     <% } %>
 
-    <br><br>
+    <br /><br />
     <div class="container-fluid">
-        <form style="margin-left: 80%;" id="event-search-form">
-          <input type="text" id="event-search-input" placeholder="Search by event name">
-          <button class="searchButton" type="submit">
-            <span class="material-symbols-outlined">
-              search
-              </span>
-          </button>
-        </form>
+      <form style="margin-left: 80%" id="event-search-form">
+        <input
+          type="text"
+          id="event-search-input"
+          placeholder="Search by event name"
+        />
+        <button class="searchButton" type="submit">
+          <span class="material-symbols-outlined"> search </span>
+        </button>
+      </form>
     </div>
 
-    <br /><br /><br>
+    <br /><br /><br />
     <div class="container" style="padding: 25px; border-style: solid">
       <div class="col-sm-12">
         <h2 style="text-align: center; color: #000">Up Coming Events</h2>
       </div>
     </div>
-
-    
 
     <div class="container">
       <div class="wrapper">
@@ -87,7 +87,7 @@
             <div class="img">
               <div class="card">
                 <div class="imgBx">
-                  <img src="../public/<%= event.imageURL %>" alt="" />
+                  <img src="../public/images/<%= event.imageURL %>" alt="" />
                 </div>
                 <div class="contentBx">
                   <div class="content">
@@ -218,7 +218,7 @@
           <div class="col-sm-6">
             <div class="card">
               <div class="imgBx">
-                <img src="../public/<%= event.imageURL %>" alt="" />
+                <img src="../public/images/<%= event.imageURL %>" alt="" />
               </div>
               <div class="contentBx">
                 <div class="content">

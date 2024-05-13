@@ -76,7 +76,7 @@
       <div id="my-profile-content" class="content-section" style="display: block">
         <div class="cnt1">
           <div class="logo-side">
-            <img src="../public/images/pixel.jpg" alt="Image not loading" />
+            <img src="../public/images/<%= clubInformation[0].clubImageUrl %>" alt="Image not loading" />
           </div>
         </div>
 
@@ -91,7 +91,7 @@
           </div>
           <% } %>
 
-            <h1 style="text-align: center; font-size: 42px; margin-bottom: 75px">
+            <h1 style="text-align: center; font-size: 36px; margin-bottom: 75px">
               Club Information
             </h1>
 
@@ -211,9 +211,9 @@
             </h1>
 
             <div class="content-containerManager">
-              <% name.forEach((item)=> { %>
+              <% clubManager.forEach((item)=> { %>
                 <div class="CLMNAMES">
-                  <img src="<../public/images/images/Alson GC.jpg>" />
+                  <img src="../public/images/<%= item.imageURL%>" />
                   <h1>
                     <span style="color: #193635">Club Manager Name:</span><br />
                     <%=item.name%>
@@ -230,7 +230,7 @@
             <div class="indivisual-card-container">
             <div class="card">
               <div class="image-container">
-                <img src="../public/<%=item.imageURL  %>" id="clubImage-<%=item.event_id  %>"/>
+                <img src="../public/images/<%=item.imageURL  %>" id="clubImage-<%=item.event_id  %>"/>
                 <% const currentDate = new Date();
                 currentDate.setHours(0, 0, 0, 0); const eventDate = new
                 Date(item.date); eventDate.setHours(0, 0, 0, 0); if
@@ -246,20 +246,28 @@
                 <% if(loggedIn) { %>
                 <div class="editanddeleteContainer">
                   <img src="../public/images/edit.png" alt="edit icon" class="edit-icon" data-eventid="<%= item.event_id %>" style="background-color: aliceblue;"/>
+                 
                   <% var eventID=parseInt(item.event_id); %>
                   <form action="/deleteEvent?eventID=<%=eventID%>" method="post">
                     <button type="submit" style="background-color: white; border:none;">
                       <img src="../public/images/delete.png" alt="delete icon"/>
                     </button>
                   </form>
-                </div>
+
+                  <form action="/album?eventID=<%=eventID%>" method="get"> 
+                  <button onclick="showPop()"> 
+                  <img src="../public/images/add_icon.png" style="background-color: aliceblue;">
+                  </button>
+                </form>
                 <% } %>
+
+                
               </div>
               <!-- Inside the HTML template -->
               <div class="text-container" id="text-container-<%= item.event_id %>">
                   <form id="edit-form-<%= item.event_id %>" class="text-container" method="POST" action="/updateEvent" enctype="multipart/form-data">
                     <div class="upload image" id="upload-button-<%= item.event_id %>">
-                      <input type="file" name="uploadImage1" />
+                      <input type="file" name="uploadImage1"/>
                     </div>
                     <input type="hidden" name="eventID" value="<%= item.event_id %>">
                     <input type="hidden" name="clubImage" value="" id="clubimageInput_<%= item.event_id %>">
@@ -399,29 +407,34 @@
     <div id="my-posts-content" class="content-section" style="display: none">
       <div class="container-fluid">
         <div class="row">
-          <%  %>
+          <% Posts.forEach((post)=> { %>
             <div class="col-sm-3">
                 <div >
                     <div style="background-color: black; height: 60px;" class="Post-card-header">
-                        <img style="border-radius: 100%; width: 50px; height: 50px;" src="../public/download (1).jpg" alt="">
-                        <span style="color: white; font-size:24px">fuck homsi</span>
-                          <span style="float: right; font-size: xx-large; color: white;" class="material-symbols-outlined">
+                        <img style="border-radius: 100%; width: 50px; height: 50px;" src="../public/images/<%= clubInformation[0].clubImageUrl%>" alt="">
+                        <span style="color: white; font-size:24px"><%= clubInformation[0].club_name %></span>
+                        <form action="/deletepost?postID=<%= post.PostID %>" method="POST" style="all: inherit; float: right; font-size: xx-large; color: white;" class="material-symbols-outlined">
+                          <button type="submit" style="background-color: black;box-shadow: none;border:none;margin: 0;padding: 0; float: right; font-size: xx-large; color: white;" class="material-symbols-outlined">
+                            <span style="float: right; font-size: xx-large; color: white;" class="material-symbols-outlined">
                             delete
                           </span>
+                        </button>
+                        </form> 
                           <span style="float: right; font-size: xx-large; color: white;" class="material-symbols-outlined">
                             edit
                           </span>
                     </div>
                     <div style="background-color: black;" class="Post-card-body">
-                        <img width="100%" height="100%" src="../public/download (1).jpg" alt="">
+                        <img width="100%" height="100%" src="../public/images/<%= post.postImageURL %>" alt="">
                     </div>
                     <div style="background-color: black;" class="Post-card-footer">
                         <span style="color: white; font-size: 20px">
-                            Description : wooooooow
+                            <%= post.postText %>
                         </span>
                     </div>
                 </div>
             </div>
+            <% }); %>
         </div>
     </div>
   </div>
@@ -503,6 +516,7 @@
   </div>
   </div>
 </div>
+
   <!-- Footer -->
   <footer><%- include("partials/footer.ejs") %></footer>
 

@@ -32,40 +32,10 @@
 
   <body>
     <header>
-      <div>
-        <a href="#" class="logo"
-          ><img src="logo.png" alt="Logo" class="logo-image"
-        /></a>
-      </div>
-      <input type="checkbox" id="nav_check" hidden />
-      <nav class="navbar">
-        <ul>
-          <li>
-            <a href="" class="active">Home</a>
-          </li>
-          <li>
-            <a href="">Clubs</a>
-          </li>
-        </ul>
-      </nav>
-
-      <div class="icons">
-        <div class="icons">
-          <i class="fas fa-search" id="search-btn"></i>
-          <i class="fas fa-user" id="log-btn"></i>
-        </div>
-
-        <form action="" class="search-bar-container">
-          <input type="search" id="search-bar" placeholder="search here..." />
-          <label for="search-bar" class="fas fa-search"></label>
-        </form>
-      </div>
-
-      <label for="nav_check" class="sideBar icons">
-        <div></div>
-        <div></div>
-        <div></div>
-      </label>
+      <% if (!loggedIn) { %> <%- include("partials/header.ejs"); %> <% } else if
+      (role === 'club') { %> <%- include("partials/club_header.ejs"); %> <% }
+      else if (role === 'sks') { %> <%- include("partials/sks_header.ejs"); %>
+      <% } %>
     </header>
     <!--Font Linking-->
     <script>
@@ -78,7 +48,7 @@
       });
     </script>
 
-    <main class="table" id="customers_table" >
+    <main class="table" id="customers_table">
       <section class="table__header">
         <h1>Content Management</h1>
         <div class="input-group">
@@ -100,8 +70,7 @@
           </thead>
           <tbody>
             <% let index; %> <% combinedData.forEach(function(item,index){ %> <%
-            let items = []; %> <% items.push(item); %>            
-            <% var buttonId; %>
+            let items = []; %> <% items.push(item); %> <% var buttonId; %>
             <tr>
               <td>
                 <h4 style="color: black"><%=clubNames[index]%></h4>
@@ -110,11 +79,23 @@
               <td>
                 <p class="status pending">Pending</p>
               </td>
-              
+
               <td>
-                <button class="approve-button" id="<%= buttonId %>" onclick="approvePost('<%= item.PostID %>', '<%= item.RequestID %>')">Approve</button>
-                <button class="reject-button" id="<%= buttonId %>"  onclick="rejectPost('<%= item.PostID %>', '<%= item.RequestID %>')">Reject</button>
-              </td> 
+                <button
+                  class="approve-button"
+                  id="<%= buttonId %>"
+                  onclick="approvePost('<%= item.PostID %>', '<%= item.RequestID %>')"
+                >
+                  Approve
+                </button>
+                <button
+                  class="reject-button"
+                  id="<%= buttonId %>"
+                  onclick="rejectPost('<%= item.PostID %>', '<%= item.RequestID %>')"
+                >
+                  Reject
+                </button>
+              </td>
               <td>
                 <button
                   class="details-button"
@@ -126,9 +107,6 @@
               </td>
             </tr>
             <% }) %>
-            
-
-
           </tbody>
         </table>
       </section>
@@ -161,28 +139,33 @@
         <button id="closeButton" onclick="closePopup()">Close</button>
       </div>
 
-      
-
       <div id="reject" class="reject-card1">
-        <input type="text" id="rejectionReason" name="rejectionReason" placeholder="Enter rejection reason...">
-        <button class="send-button" onclick="sendRejectionReason()">Send</button>
+        <input
+          type="text"
+          id="rejectionReason"
+          name="rejectionReason"
+          placeholder="Enter rejection reason..."
+        />
+        <button class="send-button" onclick="sendRejectionReason()">
+          Send
+        </button>
         <button id="closeButton2" onclick="closePopup2()">Close</button>
       </div>
 
       <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const approveButtons = document.querySelectorAll('.approve-button');
-            approveButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const buttonId = this.id;
-                    const postId = this.getAttribute('data-post-id');
-                    console.log('Button clicked:', buttonId);
-                    console.log('Post ID:', postId);
-                    // Perform further actions based on buttonId and postId
-                });
+        document.addEventListener("DOMContentLoaded", () => {
+          const approveButtons = document.querySelectorAll(".approve-button");
+          approveButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+              const buttonId = this.id;
+              const postId = this.getAttribute("data-post-id");
+              console.log("Button clicked:", buttonId);
+              console.log("Post ID:", postId);
+              // Perform further actions based on buttonId and postId
             });
+          });
         });
-    </script>
+      </script>
 
       <script>
         function showDetails(index) {
@@ -229,10 +212,6 @@
 
         console.log(beforeText);
       </script>
-
-      
-
-
     </main>
     <footer>
       <div class="footerContainer">

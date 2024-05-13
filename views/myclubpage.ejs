@@ -390,6 +390,9 @@
             const clubImage = document.getElementById(`clubImage-${eventID}`).getAttribute('src');
             document.getElementById(`clubimageInput_${eventID}`).value = clubImage;
 
+            const eventCategory = document.getElementById(`eventCategory_${eventID}`).innerText;
+            document.getElementById(`eventCategoryInput_${eventID}`).value = eventCategory;
+
               // Submit the form
               form.submit();
           });

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -72,7 +73,7 @@
         <% } %>
     </div>
 
-    <div class="ContentBody" style="background-color: #dfecff;">
+    <div class="ContentBody">
       <div id="my-profile-content" class="content-section" style="display: block">
         <div class="cnt1">
           <div class="logo-side">
@@ -84,6 +85,8 @@
           <div class="cnt6">
             <div class="logo-side1">
                 <a href="/createevent"><button>Create Event</button></a>
+                <p></p>
+                <a href="/notifications"><button>Notifications</button></a>
                 <p></p>
                 <a href="/createPost"><button>createPost</button></a>
 
@@ -223,65 +226,115 @@
             </div>
       </div>
 
-      <div id="my-events-content" class="content-section" style="display: none; background-color: #dfecff;">
+      <div id="my-events-content" class="content-section" style="display: none">
         <h1 style="text-align: center; font-size: 36px">Events</h1>
-
-        <div class="container">
-          <div class="col-sm-12">
-            <div class="row">
-              <% event.forEach((event) => { %>
-              <div class="col-sm-6">
-                <div class="card">
-                  <div class="imgBx">
-                    <img src="../public/images/<%= event.imageURL %>" alt="" />
-                  </div>
-                  <div class="contentBx">
-                    <div class="content">
-                      <% const currentDate = new Date(); currentDate.setHours(0, 0,
-                      0, 0); const eventDate = new Date(event.date);
-                      eventDate.setHours(0, 0, 0, 0); if (currentDate.getTime() ===
-                      eventDate.getTime()) { %>
-                      <div class="statu-00">
-                        <p>Active</p>
-                      </div>
-                      <% } else if (currentDate.getTime()> eventDate.getTime()) { %>
-                      <div class="statu-01"><p>Finished</p></div>
-                      <% } else { %>
-                      <div class="statu-02"><p>Soon</p></div>
-                      <% } %>
-                      <h2><%= event.club_name %></h2>
-                      <br />
-                      <h2 class="nameE"><%= event.event_name%></h2>
-                      <br />
-                      <h6>
-                        Date:
-                        <span><%= event.date.toString().substring(0, 11) %></span>
-                      </h6>
-                      <h6>Time: <span><%= event.time%></span></h6>
-                      <h6>Location: <span><%= event.location%></span></h6>
-                      <h6>Language: <span><%= event.language%></span></h6>
-                      <h6>Guest: <span><%= event.guest_name%></span></h6>
-                      <h6>
-                        <div class="category">
-                          Category:
-                          <span id="categorySpan"><%= event.category %></span>
-                        </div>
-                      </h6>
-                      <h6>Capacity: <span><%= event.capacity%></span></h6>
-                      <h6>Notes: <span><%= event.notes%></span></h6>
-                    </div>
-                    <div class="overlay">
-                      <h6>Description: <span><%= event.description %></span></h6>
-                    </div>
-                  </div>
-                </div>
+        <div class="card-container">
+          <% event.forEach((item, index)=> { %>
+            <div class="indivisual-card-container">
+            <div class="card">
+              <div class="image-container">
+                <img src="../public/images/<%=item.imageURL  %>" id="clubImage-<%=item.event_id  %>"/>
+                <% const currentDate = new Date();
+                currentDate.setHours(0, 0, 0, 0); const eventDate = new
+                Date(item.date); eventDate.setHours(0, 0, 0, 0); if
+                (currentDate.getTime() === eventDate.getTime()) { %>
+                <div class=" Active">Active
               </div>
-              <% }); %>
+              <% } else if (currentDate.getTime()> eventDate.getTime()) { %>
+                <div class="canceled">Finished</div>
+                <% } else { %>
+                  <div class="not-active">SOON</div>
+                  <% } %>
+
+                <% if(loggedIn) { %>
+                <div class="editanddeleteContainer">
+                  <img src="../public/images/edit.png" alt="edit icon" class="edit-icon" data-eventid="<%= item.event_id %>" style="background-color: aliceblue;"/>
+                  <% var eventID=parseInt(item.event_id); %>
+                  <form action="/deleteEvent?eventID=<%=eventID%>" method="post">
+                    <button type="submit" style="background-color: white; border:none;">
+                      <img src="../public/images/delete.png" alt="delete icon"/>
+                    </button>
+                  </form>
+                </div>
+                <% } %>
+              </div>
+              <!-- Inside the HTML template -->
+              <div class="text-container" id="text-container-<%= item.event_id %>">
+                  <form id="edit-form-<%= item.event_id %>" class="text-container" method="POST" action="/updateEvent" enctype="multipart/form-data">
+                    <div class="upload image" id="upload-button-<%= item.event_id %>">
+                      <input type="file" name="uploadImage1" />
+                    </div>
+                    <input type="hidden" name="eventID" value="<%= item.event_id %>">
+                    <input type="hidden" name="clubImage" value="" id="clubimageInput_<%= item.event_id %>">
+                    <div class="card-details">
+                      <span>Club Name:</span>
+                      <span class="club-name" contenteditable="true" id="clubName_<%= item.event_id %>"><%= clubInformation[0].club_name %></span>
+                      <input type="hidden" name="clubName" value="<%= clubInformation[0].club_name %>" id="clubNameInput_<%= item.event_id %>" />
+                  </div>
+                  <div class="card-details">
+                      <span>Event Name:</span>
+                      <span class="event-name" contenteditable="true" id="eventName_<%= item.event_id %>"><%= item.event_name %></span>
+                      <input type="hidden" name="eventName" value="<%= item.event_name %>" id="eventNameInput_<%= item.event_id %>" />
+                  </div>
+                  <div class="card-details">
+                      <span>Date:</span>
+                      <span class="event-date" contenteditable="true" id="eventDate_<%= item.event_id %>"><%= item.date.toString().substring(0, 11) %></span>
+                      <input type="hidden" name="eventDate" value="<%= item.date.toString().substring(0, 11) %>" id="eventDateInput_<%= item.event_id %>" />
+                  </div>
+                  <div class="card-details">
+                      <span>Time:</span>
+                      <span class="event-time" contenteditable="true" id="eventTime_<%= item.event_id %>"><%= item.time %></span>
+                      <input type="hidden" name="eventTime" value="<%= item.time %>" id="eventTimeInput_<%= item.event_id %>" />
+                  </div>
+              
+                  <!-- Location -->
+                  <div class="card-details">
+                      <span>Location:</span>
+                      <span class="event-location" contenteditable="true" id="eventLocation_<%= item.event_id %>"><%= item.location %></span>
+                      <input type="hidden" name="eventLocation" value="<%= item.location %>" id="eventLocationInput_<%= item.event_id %>" />
+                  </div>
+              
+                  <!-- Language -->
+                  <div class="card-details">
+                      <span>Language:</span>
+                      <span class="event-language" contenteditable="true" id="eventLanguage_<%= item.event_id %>"><%= item.language %></span>
+                      <input type="hidden" name="eventLanguage" value="<%= item.language %>" id="eventLanguageInput_<%= item.event_id %>" />
+                  </div>
+              
+                  <!-- Guest -->
+                  <div class="card-details">
+                      <span>Guest:</span>
+                      <span class="event-guest" contenteditable="true" id="eventGuest_<%= item.event_id %>"><%= item.guest_name %></span>
+                      <input type="hidden" name="eventGuest" value="<%= item.guest_name %>" id="eventGuestInput_<%= item.event_id %>" />
+                  </div>
+                  
+              
+                  <!-- Description -->
+                  <div class="card-details">
+                      <span>Description:</span>
+                      <span class="event-description" contenteditable="true" id="eventDescription_<%= item.event_id %>"><%= item.description %></span>
+                      <input type="hidden" name="eventDescription" value="<%= item.description %>" id="eventDescriptionInput_<%= item.event_id %>" />
+                  </div>
+              
+                  <!-- Capacity -->
+                  <div class="card-details">
+                      <span>Capacity:</span>
+                      <span class="event-capacity" contenteditable="true" id="eventCapacity_<%= item.event_id %>"><%= item.capacity %></span>
+                      <input type="hidden" name="eventCapacity" value="<%= item.capacity %>" id="eventCapacityInput_<%= item.event_id %>" />
+                  </div>
+              
+                  <!-- Notes -->
+                  <div class="card-details">
+                      <span>Notes:</span>
+                      <span class="event-notes" contenteditable="true" id="eventNotes_<%= item.event_id %>"><%= item.notes %></span>
+                      <input type="hidden" name="eventNotes" value="<%= item.notes %>" id="eventNotesInput_<%= item.event_id %>" />
+                  </div>
+                  <button type="button" class="events-save-button" data-eventid="<%= item.event_id %>">Save</button>
+                  
+              </div>
             </div>
-          </div>
-        </div>
-        
-      </div>
+            <button type="submit" class="events-save-button" data-eventid="<%= item.event_id %>" id="save-button-<%= item.event_id %>">Save</button>
+          </form>
           
 <script>
   document.addEventListener("DOMContentLoaded", function() {
@@ -343,7 +396,9 @@
       });
   });
 </script>
-           
+          </div>
+          <% }); %>
+        </div>    
     </div>
     <div id="my-posts-content" class="content-section" style="display: none">
       <div class="container-fluid">
@@ -457,7 +512,6 @@
   </div>
   </div>
 </div>
-
   <!-- Footer -->
   <footer><%- include("partials/footer.ejs") %></footer>
 

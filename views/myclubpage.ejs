@@ -413,10 +413,9 @@
             <div class="col-sm-3">
                 <div >
                     <div style="background-color: black; height: 60px;" class="Post-card-header">
-                      <% console.log(clubManager[0]) %>
                         <img style="border-radius: 100%; width: 50px; height: 50px;" src="../public/images/<%= clubInformation[0].clubImageUrl%>" alt="">
                         <span style="color: white; font-size:24px"><%= clubInformation[0].club_name %></span>
-                        <form action="POST" method="/deletepost?postID=<% post.PostID %>" style="all: inherit; float: right; font-size: xx-large; color: white;" class="material-symbols-outlined">
+                        <form action="/deletepost?postID=<%= post.PostID %>" method="POST" style="all: inherit; float: right; font-size: xx-large; color: white;" class="material-symbols-outlined">
                           <button type="submit" style="background-color: black;box-shadow: none;border:none;margin: 0;padding: 0; float: right; font-size: xx-large; color: white;" class="material-symbols-outlined">
                             <span style="float: right; font-size: xx-large; color: white;" class="material-symbols-outlined">
                             delete

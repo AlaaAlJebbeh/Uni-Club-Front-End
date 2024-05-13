@@ -718,10 +718,10 @@ footer{
     left: 50%; /* Adjust the left position */
     transform: translate(-50%, -50%); /* Center the popup */
     z-index: 9999; 
-    width: 30%; 
-    max-width: 800px; /* Adjust the maximum width */
+    width: 100%; 
+    max-width: 1500px; /* Adjust the maximum width */
     height: 70%; /* Adjust the height */
-    max-height: 600px; /* Adjust the maximum height */
+    max-height: 1000px; /* Adjust the maximum height */
     padding: 20px;
     border-radius: 10px;
     background-color: white; /* Add a background color */

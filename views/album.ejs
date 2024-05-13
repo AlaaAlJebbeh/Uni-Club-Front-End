@@ -1,0 +1,23 @@
+
+<html lang="en">
+  <head>
+ 
+   
+    <link rel="stylesheet" href="../public/styles/album.css" />
+
+    <script src="../public/scripts/album.js" defer></script>
+  </head>
+  
+    <section class="wrapper">
+      <% results.forEach((item, index) => { %>
+      <i class="fa-solid fa-arrow-left button" id="prev"></i>
+      <div class="image-container">
+        <div class="carousel">
+          <img src="../public/images/<%= item.AlbumImage[index].Url%>" alt="" />  
+        </div>
+        <i class="fa-solid fa-arrow-right button" id="next"></i>
+      </div>
+      <% }); %>
+    </section>
+    
+</html>

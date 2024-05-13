@@ -340,8 +340,6 @@ app.get("/socialmedia/:link/:link2", (req, res) => {
 
 app.get("/eventRequests", (req, res) => {
 
-
-
     connection.query(`SELECT * FROM tempevents`, (err, results) => {
         if (err) {
             console.error("Error fetching temp events:", err);
@@ -358,19 +356,17 @@ app.get("/eventRequests", (req, res) => {
                 console.error("Error fetching events:", err);
                 return res.status(500).send("Internal Server Error");
             }
-            console.log(events);
-            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events });
+            connection.query("Select * from tempeventedits", (err, tempeventedits) => {
+                if (err){
+                    console.error("Error fetching temp event Edits:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
 
-        });
+                res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events, tempeventedits });
 
-        connection.query(`SELECT * FROM event WHERE event_id IN (?)`, [eventIds], (err, events) => {
-            if (err) {
-                console.error("Error fetching events:", err);
-                return res.status(500).send("Internal Server Error");
-            }
-            console.log(events);
-            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events });
+            });
 
+           
         }); 
 
 
@@ -437,6 +433,45 @@ app.get("/popupContent", (req, res) => {
         }
         console.log({ results });
         res.render('popupContent.ejs', { results });
+    });
+
+});
+
+app.get("/popupContentedit", (req, res) => {
+    const buttonId = req.query.buttonId;
+    const lastIndex = buttonId.lastIndexOf('_');
+    const eventId = buttonId.substring(lastIndex + 1); // Extract the substring after the last '_'
+
+    connection.query('SELECT * FROM tempeventedits where event_id = ?', [eventId], (err, newEvent) => {
+        if (err) {
+            console.log('error fetching old event ', err);
+            return res.status(404).send("Internal Server Error");
+        }
+        connection.query("Select * from event where event_id = ?", [eventId], (err,oldEvent) =>{
+            if (err) {
+                console.log('error fetching new event ', err);
+                return res.status(404).send("Internal Server Error");
+            }
+            res.render('popupContentedit.ejs', { newEvent,  oldEvent});
+        });
+        
+    });
+
+});
+
+
+app.get("/album", (req, res) => {
+    const event_id = req.query.event_id;
+   
+    console.log(event_id);
+    // Fetch popup content based on button ID from the database or any other source
+    console.log("this is the button id" + event_id);
+    connection.query('SELECT * FROM event_album where event_id = ?', [event_id], (err, results) => {
+        if (err) {
+            console.log('didnt get', err);
+        }
+        console.log({ results });
+        res.render('album.ejs', { results });
     });
 
 });
@@ -573,22 +608,27 @@ app.post("/createEvent", async (req, res) => {
             const clubId = clubResult[0].club_id;
 
             connection.query(
-                `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl, club_name)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName, clubName],
+                `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl, club_name, request_type, status)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName, clubName, "New Event", 0],
+                `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl, club_name, request_type, status)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName, clubName, "New Event", 0],
                 (error, results, fields) => {
                     if (error) {
                         console.error('Error inserting event into database:', error);
                         return res.status(500).send('Failed to insert');
                     }
                     else{
-                        connection.query("INSERT INTO notifications_sks(notificationType, club_name, club_id,   )")
-                        res.redirect("/myclubpage");
-
+                        connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)" , [notificationType, clubName, clubId], (err) =>{
+                            if(err){
+                                console.log("error inseting to notifications: " + err.message);
+                            } else{
+                                res.redirect("/myclubpage");
+                            }
+                        });
                     }
-                    
-                });
-
+            });
         });
 
     });
@@ -609,6 +649,7 @@ app.post('/updateEvent', (req, res) => {
     const eventDescription = req.body.eventDescription;
     const eventCapacity    = parseInt(req.body.eventCapacity);
     const eventNotes       = req.body.eventNotes;
+    const eventCategory    = req.body.eventCategory;
     let imgName;
     const userID           = req.session.userID;
     const clubImage        =  req.body.clubImage;
@@ -622,19 +663,26 @@ app.post('/updateEvent', (req, res) => {
          imgName = clubImage;
     }
 
-    const queryString = `INSERT INTO tempeventedits (event_id, club_name, event_name, date, time, location, language, guest_name, description, capacity, notes, imageUrl, clm_id, status)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const queryString = `INSERT INTO tempeventedits (event_id, club_name, event_name, date, time, location, language, guest_name, description, capacity, notes, imageUrl, clm_id, status, request_type, category)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
 
-    connection.query(queryString, [eventID, clubName, eventName, eventDate, eventTime, eventLocation, eventLanguage, eventGuest, eventDescription, eventCapacity, eventNotes, imgName, userID, 0 ], (error, results, fields) => {
+    connection.query(queryString, [eventID, clubName, eventName, eventDate, eventTime, eventLocation, eventLanguage, eventGuest, eventDescription, eventCapacity, eventNotes, imgName, userID, 0, "Event Edits", eventCategory], (error, results, fields) => {
         if (error) {
             console.error('Error inserting into tempeventedits table:', error);
             return res.status(404).send("Internal Server Error");
         }
-            // Send back a response indicating success or failure
-            res.redirect('/myclubpage');
-            console.log("Data inserted Successfully");
+        const notificationType = "Edit Event Request";
+        connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)" , [notificationType, clubName, req.session.clubID], (err) =>{
+            if(err){
+                console.log("error inseting to notifications: " + err.message);
+            } else{
+                res.redirect("/myclubpage");
+            }
         });
+            // Send back a response indicating success or failure
+            
+    });
 
 });
 
@@ -688,8 +736,16 @@ app.post("/createPost", async (req, res) => {
                             console.error('Error inserting event into database:', error);
                             return res.status(500).send('Failed to insert');
                         }
-                        res.redirect("/myclubpage");
-                    });
+                        const notificationType = "Create New Post";
+                        connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)" , [notificationType, clubName, clubId], (err) =>{
+                            if(err){
+                                console.log("error inserting to notification");
+                            } else{
+                                res.redirect("/myclubpage");
+                            }
+                        
+                        });
+                });
 
             });
 
@@ -1233,7 +1289,7 @@ app.post('/updateProfile', (req, res) => {
 });
 
 
-app.get("/notifications", (req, res) => {
+app.get("/notificationsClub", (req, res) => {
     const email = req.session.email;
     connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
         if (err) {
@@ -1268,7 +1324,6 @@ app.get("/notifications", (req, res) => {
 });
 
 app.post("/changeNotificationStatusEvents", (req, res) => {
-    console.log("form has been sent");
     const email = req.session.email;
     const eventID = req.query.eventId;
 
@@ -1568,6 +1623,39 @@ app.post('/singleclubpage', (req, res) => {
         });
     });
 });
+
+app.get("/notificationsSks", (req, res) =>{
+    const email = req.session.email;
+    
+    connection.query("SELECT n.notificationType, n.club_name, n.notify_id, n.club_id, n.status_notification,c.clubImageUrl FROM notifications_sks n JOIN club c ON n.club_id = c.club_id", (err, resultNotiNewEvent)=>{
+        if(err){
+            console.log("error with join");
+        } else{
+            res.render("notificationsSks.ejs", { loggedIn: true, role: "sks", email: email, resultNotiNewEvent});
+        }
+    });
+});
+
+app.post("/changeNotificationStatusSks", (req, res) =>{
+    console.log("Entered the notificatio edit sks");
+    const email = req.session.email;
+    const notify_id = req.query.notify_id;
+
+    connection.query("UPDATE notifications_sks SET status_notification = 1 WHERE notify_id = ?", [notify_id], (err) => {
+        if(err){
+            console.log("Error notification updated" + err.message);
+        }else{
+            connection.query("SELECT n.notificationType, n.club_name, n.notify_id, n.club_id, n.status_notification,c.clubImageUrl FROM notifications_sks n JOIN club c ON n.club_id = c.club_id", (err, resultNotiNewEvent)=>{
+                if(err){
+                    console.log("error with join");
+                } else{
+                    res.render("notificationsSks.ejs", { loggedIn: true, role: "sks", email: email, resultNotiNewEvent});
+                }
+            });
+        }  
+    });
+});
+
 
 //listining to the port 
 app.listen(port, () => {

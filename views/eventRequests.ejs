@@ -52,8 +52,9 @@
                         <th> Request <span class="icon-arrow">&UpArrow;</span></th>
                         <th> Event Name <span class="icon-arrow">&UpArrow;</span></th>
                         <th> Status <span class="icon-arrow">&UpArrow;</span></th>
-                        <th>Action</th>
-                        <th>Details</th>
+                        <th> Request Type</th>
+                        <th> Action</th>
+                        <th> Details</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,36 +62,52 @@
                     <% var eventID %>
                     <% tempevents.forEach((item) => { %>
                         <%  buttonId = 'button_' + item.event_id; %>
-                       
                     <tr>
                         <td><img src="../public/images/<%=item.imageUrl%>"/></td>
                          <td> 
-                             <%=item.event_name%>
+                            <%=item.event_name%>
                         </td>
-
                         <td>
-                
-                                <p id="status_<%= item.event_id %>" class="status pending">Pending</p>
-                         
+                        <p id="status_<%= item.event_id %>" class="status pending">Pending</p>
                        </td>
-                       
+                       <td>
+                        <%= item.request_type%>
+                        </td>
                        <td>
                           <button class="approve-button" onclick="approveEvent('<%= item.event_id %>')" >Approve</button> 
                             <button  class="reject-button" onclick="reject('<%= item.event_id %>')">Reject</button>
-   </td>
-
-                        <td>
-                        
-        
-  <!-- Create button element -->
-                
+                        </td>   
+                        <td>    
                             <button id="<%= buttonId %>" class="details-button" onclick="showPopup('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>
                         </td>
                         </tr>
+                        <% }); %>
+
+                        <!--  NEWWWW LINEEE   -->
+                        <% var buttonId; %>
+                        <% var eventID %>
+                        <% tempeventedits.forEach((item) => { %>
+                        <%  buttonId = 'button_' + item.event_id; %>
+                        <tr>
+                            <td><img src="../public/images/<%=item.imageUrl%>"/></td>
+                            <td> 
+                                <%=item.event_name%>
+                            </td>
+                            <td>
+                            <p id="status_<%= item.event_id %>" class="status pending">Pending</p>
+                        </td>
+                        <td>
+                            <%= item.request_type%>
+                            </td>
+                        <td>
+                            <button class="approve-button" onclick="approveEvent('<%= item.event_id %>')" >Approve</button> 
+                            <button  class="reject-button" onclick="reject('<%= item.event_id %>')">Reject</button>
+                            </td>   
+                            <td>    
+                                <button id="<%= buttonId %>" class="details-button" onclick="showPopupedit('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>
+                            </td>
+                            </tr>
                     </div>
-                    </form>
-
-
 
                     <% }); %>
                     <div id="reject" class="reject-card1">
@@ -115,8 +132,7 @@
         <script>
             // Function to show the popup card
             function showPopup() {
-                document.getElementById("popup").style.display = "block"
-                
+                document.getElementById("popup").style.display = "block"    
             }
         
             // Function to close the popup card

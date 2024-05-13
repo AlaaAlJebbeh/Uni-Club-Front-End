@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Project</title>
+    <link rel="stylesheet" href="../public/styles/notifications.css">
+</head>
+<body>
+    <div class="container">
+        <div class="notificationContainer">
+            <header>
+                <div class="notificationHeader">
+                    <h1>Notification</h1>
+                    <span id="num-of-notif"></span>
+                </div>
+                <p id="mark-as-read">Mark as All Read</p>
+            </header>
+            <main>
+                    <% resultNotiNewEvent.forEach((itemNE, index) => { %>
+                        <% var clubName = itemNE.club_name; %>
+                        <% var notificationType = itemNE.notificationType%>
+                        <% var notify_id = parseInt(itemNE.notify_id); %>
+                        <% var divId='button_' + itemNE.notify_id; %>
+    
+                        <%if(itemNE.status_notification == 0){%>
+                            <form id="readNotificationFormNewEvent" action="/changeNotificationStatusSks?notify_id=<%= notify_id%>" method="POST">
+                                <div class="notificationCard unread read-notification" id="<%= divId %>">
+                                    <img src="../public/images/<%=itemNE.clubImageUrl%>"/>
+                                     <div class="description">
+                                        <p>Your Have <%=itemNE.notificationType%> From "<%=clubName%>"</p>       
+                                    </div>
+                                </div>
+                            </form>
+                        <%}else if(itemNE.status_notification == 1){%>
+                            <div class="notificationCard">
+                                <img src="../public/images/<%=itemNE.clubImageUrl%>"/>
+                                 <div class="description">
+                                    <p>Your Have <%=itemNE.notificationType%> From "<%=clubName%>"</p>       
+                                </div>
+                            </div>
+                            <%}%>
+                    <%})%> 
+                
+                        
+               
+                
+            </main>
+        </div>
+    </div>
+    <script src="../public/scripts/notificationsSks.js"></script>
+</body>
+</html>

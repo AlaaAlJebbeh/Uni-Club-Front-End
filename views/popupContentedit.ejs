@@ -1,0 +1,102 @@
+<head>
+  <link rel="stylesheet" href="../public/styles/popupcontentedit.css" />
+</head>
+<div class="popup-content">
+  <div class="mainContainer">
+    <div class="leftSide">
+      <% oldEvent.forEach((event) => { %>
+      <div class="card">
+        <div class="imgBx">
+          <img src="../public/images/<%= event.imageURL %>" alt="" />
+        </div>
+        <div class="contentBx">
+          <div class="content">
+            <% const currentDate = new Date(); currentDate.setHours(0, 0, 0, 0);
+            const eventDate = new Date(event.date); eventDate.setHours(0, 0, 0,
+            0); if (currentDate.getTime() === eventDate.getTime()) { %>
+            <div class="statu-00">
+              <p>Active</p>
+            </div>
+            <% } else if (currentDate.getTime()> eventDate.getTime()) { %>
+            <div class="statu-01"><p>Finished</p></div>
+            <% } else { %>
+            <div class="statu-02"><p>Soon</p></div>
+            <% } %>
+            <h2><%= event.club_name %></h2>
+            <br />
+            <h2 class="nameE"><%= event.event_name%></h2>
+            <br />
+            <h6>
+              Date:
+              <span><%= event.date.toString().substring(0, 11) %></span>
+            </h6>
+            <h6>Time: <span><%= event.time%></span></h6>
+            <h6>Location: <span><%= event.location%></span></h6>
+            <h6>Language: <span><%= event.language%></span></h6>
+            <h6>Guest: <span><%= event.guest_name%></span></h6>
+            <h6>
+              <div class="category">
+                Category:
+                <span id="categorySpan"><%= event.category %></span>
+              </div>
+            </h6>
+            <h6>Capacity: <span><%= event.capacity%></span></h6>
+            <h6>Notes: <span><%= event.notes%></span></h6>
+          </div>
+          <div class="overlay">
+            <h6>Description: <span><%= event.description %></span></h6>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+    <div class="rightSide">
+      <% newEvent.forEach((event) => { %>
+      <div class="card">
+        <div class="imgBx">
+          <img src="../public/images/<%= event.imageURL %>" alt="" />
+        </div>
+        <div class="contentBx">
+          <div class="content">
+            <% const currentDate = new Date(); currentDate.setHours(0, 0, 0, 0);
+            const eventDate = new Date(event.date); eventDate.setHours(0, 0, 0,
+            0); if (currentDate.getTime() === eventDate.getTime()) { %>
+            <div class="statu-00">
+              <p>Active</p>
+            </div>
+            <% } else if (currentDate.getTime()> eventDate.getTime()) { %>
+            <div class="statu-01"><p>Finished</p></div>
+            <% } else { %>
+            <div class="statu-02"><p>Soon</p></div>
+            <% } %>
+            <h2><%= event.club_name %></h2>
+            <br />
+            <h2 class="nameE"><%= event.event_name%></h2>
+            <br />
+            <h6>
+              Date:
+              <span><%= event.date.toString().substring(0, 11) %></span>
+            </h6>
+            <h6>Time: <span><%= event.time%></span></h6>
+            <h6>Location: <span><%= event.location%></span></h6>
+            <h6>Language: <span><%= event.language%></span></h6>
+            <h6>Guest: <span><%= event.guest_name%></span></h6>
+            <h6>
+              <div class="category">
+                Category:
+                <span id="categorySpan"><%= event.category %></span>
+              </div>
+            </h6>
+            <h6>Capacity: <span><%= event.capacity%></span></h6>
+            <h6>Notes: <span><%= event.notes%></span></h6>
+          </div>
+          <div class="overlay">
+            <h6>Description: <span><%= event.description %></span></h6>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+  <button id="closeButton" onclick="closePopup()">Close</button>
+</div>

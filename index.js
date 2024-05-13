@@ -474,16 +474,6 @@ app.post("/approveEvent", (req, res) => {
         // Assuming you want to insert the entire event data into the toshareevents table
         const eventData = JSON.stringify(results);
 
-/*
-        connection.query('UPDATE tempevents SET status = 1 WHERE event_id = ?', [eventId], (err, result) => {
-            if (err) {
-                console.error("Error updating status in temporary events table:", err);
-                return res.status(500).send("Internal Server Error");
-            }
-
-            console.log("Status updated in temporary events table");
-
-*/
             results.forEach(event => {
 
                         event.status = 1;

@@ -262,6 +262,22 @@ app.get("/myclubpage", (req, res) => {
     });
 });
 
+app.post("/deletepost", (req, res) => {
+
+    const postID = parseInt(req.query.postID);
+    console.log("Post ID: " + postID);
+
+    connection.query("DELETE FROM posts WHERE PostID = ?", [postID], (err, result) => {
+        if(err){
+            console.log("There was an error deleting the post " + err.message);
+            return res.status(404).send("Internal Server Error");
+        }
+        console.log("Deleted Successfully");
+        res.redirect("/myclubpage");
+
+    });
+});
+
 app.post("/deleteEvent", (req, res) => {
 
     const eventID = parseInt(req.query.eventID);
@@ -441,6 +457,22 @@ app.get("/popupContent", (req, res) => {
 
 });
 
+app.get("/album", (req, res) => {
+    const event_id = req.query.event_id;
+   
+    console.log(event_id);
+    // Fetch popup content based on button ID from the database or any other source
+    console.log("this is the button id" + event_id);
+    connection.query('SELECT * FROM event_album where event_id = ?', [event_id], (err, results) => {
+        if (err) {
+            console.log('didnt get', err);
+        }
+        console.log({ results });
+        res.render('album.ejs', { results });
+    });
+
+});
+
 
 app.post("/approveEvent", (req, res) => {
     const eventId = req.query.eventId; // Retrieve eventId from the query string
@@ -572,13 +604,15 @@ app.post("/createEvent", async (req, res) => {
                         return res.status(500).send('Failed to insert');
                     }
                     else{
-                        connection.query("INSERT INTO notifications_sks(notificationType, club_name, club_id,   )")
-                        res.redirect("/myclubpage");
-
+                        connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)" , [notificationType, clubName, clubId], (err) =>{
+                            if(err){
+                                console.log("error inseting to notifications: " + err.message);
+                            } else{
+                                res.redirect("/myclubpage");
+                            }
+                        });
                     }
-                    
-                });
-
+            });
         });
 
     });
@@ -791,6 +825,10 @@ app.post('/rejectMessage', (req, res) => {
 
 //Route Comparing 
 app.get("/comparing", (req, res) => {
+
+    if(!(req.session.loggedIn)){
+        res.redirect("/");
+    }
     // Query to retrieve data from the 'TempPosts' table
     connection.query("SELECT * FROM tempposts", (err, TempPosts) => {
         if (err) {
@@ -851,7 +889,7 @@ app.get("/comparing", (req, res) => {
                     // Combine data from TempPosts and PostEditRequests into a single array
                     const combinedData = [...TempPosts, ...PostEditRequests];
                     // Render the 'StatusManager.ejs' template with the combined data and club names
-                    res.render("StatusManager.ejs", { combinedData, clubNames });
+                    res.render("StatusManager.ejs", { combinedData, clubNames, email: req.session.email, loggedIn: true, role: "sks" });
                 })
                 .catch(err => {
                     console.error(err);
@@ -878,50 +916,48 @@ app.post("/approvePost", (req, res) => {
         console.log("Fetched post data:", results);
 
         // Iterate over the fetched results
-        results.forEach(post => {
+            
             // Update the status of each post to 'approved'
-            post.Status = 'approved';
+            results[0].Status = 'approved';
 
             // Extract required data for insertion into Posts table
-            const { PostID, clm_id, club_name, postText, postImageURL, notificationstatus } = post;
+            const { PostID, clubid, club_name, postText, postImageURL } = results[0];
 
             // Insert the post into the Posts table
-            connection.query('INSERT INTO posts (PostID, clm_id, club_name, postText, postImageURL, notificationstatus) VALUES (?, ?, ?, ?, ?, ?)',
-                [PostID, clm_id, club_name, postText, postImageURL, notificationstatus], (err, result) => {
+            connection.query('INSERT INTO posts (PostID, club_id, club_name, postText, postImageURL) VALUES (?, ?, ?, ?, ?)',
+                [PostID, clubid, club_name, postText, postImageURL], (err, result) => {
                     if (err) {
                         console.error("Error inserting post data into Posts table:", err);
                         return res.status(500).send("Internal Server Error");
                     }
-                    console.log("Post approved and moved to Posts table successfully!");
-                    res.status(200).send("<script>alert('Post approved successfully!');</script>");
+                   
+                
+                // Extract required data for insertion into History_post table
+                const  club_id  = results[0].club_id;
 
-                });
+                // Insert the post into the History_post table
+                connection.query('INSERT INTO history_post (PostID, club_name, club_id, postText, postImageURL, Status) VALUES (?, ?, ?, ?, ?, ?)',
+                    [PostID, club_name, club_id, postText, postImageURL, 'approved'], (err, result) => {
+                        if (err) {
+                            console.error("Error inserting post data into History_post table:", err);
+                            return res.status(500).send("Internal Server Error");
+                        }
+                        console.log("Post approved and moved to History_post table successfully!");
+                        
+                        // Delete the post from the tempposts table
+                        connection.query('DELETE FROM tempposts WHERE PostID = ?', [postId], (err, result) => {
+                            if (err) {
+                                console.error("Error deleting post from tempposts table:", err);
+                                return res.status(500).send("Internal Server Error");
+                            }
+                            console.log("Post deleted from tempposts table successfully!");
+                            res.redirect("/comparing");
+                        });
+                    });
+                }); 
 
-            // Extract required data for insertion into History_post table
-            const { club_id } = post;
-
-            // Insert the post into the History_post table
-            connection.query('INSERT INTO history_post (PostID, clm_id, club_name, club_id, postText, postImageURL, Status) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                [PostID, clm_id, club_name, club_id, postText, postImageURL, 'approved'], (err, result) => {
-                    if (err) {
-                        console.error("Error inserting post data into History_post table:", err);
-                        return res.status(500).send("Internal Server Error");
-                    }
-                    console.log("Post approved and moved to History_post table successfully!");
-                    
-
-                });
-
-            // Delete the post from the tempposts table
-            connection.query('DELETE FROM tempposts WHERE PostID = ?', [postId], (err, result) => {
-                if (err) {
-                    console.error("Error deleting post from tempposts table:", err);
-                    return res.status(500).send("Internal Server Error");
-                }
-                console.log("Post deleted from tempposts table successfully!");
-            });
-        });
     });
+  
 });
 
 // Route to handle approving a post edit request
@@ -1205,7 +1241,7 @@ app.post('/updateProfile', (req, res) => {
 });
 
 
-app.get("/notifications", (req, res) => {
+app.get("/notificationsClub", (req, res) => {
     const email = req.session.email;
     connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
         if (err) {
@@ -1539,6 +1575,37 @@ app.post('/singleclubpage', (req, res) => {
             });
         });
     });
+});
+
+app.get("/notificationsSks", (req, res) =>{
+    const email = req.session.email;
+    
+    connection.query("SELECT  notificationType, club_name, notify_id, club_id, status_notification FROM notifications_sks", (err, resultNotiNewEvent)=>{
+        if(err){
+            console.log("Error fetching notification new event");
+        } 
+            var club_id = [];
+            resultNotiNewEvent.forEach((club)=>{
+                
+                club_id.push(club.club_id);
+            });
+
+            var images = [];
+
+
+                for( var i = 0; i< club_id.length; i++){
+                    connection.query("SELECT clubImageUrl FROM club WHERE club_id = ?", club_id[i], (err, resultsClubImages)=>{
+                        
+                        if(err){
+                            console.log("error fetching images" + err.message);
+                        }
+                        resultsClubImages.push(resultsClubImages[0]);
+                        console.log(resultsClubImages);
+                        
+                    });
+                }
+            res.render("notificationsSks.ejs", { loggedIn: true, role: "sks", email: email, resultNotiNewEvent, images});           
+    });   
 });
 
 //listining to the port 

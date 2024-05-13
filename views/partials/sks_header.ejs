@@ -38,7 +38,7 @@
             <a href="/clubs">Clubs</a>
           </li>
           <li>
-            <a href="">Content Manager</a>
+            <a href="/comparing">Content Manager</a>
           </li>
           <li>
             <a href="/eventRequests">Event Requests</a>
@@ -53,6 +53,15 @@
         <div class="icons" style="display: flex">
           <% if (loggedIn) { %>
           <!-- If user is logged in, show logout button -->
+          <form action="/notificationsSks" method="GET">
+            <button
+              type="submit"
+              style="background-color: transparent; border: none"
+            >
+            <i class="fa fa-bell" aria-hidden="true" id="notifications"></i>
+          </button>
+          </form>
+
           <form action="/logout" method="GET">
             <button
               type="submit"
@@ -66,8 +75,6 @@
           <i class="fas fa-user" id="log-btn"></i>
           <% } %>
         </div>
-
-    
       </div>
 
       <div class="mainContainer">
@@ -135,6 +142,5 @@
       </label>
     </header>
     <script src="../public/scripts/logIn.js"></script>
-
   </body>
 </html>

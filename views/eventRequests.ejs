@@ -60,7 +60,7 @@
                 <tbody>
                     <% var buttonId; %>
                     <% var eventID %>
-                    <% tempevents.forEach((item) => { %>
+                    <% results.forEach((item) => { %>
                         <%  buttonId = 'button_' + item.event_id; %>
                     <tr>
                         <td><img src="../public/images/<%=item.imageUrl%>"/></td>
@@ -74,8 +74,9 @@
                         <%= item.request_type%>
                         </td>
                        <td>
-                          <button class="approve-button" onclick="approveEvent('<%= item.event_id %>')" >Approve</button> 
-                            <button  class="reject-button" onclick="reject('<%= item.event_id %>')">Reject</button>
+                        <form style="all:initial" action="/approveEvent?eventID=<%=item.event_id%>" method="POST">
+                            <button class="approve-button">Approve</button>
+                        </form> <button  class="reject-button" onclick="reject('<%= item.event_id %>')">Reject</button>
                         </td>   
                         <td>    
                             <button id="<%= buttonId %>" class="details-button" onclick="showPopup('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>

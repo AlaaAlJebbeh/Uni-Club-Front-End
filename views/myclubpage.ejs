@@ -340,7 +340,7 @@
               </div>
             </div>
             <button type="submit" class="events-save-button" data-eventid="<%= item.event_id %>" id="save-button-<%= item.event_id %>">Save</button>
-          </form>
+              </form>
           
 <script>
   document.addEventListener("DOMContentLoaded", function() {
@@ -446,55 +446,57 @@
     <div id="my-status-content" class="content-section" style="display: none">
       <main class="table" id="customers_table">
         <section class="table__header">
-          <h1>Event Requests</h1>
+          <h1>Requests Manager</h1>
           <div class="input-group">
             <input type="search" placeholder="Search Request...">
             <img src="/images/images/search.png" alt="search">
           </div>
-
         </section>
 
         <section class="table__body">
           <table>
             <thead>
               <tr>
-                <th> Request <span class="icon-arrow">&UpArrow;</span></th>
-                <th> Status <span class="icon-arrow">&UpArrow;</span></th>
-                <th>Action</th>
+                <th> Event Name</th>
+                <th> Status</th>
+                <th> Action </th>
               </tr>
             </thead>
             <tbody>
-
-              <% resultsToShare.forEach((itemTs, index)=> { %>
-                    <tr>
-                      <td>
-                        <%=itemTs.event_name%>
-                      </td>
-                      <td>
-                        <p class="status approved">Approved</p>
-                      </td>
-                      <td>
-                        <% var eventID=parseInt(itemTs.event_id); %>
-                          <form action="/ToShareEvent?eventId=<%= eventID %>" method="POST">
-                            <% var buttonId='button_' + itemTs.event_id; %>
-                              <p><button id="<%= buttonId %>" class="approve-button" type="submit">Share</button></p>
-                          </form>
-                      </td>
-                    </tr>
-                    <% }); %>
-
-              <% resultsTemp.forEach((item, index)=> { %>
-                <tr>
-                  <td>
-                    <%=item.event_name%>
-                  </td>
-
-                  <td>
-                    <p class="status pending">Pending</p>
-                  </td>
-                </tr>
+              <% if (Array.isArray(resultsToShare) && resultsToShare.length > 0) { %>
+                <% resultsToShare.forEach((itemTs, index)=> { %>
+                      <tr>
+                        <td>
+                          <%=itemTs.event_name%>
+                        </td>
+                        <td>
+                          <p class="status approved">Approved</p>
+                        </td>
+                        <td>
+                          <% var eventID=parseInt(itemTs.event_id); %>
+                            <form action="/ToShareEvent?eventId=<%= eventID %>" method="POST">
+                              <% var buttonId='button_' + itemTs.event_id; %>
+                                <p><button id="<%= buttonId %>" class="approve-button" type="submit">Share</button></p>
+                            </form>
+                        </td>
+                      </tr>
                 <% }); %>
-                  <% resultsHistory.forEach((itemh, index)=> { %>
+              <%}%>
+              <% if (Array.isArray(resultsTemp) && resultsTemp.length > 0) { %>
+                <% console.log("hi"); %>
+                <% resultsTemp.forEach((item, index)=> { %>
+                  <tr>
+                    <td>
+                      <%=item.event_name%>
+                    </td>
+                    <td>
+                      <p class="status pending">Pending</p>
+                    </td>
+                  </tr>
+                <% }); %>
+              <%}%>
+              <% if (Array.isArray(resultsHistory) && resultsHistory.length > 0) { %>
+                <% resultsHistory.forEach((itemh, index)=> { %>
                     <tr>
                       <td>
                         <%if(itemh.status == 0){%>
@@ -506,8 +508,9 @@
                           <p class="status rejected">Rejected</p>
                           <%}%>
                       </td>
-                      </tr>
-                  <% }); %>
+                    </tr>
+                <% }); %>
+              <%}%>
             </tbody>
           </table>
         </section>
@@ -519,7 +522,8 @@
   </div>
   </div>
   </div>
-</div>
+
+
   <!-- Footer -->
   <footer><%- include("partials/footer.ejs") %></footer>
 

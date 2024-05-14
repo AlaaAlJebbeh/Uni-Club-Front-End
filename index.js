@@ -278,7 +278,6 @@ app.post("/deleteEvent", (req, res) => {
 
 app.post("/ToShareEvent", (req, res) => {
     const eventId = req.query.eventId;
-    console.log("To share " + eventId);
     connection.query("SELECT * FROM toshareevents where event_id = ?", [eventId], (err, result) => {
         console.log("the selected result is");
         console.log(result);
@@ -320,7 +319,7 @@ app.post("/ToShareEvent", (req, res) => {
                         });
                     }
 
-                });
+            });
         }
 
     });

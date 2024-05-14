@@ -671,6 +671,7 @@ footer{
 .custom-table {
     border-collapse: collapse; /* Merge cell borders */
     width: fit-content; /* Set table width */
+    height: fit-content;
   }
   
   .custom-table td {

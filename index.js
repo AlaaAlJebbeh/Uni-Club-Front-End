@@ -1614,7 +1614,7 @@ app.get("/album", (req, res) => {
    
     console.log(event_id);
     // Fetch popup content based on button ID from the database or any other source
-    console.log("this is the button id" + event_id);
+    console.log("this is the button id: " + event_id);
     connection.query('SELECT * FROM event_album where event_id = ?', [event_id], (err, results) => {
         if (err) {
             console.log('didnt get', err);

@@ -63,20 +63,30 @@ wrapper.addEventListener("mouseover", () => clearInterval(intervalId));
 wrapper.addEventListener("mouseleave", autoSlide);
 
 
-document.getElementById("album").addEventListener("click", function() {
-    // Make an AJAX request to fetch images
-    fetch('/album')
-        .then(response => response.json())
-        .then(images => {
-            // Display the images
-            const imageContainer = document.getElementById("imageContainer");
-            imageContainer.innerHTML = "";
-            images.forEach(image => {
-                const imgElement = document.createElement("img");
-                imgElement.src = image.imageUrl;
-                imgElement.alt = image.altText;
-                imageContainer.appendChild(imgElement);
-            });
-        })
-        .catch(error => console.error('Error fetching images:', error));
+function album(event_id) {
+  fetch(`/album?event_id=${event_id}`, {
+      method: 'GET' // Assuming you're using POST method for updating data
+  })
+  .then(response => {
+      if (response.ok) {
+          console.log('Data fetched successfully!');
+          // Optionally, update the UI to reflect the approval
+      } else {
+          console.error('Failed to fetch img:', response.statusText);
+      }
+  })
+  .catch(error => console.error('Error fetching data:', error));
+
+ 
+  
+}
+
+$(document).ready(function() {
+  // Add click event listener to all buttons with the class 'post-button'
+  $('.add-button').click(function() {
+      // Retrieve the post ID from the button's ID
+      var eventId = parseInt($(this).attr('id').split('_')[1]);
+      console.log('Button clicked for event ID:', eventId);
+      // Perform further actions if needed
+  });
 });

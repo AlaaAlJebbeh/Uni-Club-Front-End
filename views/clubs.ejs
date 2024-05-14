@@ -47,7 +47,7 @@
         <br>
         <div class="row">
           <div class="col-sm-10">
-            <h2 style="margin-left: 150px; margin-top: 30px; color: #000">
+            <h2 style="margin-left: 150px; margin-top: 30px; font-size: 30px; color: #000">
               Our clubs
             </h2>
           </div>
@@ -131,10 +131,10 @@
                     <img src="../public/images/<%=item.clubImageUrl%>" />
                   </li>
                 </div>
-                <div class="namec"><%=item.club_name%></div>
+                <div class="namec" id="club_name"><%=item.club_name%></div>
                 <div class="contentc">
-                  <p>Description <%=item.bio%></p>
-                  <p style="background-color: #7bd3d1" disabled id="category">
+                  <p id="boldTitles">Description <%=item.bio%></p>
+                  <p style="background-color: #7bd3d1; padding: 10px; border-radius: 5px; width: 200px; margin-left:120px" id="category">
                     <%=item.category%>
                   </p>
                   <form

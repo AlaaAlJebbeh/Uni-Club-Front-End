@@ -56,7 +56,7 @@
 
     <br /><br />
     <div class="container-fluid">
-      <form style="margin-left: 80%" id="event-search-form">
+      <form style="margin-left: 75%" id="event-search-form">
         <input
           type="text"
           id="event-search-input"
@@ -67,11 +67,13 @@
         </button>
       </form>
     </div>
+  </br> 
+
 
     <br /><br /><br />
     <div class="container" style="padding: 25px; border-style: solid">
       <div class="col-sm-12">
-        <h2 style="text-align: center; color: #000">Up Coming Events</h2>
+        <h1 style="text-align: center; color: #000">Up Coming Events</h2>
       </div>
     </div>
 
@@ -87,7 +89,7 @@
             <div class="img">
               <div class="card">
                 <div class="imgBx">
-                  <img src="../public/images/<%= event.imageURL %>" alt="" />
+                  <img src="../public/images/<%=event.imageURL %>" alt="" />
                 </div>
                 <div class="contentBx">
                   <div class="content">
@@ -135,7 +137,7 @@
         <div class="col-sm-12">
           <div class="row">
             <div class="col-sm-10">
-              <h2 style="margin-left: 150px; color: #000">Events</h2>
+              <h1 style="margin-left: 150px; margin-top:5px; color: #000">Events</h2>
             </div>
             <div class="col-sm-2">
               <div class="dropdown">
@@ -152,7 +154,7 @@
                     Filter By Category:
                   </li>
                   <li class="dropdown-item" onclick="filterEvents('Fun')">
-                    <a href="#">Fun</a>
+                    Fun
                   </li>
                   <li
                     class="dropdown-item"

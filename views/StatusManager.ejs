@@ -84,14 +84,14 @@
                 <button
                   class="approve-button"
                   id="<%= buttonId %>"
-                  onclick="approvePost('<%= item.PostID %>', '<%= item.RequestID %>')"
+                  onclick="approvePost('<%= item.PostID %>', '<%= item.temp_id %>')"
                 >
                   Approve
                 </button>
                 <button
                   class="reject-button"
                   id="<%= buttonId %>"
-                  onclick="rejectPost('<%= item.PostID %>', '<%= item.RequestID %>')"
+                  onclick="rejectPost('<%= item.PostID %>', '<%= item.temp_id %>')"
                 >
                   Reject
                 </button>
@@ -236,5 +236,6 @@
       </div>
     </footer>
     <script src="../public/scripts/StatusManagerScript.js"></script>
+    <script src="../public/scripts/clubManagerSks.js"></script>
   </body>
 </html>

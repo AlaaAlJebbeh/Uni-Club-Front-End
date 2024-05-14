@@ -61,3 +61,22 @@ buttons.forEach((button) => button.addEventListener("click", updateClick));
 wrapper.addEventListener("mouseover", () => clearInterval(intervalId));
 // Add mouseleave event listener to wrapper element to start auto sliding again
 wrapper.addEventListener("mouseleave", autoSlide);
+
+
+document.getElementById("album").addEventListener("click", function() {
+    // Make an AJAX request to fetch images
+    fetch('/album')
+        .then(response => response.json())
+        .then(images => {
+            // Display the images
+            const imageContainer = document.getElementById("imageContainer");
+            imageContainer.innerHTML = "";
+            images.forEach(image => {
+                const imgElement = document.createElement("img");
+                imgElement.src = image.imageUrl;
+                imgElement.alt = image.altText;
+                imageContainer.appendChild(imgElement);
+            });
+        })
+        .catch(error => console.error('Error fetching images:', error));
+});

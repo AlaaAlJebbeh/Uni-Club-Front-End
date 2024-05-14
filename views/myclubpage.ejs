@@ -255,6 +255,15 @@
                       <img src="../public/images/delete.png" alt="delete icon"/>
                     </button>
                   </form>
+                 
+                   <form action="/album" method="get" class="add-button"> 
+                   <button id="<%= item.event_id %>" name="event_id" value="<%= item.event_id %>"  onclick="album()">
+                   <img src="../public/images/add_icon.png" style="background-color: aliceblue;">
+                   </button>
+                    </form>
+
+
+                  
                 </div>
                 <% } %>
               </div>

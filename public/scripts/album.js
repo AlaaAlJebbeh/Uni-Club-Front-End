@@ -61,3 +61,32 @@ buttons.forEach((button) => button.addEventListener("click", updateClick));
 wrapper.addEventListener("mouseover", () => clearInterval(intervalId));
 // Add mouseleave event listener to wrapper element to start auto sliding again
 wrapper.addEventListener("mouseleave", autoSlide);
+
+
+function album(event_id) {
+  fetch(`/album?event_id=${event_id}`, {
+      method: 'GET' // Assuming you're using POST method for updating data
+  })
+  .then(response => {
+      if (response.ok) {
+          console.log('Data fetched successfully!');
+          // Optionally, update the UI to reflect the approval
+      } else {
+          console.error('Failed to fetch img:', response.statusText);
+      }
+  })
+  .catch(error => console.error('Error fetching data:', error));
+
+ 
+  
+}
+
+$(document).ready(function() {
+  // Add click event listener to all buttons with the class 'post-button'
+  $('.add-button').click(function() {
+      // Retrieve the post ID from the button's ID
+      var eventId = parseInt($(this).attr('id').split('_')[1]);
+      console.log('Button clicked for event ID:', eventId);
+      // Perform further actions if needed
+  });
+});

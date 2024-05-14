@@ -1133,5 +1133,7 @@ footer{
     right: 10px; /* Position the button 10px from the right */
   }
   
-  
+  .icon:hover {
+    filter: brightness(1.2); /* Increase brightness on hover (turns yellowish) */
+}
   

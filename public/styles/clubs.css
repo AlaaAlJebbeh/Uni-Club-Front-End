@@ -14,6 +14,18 @@
     font-family: "Roboto Slab", serif;
 }
 
+#club_name{
+    font-size: 25px;
+    font-weight: 600;
+}
+
+#boldTitles{
+    font-size: 20px;
+    font-weight: 400;
+
+
+}
+
 .div-01 {
     padding: 50px;
 }
@@ -23,6 +35,35 @@ li a{
     color: #1a1a1a;
     font-family:Tajawal ;
     border-right: 1px white solid;
+}
+
+button.club_info_button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #4be0d9;
+    /* Gradient effect for modern look */
+    background-image: linear-gradient(to bottom, #0e6461, #0d6458);
+    /* Box shadow for depth */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    /* Transition for smooth hover effect */
+    transition: all 0.3s ease;
+}
+
+button.club_info_button:hover {
+    transform: translateY(-2px); /* Move button slightly up on hover */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+    background-color: #f5f52b;
+    background-image: linear-gradient(to bottom, #e9e91f, #e8e413);
+    color: #021f1b;
+
+
+
 }
 
 main {

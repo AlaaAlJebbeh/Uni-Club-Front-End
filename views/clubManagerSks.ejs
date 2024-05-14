@@ -26,12 +26,16 @@
     <!-- <link rel="stylesheet" href="/styles/footer.css"> -->
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
 
 </head>
 
 <body>
     <header>
-    </header>
+        <% if(loggedIn) { %> <%- include("partials/sks_header.ejs", {loggedIn: true}); %>
+            <% } else { %> <%- include("partials/header.ejs"); %>
+                <% } %>
+      </header>
 
     <!--Font Linking-->
 

@@ -359,6 +359,7 @@ app.get("/eventRequests", (req, res) => {
 
 
 app.get("/clubManagerSks", (req, res) => {
+    const email = req.session.email;
     connection.query("SELECT club_id, clm_id, clubImageUrl, category, club_name FROM club", (err, resultClubs) => {
         if (err) {
             console.log("Error fetching clubs:", err);
@@ -389,7 +390,7 @@ app.get("/clubManagerSks", (req, res) => {
             .then((clubNames) => {
                 console.log("All club names resolved:", clubNames);
                 // Now we render the template after all promises are resolved
-                res.render("clubManagerSks.ejs", { resultClubs, clubNames });
+                res.render("clubManagerSks.ejs", { resultClubs, clubNames,  role: 'sks', email: req.session.email, loggedIn: true });
             })
             .catch((error) => {
                 console.log("Error resolving club manager names:", error);
@@ -1190,60 +1191,55 @@ app.get("/tryID", (req, res) => {
 });
 
 
-app.get('/singleclubpage', (req, res) => {
+app.post('/singleclubpage', (req, res) => {
+    const clubID = req.query.club_id;
 
-    let email = req.session.email;
-
-    connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
+    connection.query("SELECT * FROM club WHERE club_id = ?", clubID, (err, clubInformation) => {
         if (err) {
-            console.error("Error fetching club id:", err);
+            console.error("Error fetching club information:", err);
             return res.status(500).send("Internal Server Error");
         }
-        let clubID = 23;
-        console.log("club ID " + clubID);
-        connection.query("SELECT * FROM club WHERE club_id = ?", clubID, (err, clubInformation) => {
+        if (clubInformation.length === 0) {
+            return res.status(500).send("Club Dosent Exist");
+        }
+        connection.query("select * from club_manager where club_id = ?", [clubID], (err, clubManager) => {
             if (err) {
-                console.error("Error fetching club information:", err);
+                console.error("Error fetching Club manager name:", err);
                 return res.status(500).send("Internal Server Error");
             }
-            if (clubInformation.length === 0) {
-                return res.status(500).send("Club Dosent Exist");
-            }
-            connection.query("select name from club_manager where club_id = ?", [clubID], (err, name) => {
+            connection.query("select * from event where club_id = ?", [clubID], (err, event) => {
                 if (err) {
-                    console.error("Error fetching Club manager name:", err);
+                    console.error("Error fetching events:", err);
                     return res.status(500).send("Internal Server Error");
                 }
-                connection.query("select * from event where club_id = ?", [clubID], (err, event) => {
+
+                connection.query(`SELECT event_name FROM tempevents WHERE club_id = ?`, [clubID], (err, resultsTemp) => {
                     if (err) {
-                        console.error("Error fetching events:", err);
+                        console.error("Error fetching temp events:", err);
                         return res.status(500).send("Internal Server Error");
                     }
-                    connection.query(`SELECT event_name FROM tempevents WHERE club_id = ?`, [clubID], (err, resultsTemp) => {
+                    // Extracting event IDs from the results of the first query
+
+                    connection.query(`SELECT event_name, status, event_id FROM history_event WHERE club_id = ?`, [clubID], (err, resultsHistory) => {
                         if (err) {
                             console.error("Error fetching temp events:", err);
                             return res.status(500).send("Internal Server Error");
                         }
-                        // Extracting event IDs from the results of the first query
-                        connection.query(`SELECT event_name, status, event_id FROM history_event WHERE club_id = ?`, [clubID], (err, resultsHistory) => {
+
+                        connection.query(`SELECT event_name, event_id FROM toshareevents WHERE club_id = ?`, [clubID], (err, resultsToShare) => {
                             if (err) {
                                 console.error("Error fetching temp events:", err);
                                 return res.status(500).send("Internal Server Error");
                             }
-                            connection.query(`SELECT event_name, event_id FROM toshareevents WHERE club_id = ?`, [clubID], (err, resultsToShare) => {
-                                if (err) {
-                                    console.error("Error fetching temp events:", err);
-                                    return res.status(500).send("Internal Server Error");
+                            connection.query("Select * from posts where club_id = ?", [clubID], (err,Posts) => {
+                                if(err){
+                                    console.log("Error fetching posts: " + err.message);
+                                    return res.status(404).send("Internal Server Error");
                                 }
-                                res.render("myclubpage.ejs", { clubInformation, name, role: 'club', email: req.session.email, loggedIn: false, event, resultsTemp, resultsHistory, resultsToShare });
+                                res.render("myclubpage.ejs", { clubInformation, clubManager, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, event, resultsTemp, resultsHistory, resultsToShare, Posts });
                             });
                         });
-
-
-
                     });
-
-
                 });
             });
         });
@@ -1575,7 +1571,7 @@ app.get("/clubs", (req, res) => {
             if (error) {
                 console.log("Error fetching categories");
             } else {
-                res.render("clubs.ejs", { role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, resultClubs });
+                res.render("clubs.ejs", { role: req.session.role, email: req.session.email, loggedIn: req.session.loggedIn, resultClubs });
             }
         });
 
@@ -1601,7 +1597,6 @@ app.post('/singleclubpage', (req, res) => {
 
     const clubID = req.query.club_id;
     console.log("club id from single page is " + clubID);
-    console.log("club ID " + clubID);
     connection.query("SELECT * FROM club WHERE club_id = ?", clubID, (err, clubInformation) => {
         if (err) {
             console.error("Error fetching club information:", err);
@@ -1610,7 +1605,9 @@ app.post('/singleclubpage', (req, res) => {
         if (clubInformation.length === 0) {
             return res.status(500).send("Club Dosent Exist");
         }
-        console.log(clubInformation + "club info")
+        console.log("clubInformation");
+
+        console.log(clubInformation);
         connection.query("select name from club_manager where club_id = ?", [clubID], (err, name) => {
             if (err) {
                 console.error("Error fetching Club manager name:", err);

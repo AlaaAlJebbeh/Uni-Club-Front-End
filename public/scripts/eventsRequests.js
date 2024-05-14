@@ -219,9 +219,9 @@ function showPopup(buttonId) {
     .then(response => response.text())
     .then(data => {
         // Insert the fetched popup content into the popup container
-        document.getElementById("popup").innerHTML = data;
+        document.getElementById("popupedit").innerHTML = data;
         // Display the popup
-        document.getElementById("popup").style.display = "block";
+        document.getElementById("popupedit").style.display = "block";
     })
     .catch(error => console.error('Error fetching popup content:', error));
 }
@@ -232,9 +232,9 @@ function showPopupedit(buttonId) {
     .then(response => response.text())
     .then(data => {
         // Insert the fetched popup content into the popup container
-        document.getElementById("popup").innerHTML = data;
+        document.getElementById("popupedit").innerHTML = data;
         // Display the popup
-        document.getElementById("popup").style.display = "block";
+        document.getElementById("popupedit").style.display = "block";
     })
     .catch(error => console.error('Error fetching popup content:', error));
 }

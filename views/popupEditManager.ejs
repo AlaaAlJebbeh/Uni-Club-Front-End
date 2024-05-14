@@ -14,7 +14,7 @@
                     <%var clubId = clubId%>
                     <%console.log("club Id from popuppp: " + clubId)%>
                     <form action="/EditManagerRequest?clubId=<%= clubId %>" method="POST" class="form" name="EditManager" id="EditManager" >
-                        <div class="select-box">
+                        <div class="select-box" style="width:270px;">
                             <select name="newManagerID" class="manager_choose">
                                 <option value="" disabled selected>New Manager Id</option>
                                 <%resultsClubManagers.forEach((item, index)=> {%>
@@ -25,11 +25,14 @@
     
                             </select>
                         </div>
-                        <div class="buttonContainer">
-                            <button id="sendButton" type="submit">Edit Manager</button>
+                        <div class="buttonContainer" style=" display: flex; justify-content: space-between; margin: 0; padding:0;">
+                        </br></br>
+                            <button id="sendButton" style="cursor: pointer; color: white; background-color: #289e46; margin-top: 5px; font-size:13px; width: 250px; margin-left: 10px; " type="submit">Edit Manager</button>
+                        </br></br>
+                        </div>
                         </div>
                     </form>
-                    <button id="closeButton" onclick="closePopup()">Close</button>
+                    <button id="closeButton" style=" border-radius: 0; cursor: pointer; color: white; background-color: #a61111; margin-top: 20px; width: 250px; font-size:13px; margin-left: 20px; position: relative;" onclick="closePopup()">Close</button>
                 </div>
             </div>
         </div>

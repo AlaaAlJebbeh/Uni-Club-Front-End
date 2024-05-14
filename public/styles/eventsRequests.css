@@ -674,6 +674,14 @@ footer{
     background-color: rgb(214, 60, 60);
 }
 
+.sendButtonAfterReject {
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: white;
+    background-color: #289e46;
+}
+
 #sendButton {
     padding: 10px 20px;
     margin: 0 10px;

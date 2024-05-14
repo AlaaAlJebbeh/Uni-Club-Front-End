@@ -233,7 +233,7 @@
             <div class="indivisual-card-container">
             <div class="card">
               <div class="image-container">
-                <img src="../public/images/<%=item.imageURL  %>" id="clubImage-<%=item.event_id  %>"/>
+                <img src="../public/images/<%=item.imageURL%>" id="clubImage-<%=item.event_id %>"/>
                 <% const currentDate = new Date();
                 currentDate.setHours(0, 0, 0, 0); const eventDate = new
                 Date(item.date); eventDate.setHours(0, 0, 0, 0); if
@@ -265,7 +265,7 @@
                       <input type="file" name="uploadImage1" />
                     </div>
                     <input type="hidden" name="eventID" value="<%= item.event_id %>">
-                    <input type="hidden" name="clubImage" value="" id="clubimageInput_<%= item.event_id %>">
+                    <input type="hidden" name="clubImage" value="<%= item.imageURL %>" id="clubimageInput_<%= item.event_id %>">
                     <div class="card-details">
                       <span>Club Name:</span>
                       <span class="club-name" contenteditable="true" id="clubName_<%= item.event_id %>"><%= clubInformation[0].club_name %></span>
@@ -278,8 +278,8 @@
                   </div>
                   <div class="card-details">
                       <span>Date:</span>
-                      <span class="event-date" contenteditable="true" id="eventDate_<%= item.event_id %>"><%= item.date.toString().substring(0, 11) %></span>
-                      <input type="hidden" name="eventDate" value="<%= item.date.toString().substring(0, 11) %>" id="eventDateInput_<%= item.event_id %>" />
+                      <span class="event-date" contenteditable="true" id="eventDate_<%= item.event_id %>"><%= item.date%></span>
+                      <input type="hidden" name="eventDate" value="<%= item.date %>" id="eventDateInput_<%= item.event_id %>" />
                   </div>
                   <div class="card-details">
                       <span>Time:</span>
@@ -307,7 +307,13 @@
                       <span class="event-guest" contenteditable="true" id="eventGuest_<%= item.event_id %>"><%= item.guest_name %></span>
                       <input type="hidden" name="eventGuest" value="<%= item.guest_name %>" id="eventGuestInput_<%= item.event_id %>" />
                   </div>
-                  
+                  <!-- Category -->
+
+                  <div class="card-details">
+                      <span>Category:</span>
+                      <span class="event-category" contenteditable="true" id="eventCategory_<%= item.event_id %>"><%= item.category %></span>
+                      <input type="hidden" name="eventCategory" value="<%= item.category %>" id="eventCategoryInput_<%= item.category %>" />
+                  </div>
               
                   <!-- Description -->
                   <div class="card-details">
@@ -375,6 +381,9 @@
             const eventGuest = document.getElementById(`eventGuest_${eventID}`).innerText;
             document.getElementById(`eventGuestInput_${eventID}`).value = eventGuest;
 
+            const eventCategory = document.getElementById(`eventCategory_${eventID}`).innerText;
+            document.getElementById(`eventCategoryInput_${eventID}`).value = eventCategory;
+
             // Update description
             const eventDescription = document.getElementById(`eventDescription_${eventID}`).innerText;
             document.getElementById(`eventDescriptionInput_${eventID}`).value = eventDescription;
@@ -390,8 +399,7 @@
             const clubImage = document.getElementById(`clubImage-${eventID}`).getAttribute('src');
             document.getElementById(`clubimageInput_${eventID}`).value = clubImage;
 
-              // Submit the form
-              form.submit();
+            form.submit();
           });
       });
   });

@@ -112,12 +112,15 @@
                             </tr>
                     </div>
 
-                    <% }); %>
+                    
                     <div id="reject" class="reject-card1">
-                        <input type="text" id="rejectionReason" name="rejectionReason" placeholder="Enter rejection reason...">
-                        <button class="send-button" onclick="sendRejectionReason()">Send</button>
+                        <form id="rejectionForm-<%=item.event_id%>" action="/rejectMessage?eventID=<%=item.event_id%>" method="POST" onsubmit="return sendRejectionReason(event)">
+                            <input type="text" id="rejectionReason-<%=item.event_id%>" name="rejectionReason" placeholder="Enter rejection reason...">
+                            <button class="send-button" type="submit">Send</button>
+                        </form>
                         <button id="closeButton2" onclick="closePopup2()">Close</button>
-                      </div>      
+                    </div>
+                      <% }); %>    
                 </tbody>
             </table>
         </section>

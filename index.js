@@ -339,8 +339,6 @@ app.get("/socialmedia/:link/:link2", (req, res) => {
 //Route eventRequests 
 
 app.get("/eventRequests", (req, res) => {
-    let exists1 = false;
-    let exists2 = false;
 
     connection.query(`SELECT * FROM tempevents`, (err, results) => {
         if (err) {
@@ -619,9 +617,7 @@ app.post("/createEvent", async (req, res) => {
                 `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl, club_name, request_type, status)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName, clubName, "New Event", 0],
-                `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl, club_name, request_type, status)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName, clubName, "New Event", 0],
+                
                 (error, results, fields) => {
                     if (error) {
                         console.error('Error inserting event into database:', error);

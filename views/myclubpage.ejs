@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -206,7 +207,7 @@
                 });
               });
             </script>
-
+           
             <hr />
             <h1 style="text-align: center; font-size: 42px; margin-bottom: 75px">
               Club Manager Information
@@ -248,28 +249,20 @@
                 <% if(loggedIn) { %>
                 <div class="editanddeleteContainer">
                   <img src="../public/images/edit.png" alt="edit icon" class="edit-icon" data-eventid="<%= item.event_id %>" style="background-color: aliceblue;"/>
-                 
                   <% var eventID=parseInt(item.event_id); %>
                   <form action="/deleteEvent?eventID=<%=eventID%>" method="post">
                     <button type="submit" style="background-color: white; border:none;">
                       <img src="../public/images/delete.png" alt="delete icon"/>
                     </button>
                   </form>
-
-                  <form action="/album?event_id=<%=event_id%>" method="get"> 
-                  <button > 
-                    <a  href="/album" > <img src="../public/images/add_icon.png" style="background-color: aliceblue;"></a> 
-                  </button>
-                </form>
+                </div>
                 <% } %>
-
-                
               </div>
               <!-- Inside the HTML template -->
               <div class="text-container" id="text-container-<%= item.event_id %>">
                   <form id="edit-form-<%= item.event_id %>" class="text-container" method="POST" action="/updateEvent" enctype="multipart/form-data">
                     <div class="upload image" id="upload-button-<%= item.event_id %>">
-                      <input type="file" name="uploadImage1"/>
+                      <input type="file" name="uploadImage1" />
                     </div>
                     <input type="hidden" name="eventID" value="<%= item.event_id %>">
                     <input type="hidden" name="clubImage" value="" id="clubimageInput_<%= item.event_id %>">
@@ -314,6 +307,7 @@
                       <span class="event-guest" contenteditable="true" id="eventGuest_<%= item.event_id %>"><%= item.guest_name %></span>
                       <input type="hidden" name="eventGuest" value="<%= item.guest_name %>" id="eventGuestInput_<%= item.event_id %>" />
                   </div>
+                  
               
                   <!-- Description -->
                   <div class="card-details">
@@ -518,7 +512,6 @@
   </div>
   </div>
 </div>
-
   <!-- Footer -->
   <footer><%- include("partials/footer.ejs") %></footer>
 

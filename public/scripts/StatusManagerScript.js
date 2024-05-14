@@ -212,32 +212,33 @@ details.addEventListener("click", (e) => {
 
 });
 
-
-function approvePost(PostId, RequestId) {
+function approvePost(PostId, temp_id, requestTypeMap) {
     let endpoint = `/approvePost?postId=${PostId}`; // Default endpoint for regular posts
 
     // Check if RequestId is defined
-    if (RequestId) {
-        endpoint = `/approvePostEditRequest?postId=${PostId}&requestId=${RequestId}`; // Use endpoint for post edit requests
+    if (temp_id) {
+        endpoint = `/approvePostEdit?postId=${PostId}&RequestId=${temp_id}`; // Use endpoint for post edit requests
     }
 
-    fetch(endpoint, {
+    /*fetch(endpoint, {
         method: 'POST' // Assuming you're using POST method for updating data
     })
     .then(response => {
         if (response.ok) {
-            const statusElement = document.getElementById(`Status_${PostId}_${RequestId}`); // Update status element ID
+            const statusElement = document.getElementById(`buttonId${PostId}_${temp_id}`); // Update status element ID
             if (statusElement) {
-                statusElement.textContent = "Approved";
+                statusElement.textContent = "approved";
             }
             console.log('post approved successfully!');
             // Optionally, update the UI to reflect the approval
         } else {
-            console.error('Failed to approve post:', response.statusText);
+            console.error('Failed to approve profile edit:', response.statusText);
         }
     })
-    .catch(error => console.error('Error approving post:', error));
+    .catch(error => console.error('Error approving profile edit:', error));*/
+    
 }
+approvePost(PostId, temp_id, requestTypeMap);
 
 
 
@@ -281,3 +282,5 @@ function rejectPost(postId, requestId) {
     var popup = document.getElementById("reject");
     popup.style.display = "none";
   }
+
+

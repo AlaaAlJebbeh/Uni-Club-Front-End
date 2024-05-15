@@ -212,7 +212,7 @@ details.addEventListener("click", (e) => {
 
 });
 
-/////DONT TOUCH THIS CODE IT WORKED PLZ/////
+/////DONT TOUCH THIS CODE YET/////
 
 /*function approvePost(PostId, temp_id, requestTypeMap) {
     let endpoint = `/approvePost?postId=${PostId}`; // Default endpoint for regular posts

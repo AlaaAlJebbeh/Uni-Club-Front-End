@@ -43,7 +43,7 @@
     <div class="rightSide">
       <h1 style="text-align: center; text-decoration: underline">New Event</h1>
       <% newEvent.forEach((event) => { %>
-      <div class="imgBx">
+      <div class="imgBx" <% if(event.imageUrl !== oldEvent[0].imageUrl) {%> style = "background-color: yellow" <%} %>>
         <img src="../public/images/<%= event.imageUrl %>" alt="" />
       </div>
       <div class="contentBx">

@@ -792,15 +792,15 @@ app.post("/clubform", async (req, res) => {
     const media3 = req.body.media3;
     const email = req.body.email;
 
-    const { ImagePost } = req.files;
-    const imgPath = __dirname + '/public/images' + ImagePost.name
+    const { uploadImage1 } = req.files;
+    const imgPath = __dirname + '/public/images/' + uploadImage1.name
     // Move the uploaded image to our upload folder
-    ImagePost.mv(imgPath);
-    const imgName = ImagePost.name;
+    uploadImage1.mv(imgPath);
+    const imageName = uploadImage1.name;
 
 
-    connection.query('INSERT INTO club(club_name, category, clm_id, bio, contact, social_media1, social_media2, social_media3, email) VALUES(?,?,?,?,?,?,?,?,?)',
-        [name, cars, manager, bio, number, media1, media2, media3, email], (err, result) => {
+    connection.query('INSERT INTO club(club_name, category, clm_id, bio, contact, social_media1, social_media2, social_media3, email, clubImageUrl) VALUES(?,?,?,?,?,?,?,?,?,?)',
+        [name, cars, manager, bio, number, media1, media2, media3, email, imageName], (err, result) => {
             if (err) {
                 console.error("Error inserting club:", error);
                 res.status(500).send("Error creating club");

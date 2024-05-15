@@ -30,7 +30,7 @@
   <body>
     <!--Header-->
     <header><%- include("partials/sks_header.ejs") %></header>
-    <form action="/clubform" class="form" method="POST">
+    <form action="/clubform" class="form" method="POST" enctype="multipart/form-data">
     <section class="container">
       <h1 class="btne-01">Create Club</h1>
      
@@ -184,6 +184,10 @@
           <span class="error-message" style="color: red; display: none"
             >Please enter a valid email address.</span
           >
+        </div>
+
+        <div class="upload image">
+          <input type="file" name="uploadImage1" />
         </div>
 
         <button type="submit" id="sendButton">Submit</button>

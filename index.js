@@ -687,7 +687,7 @@ app.post('/updateEvent', (req, res) => {
     const queryString = `INSERT INTO tempeventedits (event_id, club_name, event_name, date, time, location, language, guest_name, description, capacity, notes, imageUrl, clm_id, status, request_type, category)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-    console.log("this is the event image name:  ", imgName + "and this is the Date: ", eventDate);
+    console.log("this is the event image name:  ", imgName + "and this is the Date: ", eventDate + "and this is the language: ", eventLanguage);
     connection.query(queryString, [eventID, clubName, eventName, eventDate, eventTime, eventLocation, eventLanguage, eventGuest, eventDescription, eventCapacity, eventNotes, imgName, userID, 0, "Event Edits", eventCategory], (error, results, fields) => {
         if (error) {
             console.error('Error inserting into tempeventedits table:', error);

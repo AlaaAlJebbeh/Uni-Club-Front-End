@@ -352,7 +352,7 @@ app.get("/eventRequests", (req, res) => {
                 console.error("Error fetching temp event Edits:", err);
                 return res.status(500).send("Internal Server Error");
             }
-            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results,  tempeventedits, results });
+            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true,   tempeventedits, results });
 
         });
     }); 
@@ -807,6 +807,8 @@ app.post('/rejectMessage', (req, res) => {
             console.log("Error fetching event from temp Events: " + err.message);
             return res.status(500).send("Internal Server Error");
         }
+
+        console.log("Fetched Event from temp Events: " , eventInfo);
         connection.query("INSERT INTO history_event (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, status, comment, notificationstatus, club_name, clm_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [eventID, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, clubId, 0, "", 0, clubName, eventInfo[0].clm_id], (err, result) => {
             if (err) {
                 console.log("Error Inserting into history_event ", err);

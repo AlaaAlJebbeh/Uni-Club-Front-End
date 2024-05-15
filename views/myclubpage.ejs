@@ -210,7 +210,7 @@
             </script>
            
             <hr />
-            <h1 style="text-align: center; font-size: 42px; margin-bottom: 75px">
+            <h1 style="text-align: center; font-size: 36px; margin-bottom: 75px">
               Club Manager Information
             </h1>
 
@@ -218,10 +218,19 @@
               <% clubManager.forEach((item)=> { %>
                 <div class="CLMNAMES">
                   <img src="../public/images/<%= item.imageURL%>" />
-                  <h1>
+                  <h2>
                     <span style="color: #193635">Club Manager Name:</span><br />
                     <%=item.name%>
-                  </h1>
+                  </h2>
+                  <% if(loggedIn) { %>
+                  <form action = "/updatePictureManager" method="post" style="all:initial" enctype="multipart/form-data">
+                    <div>
+                      <input type="file" name="uploadImage1" />
+                    </div>
+
+                    <button type="submit" class="uploadbutton">Upload</button>
+                    </form>
+                    <% } %>
                 </div>
                 <% }); %>
             </div>
@@ -289,10 +298,13 @@
                       <span class="event-name" contenteditable="false" id="eventName_<%= item.event_id %>"><%= item.event_name %></span>
                       <input type="hidden" name="eventName" value="<%= item.event_name %>" id="eventNameInput_<%= item.event_id %>" />
                   </div>
-                  <div class="card-details"> 
-                      <span>Date:</span>
-                      <span class="event-date" contenteditable="false" id="eventDate_<%= item.event_id %>"><%= item.date.toString().substring(0, 11) %></span>
-                      <input type="hidden" name="eventDate" value="<%= item.date.toString().substring(0, 11) %>" id="eventDateInput_<%= item.event_id %>" />
+                  <!--Date-->
+                  <div class="card-details">
+                    <span>Date:</span>
+                    <span class="event-date" contenteditable="false" id="eventDate_<%= item.event_id %>">
+                        <%= item.date.toISOString().split('T')[0] %>
+                    </span>
+                    <input type="hidden" name="eventDate" value="<%= item.date.toISOString().split('T')[0] %>" id="eventDateInput_<%= item.event_id %>" />
                   </div>
                   <div class="card-details">
                       <span>Time:</span>

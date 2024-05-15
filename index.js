@@ -489,7 +489,7 @@ app.post("/approveEvent", (req, res) => {
                                     console.log("fetching event name");
                                 } else {
                                     const event_name = result[0].event_name;
-                                    connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)", [notificationType, event_name, clubId], (err) => {
+                                    connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)", [notificationType, eventInfo[0].event_name, clubId], (err) => {
                                         if (err) {
                                             console.log("error inseting to notifications approve event : " + err.message);
                                         } else {
@@ -601,7 +601,7 @@ app.get("/createEvent", (req, res) => {
 
 app.post("/createEvent", async (req, res) => {
     const { uploadImage1 } = req.files;
-    const imgPath = __dirname + '/public/images' + uploadImage1.name
+    const imgPath = __dirname + '/public/images/' + uploadImage1.name
     // Move the uploaded image to our upload folder
     uploadImage1.mv(imgPath);
     const imageName = uploadImage1.name;
@@ -715,7 +715,7 @@ app.post("/createPost", async (req, res) => {
     console.log("The requuest is");
     const { ImagePost } = req.files;
 
-    const imgPath = __dirname + '/public/images' + ImagePost.name
+    const imgPath = __dirname + '/public/images/' + ImagePost.name
     // Move the uploaded image to our upload folder
     ImagePost.mv(imgPath);
     const imgName = ImagePost.name;
@@ -810,6 +810,7 @@ app.post("/clubform", async (req, res) => {
             res.send('Club successfully created');
         });
 });
+
 
 app.post('/rejectEvent', (req, res) => {
     const eventID = parseInt(req.query.eventID);
@@ -1324,7 +1325,7 @@ app.post('/updateProfile', (req, res) => {
             if (req.files) {
                 const { uploadImage1 } = req.files;
                 console.log(uploadImage1.name);
-                const imgPath = __dirname + '/public/' + uploadImage1.name
+                const imgPath = __dirname + '/public/images' + uploadImage1.name
                 uploadImage1.mv(imgPath);
                 let imageName = uploadImage1.name;
                 connection.query("INSERT INTO tempprofile (club_id, input, RequestType) VALUES (?, ?, ?)", [clubid, imageName, "New Club Image"], (err, result) => {

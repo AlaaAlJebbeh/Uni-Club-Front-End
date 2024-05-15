@@ -360,7 +360,7 @@ app.get("/eventRequests", (req, res) => {
                     return res.status(500).send("Internal Server Error");
                 }
 
-                res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, tempevents: results, events, tempeventedits });
+                res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, results, events, tempeventedits });
 
             });
         }); 
@@ -496,9 +496,16 @@ app.post("/approveEventedit", (req, res) => {
                                 console.log("Error deleteing the requst from temp event edit : ", err);
                                 return res.status(500).send("Internal Server Error");
                             }
-
-                            res.redirect("/eventRequests");
-
+                            else{
+                                const notificationType = "Edit Event Approved";
+                                connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)" , [notificationType, event_name, clubId], (err) =>{
+                                    if(err){
+                                        console.log("error inseting to notifications: " + err.message);
+                                    } else{
+                                        res.redirect("/eventRequests");
+                                    }
+                                });
+                            }
                         });
                     });
                 });

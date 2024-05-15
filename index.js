@@ -940,6 +940,7 @@ app.post('/rejectEventEdit', (req, res) => {
 
     });
 });
+});
 
 //Route Comparing 
 app.get("/comparing", (req, res) => {

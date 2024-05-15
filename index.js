@@ -345,13 +345,22 @@ app.get("/eventRequests", (req, res) => {
             console.error("Error fetching temp events:", err);
             return res.status(500).send("Internal Server Error");
         }
+        // Extracting event IDs from the results of the first query
+        const eventIds = results.map(row => row.eventid);
 
-        connection.query("Select * from tempeventedits", (err, tempeventedits) => {
-            if (err){
-                console.error("Error fetching temp event Edits:", err);
+        // Performing a second query to fetch events based on the event IDs
+        connection.query(`SELECT * FROM event WHERE event_id IN (?)`, [eventIds], (err, events) => {
+            if (err) {
+                console.error("Error fetching events:", err);
                 return res.status(500).send("Internal Server Error");
             }
-            res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true,   tempeventedits, results });
+            connection.query("Select * from tempeventedits", (err, tempeventedits) => {
+                if (err){
+                    console.error("Error fetching temp event Edits:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+
+                res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, results, events, tempeventedits });
 
             });
         }); 
@@ -487,9 +496,16 @@ app.post("/approveEventedit", (req, res) => {
                                 console.log("Error deleteing the requst from temp event edit : ", err);
                                 return res.status(500).send("Internal Server Error");
                             }
-
-                            res.redirect("/eventRequests");
-
+                            else{
+                                const notificationType = "Edit Event Approved";
+                                connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)" , [notificationType, event_name, clubId], (err) =>{
+                                    if(err){
+                                        console.log("error inseting to notifications: " + err.message);
+                                    } else{
+                                        res.redirect("/eventRequests");
+                                    }
+                                });
+                            }
                         });
                     });
                 });

@@ -79,22 +79,44 @@ $(document).ready(function() {
         // Perform further actions if needed
     });
 })
-
 document.addEventListener("DOMContentLoaded", function() {
     const editIcons = document.querySelectorAll('.edit-icon');
     editIcons.forEach(icon => {
         icon.addEventListener('click', function() {
             const eventID = this.getAttribute('data-eventid');
-            const textContainer = document.getElementById(`text-container-${eventID}`);
             const saveButton = document.getElementById(`save-button-${eventID}`);
             const uploadButton = document.getElementById(`upload-button-${eventID}`);
-            
-            if (textContainer) {
-                const isEditable = textContainer.getAttribute('contenteditable') === 'true';
-                saveButton.style.display = isEditable ? 'none' : 'block';
-                uploadButton.style.display = isEditable ? 'none' : 'block';
-                textContainer.contentEditable = !isEditable;
-            }
+            const clubName = document.getElementById(`clubName_${eventID}`);
+            const eventName = document.getElementById(`eventName_${eventID}`);
+            const eventDate = document.getElementById(`eventDate_${eventID}`);
+            const eventTime = document.getElementById(`eventTime_${eventID}`);
+            const eventLocation = document.getElementById(`eventLocation_${eventID}`);
+            const eventLanguage = document.getElementById(`eventLanguage_${eventID}`);
+            const eventGuest = document.getElementById(`eventGuest_${eventID}`);
+            const eventDescription = document.getElementById(`eventDescription_${eventID}`);
+            const eventCapacity = document.getElementById(`eventCapacity_${eventID}`);
+            const eventCategory = document.getElementById(`eventCategory_${eventID}`);
+            const eventNotes = document.getElementById(`eventNotes_${eventID}`);
+
+            const editableElements = [
+                clubName, eventName, eventDate, eventTime, eventLocation,
+                eventLanguage, eventGuest, eventDescription, eventCapacity,
+                eventCategory, eventNotes
+            ];
+
+            // Check the current editable state of the first element to determine the toggle state
+            const isEditable = editableElements[0].getAttribute('contenteditable') === 'true';
+
+            // Toggle the contenteditable state of each element
+            editableElements.forEach(element => {
+                if (element) {
+                    element.setAttribute('contenteditable', !isEditable);
+                }
+            });
+
+            // Show or hide the save and upload buttons based on the editable state
+            saveButton.style.display = isEditable ? 'none' : 'block';
+            uploadButton.style.display = isEditable ? 'none' : 'block';
         });
     });
 

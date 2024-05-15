@@ -241,12 +241,12 @@ details.addEventListener("click", (e) => {
 approvePost(PostId, temp_id, requestTypeMap);*/
 
 
-function reject(temp_id) {
+function rejectProfileEdit(temp_id) {
     window.selectedRequestId = temp_id;
     showPopup2();
 }
 
-function reject(postId) {
+function rejectPost(postId) {
     window.selectedRequestId = postId;
     showPopup2();
 }
@@ -274,7 +274,7 @@ function sendRejectionReason() {
     });
 }
 
-function sendRejectionReason() {
+function sendRejectionReason2() {
     const rejectionReason = document.getElementById('rejectionReason').value;
     const postId = window.selectedPostID;
     // Send rejection reason to server
@@ -296,8 +296,6 @@ function sendRejectionReason() {
         // Handle error
     });
 }
-
-
 
   // Function to display the popup
   function showPopup2() {

@@ -212,7 +212,7 @@ details.addEventListener("click", (e) => {
 
 });
 
-function approvePost(PostId, temp_id, requestTypeMap) {
+/*function approvePost(PostId, temp_id, requestTypeMap) {
     let endpoint = `/approvePost?postId=${PostId}`; // Default endpoint for regular posts
 
     // Check if RequestId is defined
@@ -220,7 +220,7 @@ function approvePost(PostId, temp_id, requestTypeMap) {
         endpoint = `/approvePostEdit?postId=${PostId}&RequestId=${temp_id}`; // Use endpoint for post edit requests
     }
 
-    /*fetch(endpoint, {
+    fetch(endpoint, {
         method: 'POST' // Assuming you're using POST method for updating data
     })
     .then(response => {
@@ -235,41 +235,69 @@ function approvePost(PostId, temp_id, requestTypeMap) {
             console.error('Failed to approve profile edit:', response.statusText);
         }
     })
-    .catch(error => console.error('Error approving profile edit:', error));*/
+    .catch(error => console.error('Error approving profile edit:', error));
     
 }
-approvePost(PostId, temp_id, requestTypeMap);
+approvePost(PostId, temp_id, requestTypeMap);*/
 
 
-
-function rejectPost(postId, requestId) {
-    // Store PostID and RequestID in a global variable accessible by the sendRejectionReason function
-    window.selectedPostId = postId;
-    window.selectedRequestId = requestId;
+function reject(temp_id) {
+    window.selectedRequestId = temp_id;
     showPopup2();
-  }
+}
 
-  function sendRejectionReason() {
-    var rejectionReason = document.getElementById("rejectionReason").value;
-    fetch('/reject', {
+function reject(postId) {
+    window.selectedRequestId = postId;
+    showPopup2();
+}
+
+function sendRejectionReason() {
+    const rejectionReason = document.getElementById('rejectionReason').value;
+    const RequestId = window.selectedRequestId;
+    // Send rejection reason to server
+    fetch(`/rejectProfileEdit?temp_id=${RequestId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ postId: window.selectedPostId, rejectionReason: rejectionReason })
-    })
-    .then(response => {
+        body: JSON.stringify({ rejectionReason: rejectionReason })
+    }).then(response => {
         if (response.ok) {
-            console.log("Rejection reason sent successfully");
-            closePopup2(); // Close the popup after sending rejection reason
+            // Profile edit rejected successfully, close popup or do something else
+            closePopup2();
         } else {
-            console.error("Failed to send rejection reason", response.status);
+            // Handle error
         }
-    })
-    .catch(error => {
-        console.error("Error:", error);
+    }).catch(error => {
+        console.error('Error sending rejection reason:', error);
+        // Handle error
     });
-  }
+}
+
+function sendRejectionReason() {
+    const rejectionReason = document.getElementById('rejectionReason').value;
+    const postId = window.selectedPostID;
+    // Send rejection reason to server
+    fetch(`/rejectPost?postId=${postId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ rejectionReason: rejectionReason })
+    }).then(response => {
+        if (response.ok) {
+            // Post rejected successfully, close popup or do something else
+            closePopup2();
+        } else {
+            // Handle error
+        }
+    }).catch(error => {
+        console.error('Error sending rejection reason:', error);
+        // Handle error
+    });
+}
+
+
 
   // Function to display the popup
   function showPopup2() {

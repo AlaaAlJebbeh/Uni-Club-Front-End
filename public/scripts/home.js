@@ -40,7 +40,7 @@ const dragStart = (e) => {
 }
 
 const dragging = (e) => {
-    if(!isDragging) return; // if isDragging is false return from here
+    if (!isDragging) return; // if isDragging is false return from here
     // Updates the scroll position of the carousel based on the cursor movement
     carousel.scrollLeft = startScrollLeft - (e.pageX - startX);
 }
@@ -52,13 +52,13 @@ const dragStop = () => {
 
 const infiniteScroll = () => {
     // If the carousel is at the beginning, scroll to the end
-    if(carousel.scrollLeft === 0) {
+    if (carousel.scrollLeft === 0) {
         carousel.classList.add("no-transition");
         carousel.scrollLeft = carousel.scrollWidth - (2 * carousel.offsetWidth);
         carousel.classList.remove("no-transition");
     }
     // If the carousel is at the end, scroll to the beginning
-    else if(Math.ceil(carousel.scrollLeft) === carousel.scrollWidth - carousel.offsetWidth) {
+    else if (Math.ceil(carousel.scrollLeft) === carousel.scrollWidth - carousel.offsetWidth) {
         carousel.classList.add("no-transition");
         carousel.scrollLeft = carousel.offsetWidth;
         carousel.classList.remove("no-transition");
@@ -66,11 +66,11 @@ const infiniteScroll = () => {
 
     // Clear existing timeout & start autoplay if mouse is not hovering over carousel
     clearTimeout(timeoutId);
-    if(!wrapper.matches(":hover")) autoPlay();
+    if (!wrapper.matches(":hover")) autoPlay();
 }
 
 const autoPlay = () => {
-    if(window.innerWidth < 800 || !isAutoPlay) return; // Return if window is smaller than 800 or isAutoPlay is false
+    if (window.innerWidth < 800 || !isAutoPlay) return; // Return if window is smaller than 800 or isAutoPlay is false
     // Autoplay the carousel after every 2500 ms
     timeoutId = setTimeout(() => carousel.scrollLeft += firstCardWidth, 2500);
 }
@@ -83,18 +83,18 @@ carousel.addEventListener("scroll", infiniteScroll);
 wrapper.addEventListener("mouseenter", () => clearTimeout(timeoutId));
 wrapper.addEventListener("mouseleave", autoPlay);
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const eventSearchForm = document.getElementById('event-search-form');
     const eventCards = document.querySelectorAll('.col-sm-6');
 
     if (eventSearchForm && eventCards) {
-        eventSearchForm.addEventListener('submit', function(event) {
+        eventSearchForm.addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent form submission
 
             const searchTerm = document.getElementById('event-search-input').value.trim().toLowerCase();
 
             // Filter event cards based on search term
-            eventCards.forEach(function(card) {
+            eventCards.forEach(function (card) {
                 const eventNameElement = card.querySelector('.nameE');
                 if (eventNameElement) {
                     const eventName = eventNameElement.textContent.trim().toLowerCase();
@@ -112,6 +112,62 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('event-search-form or card elements not found.');
     }
 });
+
+function convertDateToISOString(dateString) {
+    // Create a Date object from the input date string (assuming it's in YYYY-MM-DD format)
+    const dateObject = new Date(dateString);
+
+    // Get the ISO string in the format YYYY-MM-DDTHH:mm:ss.sssZ
+    const isoString = dateObject.toISOString();
+
+    // Split the ISO string at 'T' to get only the date part (YYYY-MM-DD)
+    const datePart = isoString.split('T')[0];
+
+    // Return the formatted date part
+    return datePart;
+}
+
+document.getElementById('dateFilterForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    console.log("Entered the date transform");
+
+    // Retrieve start date and end date values from form inputs
+    const startDateInput = document.getElementById('startDate').value;
+    const endDateInput = document.getElementById('endDate').value;
+
+    console.log("Start Date Input:", startDateInput);
+    console.log("End Date Input:", endDateInput);
+
+    // Convert start date and end date to ISO date format (YYYY-MM-DD)
+    const startDateISO = new Date(startDateInput).toISOString().split('T')[0];
+    const endDateISO = new Date(endDateInput).toISOString().split('T')[0];
+
+    console.log("Start Date ISO:", startDateISO);
+    console.log("End Date ISO:", endDateISO);
+
+    // Call the function to filter events by date
+    filterEventsByDate(startDateISO, endDateISO);
+});
+
+// Function to filter events by date
+function filterEventsByDate(startDate, endDate) {
+    const allCards = document.querySelectorAll(".col-sm-6");
+  
+    allCards.forEach((card) => {
+      const eventDateSpan = card.querySelector(".content .date #dateSpan");
+      if (eventDateSpan) {
+        const eventDate = new Date(eventDateSpan.textContent.trim());
+        
+        // Check if event date is valid and within the specified range
+        if (!isNaN(eventDate) && eventDate >= new Date(startDate) && eventDate <= new Date(endDate)) {
+          card.style.display = "block"; // Show card if event date is within range
+        } else {
+          card.style.display = "none"; // Hide card if event date is outside range
+        }
+      }
+    });
+  }
 
 
 

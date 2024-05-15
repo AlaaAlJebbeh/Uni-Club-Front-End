@@ -1243,10 +1243,10 @@ app.post("/rejectProfileEdit", (req, res) => {
         }
 
         const profileEdit = profileEditResults[0];
-        const { clubid, input, RequestType } = profileEdit;
+        const { club_id, input, RequestType } = profileEdit;
 
         connection.query('INSERT INTO history_profile (club_id, temp_id, Status, RequestType, input, rejectionReason) VALUES (?, ?, ?, ?, ?, ?)',
-            [clubid, RequestId, 'rejected', RequestType, input, rejectionReason],
+            [club_id, RequestId, 'rejected', RequestType, input, rejectionReason],
             (err, insertResult) => {
                 if (err) {
                     console.error('Error inserting into history_profile:', err);

@@ -778,7 +778,14 @@ app.post("/createPost", async (req, res) => {
 //Route createClub
 app.get("/createclub", (req, res) => {
 
-    res.render("on_click_create_club.ejs", { role: 'sks', email: req.session.email, loggedIn: true });
+    connection.query('SELECT clm_id FROM club_manager', (err, resultsClubManagers) => {
+        if (err) {
+            console.log("couldn't fetch club managers", err);
+        }
+        console.log({ resultsClubManagers });
+        res.render("on_click_create_club.ejs", { role: 'sks', email: req.session.email, loggedIn: true, resultsClubManagers});
+    });
+
 });
 
 app.post("/clubform", async (req, res) => {

@@ -43,6 +43,19 @@
             required
           />
         </div>
+        <label style="font-size: medium">Manager ID</label>
+        <div class="select-box" style="width:270px;">
+          <select name="newManagerID" class="manager_choose" required>
+              <option value="" disabled selected>New Manager Id</option>
+              <%resultsClubManagers.forEach((item, index)=> {%>
+                  <option>
+                      <%=item.clm_id%>
+                  </option>
+                  <%})%>
+
+          </select>
+          <span class="error-message" style="color: red; display: none">Please select a manager.</span>
+        </div>
 
         <div class="gender-box">
           <h3 style="font-size: medium; font-weight: bold">Category</h3>
@@ -114,22 +127,6 @@
             </div>
           </div>
         </div>
-   
-        
-        <div class="input-box">
-          <label style="font-size: medium">Manager ID</label>
-          <select name="manager" required>
-            <option value="" disabled selected>Select Manager ID</option>
-            <!-- Replace these options with dynamic values from your database -->
-            <option value="1">Manager 1</option>
-           
-            <!-- More options -->
-          </select>
-          <span class="error-message" style="color: red; display: none">Please select a manager.</span>
-        </div>
-        
-
-       
 
         <div class="input-box address">
           <label style="font-size: medium">BIO</label>

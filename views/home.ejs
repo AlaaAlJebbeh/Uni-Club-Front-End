@@ -134,15 +134,29 @@
       </div>
 
       <div class="container-fluid" style="padding: 25px; border-style: solid">
+        
         <div class="col-sm-12">
           <div class="row">
             <div class="col-sm-10">
               <h1 style="margin-left: 150px; margin-top:5px; color: #000">Events</h2>
             </div>
+
+            <div class="col-sm-2" style="margin-left:460px;">
+              <form id="dateFilterForm">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="startDate">
+
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" name="endDate">
+
+                <button type="submit">Filter by Date</button>
+              </form>
+            </div> 
+
             <div class="col-sm-2">
               <div class="dropdown">
                 <span
-                  style="margin-left: 100px; color: #000; font-size: xxx-large"
+                  style="margin-left: 500px; color: #000; font-size: xxx-large"
                   type="button"
                   class="material-symbols-outlined"
                   data-bs-toggle="dropdown"
@@ -189,6 +203,9 @@
           </div>
         </div>
       </div>
+
+      
+
       <script>
         function filterEvents(category) {
           const allCards = document.querySelectorAll(".col-sm-6");
@@ -241,8 +258,10 @@
                   <h2 class="nameE"><%= event.event_name%></h2>
                   <br />
                   <h6>
-                    Date:
-                    <span><%= event.date.toString().substring(0, 11) %></span>
+                    <div class="date">
+                      Date:
+                      <span id="dateSpan"><%= event.date.toISOString().split('T')[0] %></span>
+                      </div>
                   </h6>
                   <h6>Time: <span><%= event.time%></span></h6>
                   <h6>Location: <span><%= event.location%></span></h6>

@@ -212,6 +212,8 @@ details.addEventListener("click", (e) => {
 
 });
 
+/////DONT TOUCH THIS CODE YET/////
+
 /*function approvePost(PostId, temp_id, requestTypeMap) {
     let endpoint = `/approvePost?postId=${PostId}`; // Default endpoint for regular posts
 
@@ -240,22 +242,22 @@ details.addEventListener("click", (e) => {
 }
 approvePost(PostId, temp_id, requestTypeMap);*/
 
-
-function rejectProfileEdit(temp_id) {
+/*function reject(temp_id) {
     window.selectedRequestId = temp_id;
-    showPopup2();
+    showPopup2(temp_id);
 }
 
-function rejectPost(postId) {
-    window.selectedRequestId = postId;
-    showPopup2();
+function reject2(postId) {
+    window.selectedPostID = postId;
+    showPopup2(postId);
 }
+
 
 function sendRejectionReason() {
     const rejectionReason = document.getElementById('rejectionReason').value;
-    const RequestId = window.selectedRequestId;
+    const temp_id = window.selectedRequestId; // Use temp_id for profile edits
     // Send rejection reason to server
-    fetch(`/rejectProfileEdit?temp_id=${RequestId}`, {
+    fetch(`/rejectProfileEdit?temp_id=${temp_id}`, { // Use /rejectProfileEdit endpoint
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -297,16 +299,19 @@ function sendRejectionReason2() {
     });
 }
 
+
+
   // Function to display the popup
-  function showPopup2() {
-    var popup = document.getElementById("reject");
+  // Function to display the popup
+function showPopup2(id) {
+    var popup = document.getElementById("reject_" + id);
     popup.style.display = "block";
-  }
+}
 
   // Function to close the popup
   function closePopup2() {
     var popup = document.getElementById("reject");
     popup.style.display = "none";
   }
-
-
+*/
+////////I REPEAT DONT TOUCH THIS CODEE///

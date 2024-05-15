@@ -86,7 +86,7 @@
                 <form style="all:initial" action="/approvePost?postId=<%=item.PostID%>" method="POST">
                   <button class="approve-button">Approve</button>
               </form> 
-              <button class="reject-button" onclick="rejectPost('<%=item.PostID%>')">Reject</button>
+              <button class="reject-button" onclick="reject2('<%=item.PostID%>')">Reject</button>
               </td>  
               </td>
               <td>
@@ -99,20 +99,13 @@
                 </button>
               </td>
             </tr>
-                <div id="reject" class="reject-card1">
-                  <input
-                    type="text"
-                    id="rejectionReason"
-                    name="rejectionReason"
-                    placeholder="Enter rejection reason..."
-                  />       
-                  <form style="all:initial" action="/rejectPost?postId=<%=item.PostID%>" method="POST"> 
-                    <button class="send-button" onclick="sendRejectionReason2()">
-                      Send
-                    </button>
-                  </form>
-                  <button id="closeButton2" onclick="closePopup2()">Close</button>
-                </div>
+            <div id="reject" class="reject-card1">
+              <form id="rejectionForm-<%=item.PostID%>" action="/rejectPost?postId=<%=item.PostID%>" method="POST" onsubmit="return sendRejectionReason(event)">
+                  <input type="text" id="rejectionReason-<%=item.PostID%>" name="rejectionReason" placeholder="Enter rejection reason...">
+                  <button class="send-button" onclick="sendRejectionReason()" type="submit" style="padding: 10px 20px; margin: 0 10px; cursor: pointer; color: white; background-color: #289e46; margin-left: 30px;">Send</button>  
+              </form>
+          <button id="closeButton2" onclick="closePopup2()">Close</button>
+          </div>
             <% }) %>
 
             <% var buttonId; %>
@@ -132,7 +125,7 @@
                 <form style="all:initial" action="/approveProfileEdit?temp_id=<%=item.temp_id%>" method="POST">
                   <button class="approve-button">Approve</button>    
                 </form>                      
-                  <button class="reject-button" onclick="rejectProfileEdit('<%=item.temp_id%>')">Reject</button>              
+                  <button class="reject-button" onclick="reject('<%=item.temp_id%>')">Reject</button>              
               </td>  
               </td>
               <td>
@@ -145,26 +138,36 @@
                 </button>
               </td>
             </tr>
-              <div id="reject" class="reject-card1">
-                <input
-                  type="text"
-                  id="rejectionReason"
-                  name="rejectionReason"
-                  placeholder="Enter rejection reason..."
-                /> 
-                <form style="all:initial" action="/rejectProfileEdit?temp_id=<%=item.temp_id%>" method="POST">       
-                    <button class="send-button" onclick="sendRejectionReason()">
-                      Send
-                    </button>
-                </form>
-                <button id="closeButton2" onclick="closePopup2()">Close</button>
-              </div>
+            <div id="reject" class="reject-card1">
+              <form id="rejectionForm-<%=item.temp_id%>" action="/rejectProfileEdit?temp_id=<%=item.temp_id%>" method="POST" onsubmit="return sendRejectionReason(event)">
+                  <input type="text" id="rejectionReason-<%=item.temp_id%>" name="rejectionReason" placeholder="Enter rejection reason...">
+                  <button class="send-button" onclick="sendRejectionReason()" type="submit" style="padding: 10px 20px; margin: 0 10px; cursor: pointer; color: white; background-color: #289e46; margin-left: 30px;">Send</button>  
+              </form>
+          <button id="closeButton2" onclick="closePopup2()">Close</button>
+          </div>
             <% }) %>
 
           </tbody>
         </table>
       </section>
      
+      <script>
+        function showPopup2() {
+            var popup = document.getElementById("reject");
+            popup.style.display = "block";
+        }
+        
+        function closePopup2() {
+            var popup = document.getElementById("reject");
+            popup.style.display = "none";
+        }
+        
+        var rejectButtons = document.querySelectorAll('.reject-button');
+        
+        rejectButtons.forEach(function(button) {
+            button.addEventListener('click', showPopup2);
+        });
+    </script>
 
       <script>
         document.addEventListener("DOMContentLoaded", () => {

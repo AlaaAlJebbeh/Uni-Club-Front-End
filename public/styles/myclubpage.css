@@ -460,11 +460,10 @@ a:active {
 }
 
 .upload {
-
     position: absolute;
-    top:  -40px;
-    right: -135px;
     display: none;
+    top: -50px;
+    right: 100px;
 }
 /* CSS for the modal */
 .modal {

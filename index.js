@@ -844,7 +844,7 @@ app.post('/rejectEvent', (req, res) => {
                     return res.status(500).send("Internal Server Error");
                 }
                 const notificationType = "Event Rejected";
-                connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)", [notificationType, eventInfo[0].event_name, eventInfo[0].club_id], (err) => {
+                connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id, RejectionReason) VALUES (?, ?, ?, ?)", [notificationType, eventInfo[0].event_name, eventInfo[0].club_id, message ], (err) => {
                     if (err) {
                         console.log("error inseting to notifications approve event : " + err.message);
                     } else {

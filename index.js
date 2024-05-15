@@ -790,11 +790,7 @@ app.post("/clubform", async (req, res) => {
     const media3 = req.body.media3;
     const email = req.body.email;
 
-    const { ImagePost } = req.files;
-    const imgPath = __dirname + '/public/images' + ImagePost.name
-    // Move the uploaded image to our upload folder
-    ImagePost.mv(imgPath);
-    const imgName = ImagePost.name;
+
 
 
     connection.query('INSERT INTO club(club_name, category, clm_id, bio, contact, social_media1, social_media2, social_media3, email) VALUES(?,?,?,?,?,?,?,?,?)',
@@ -808,6 +804,7 @@ app.post("/clubform", async (req, res) => {
             res.send('Club successfully created');
         });
 });
+
 
 app.post('/rejectEvent', (req, res) => {
     const eventID = parseInt(req.query.eventID);

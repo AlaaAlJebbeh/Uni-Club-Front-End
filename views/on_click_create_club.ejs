@@ -114,21 +114,20 @@
             </div>
           </div>
         </div>
-
+   
+        
         <div class="input-box">
           <label style="font-size: medium">Manager ID</label>
-          <input
-            type="text"
-            name="manager"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            placeholder="Manager ID"
-            required
-          />
-          <span class="error-message" style="color: red; display: none"
-            >Please enter only numbers.</span
-          >
+          <select name="manager" required>
+            <option value="" disabled selected>Select Manager ID</option>
+            <!-- Replace these options with dynamic values from your database -->
+            <option value="1">Manager 1</option>
+           
+            <!-- More options -->
+          </select>
+          <span class="error-message" style="color: red; display: none">Please select a manager.</span>
         </div>
+        
 
        
 

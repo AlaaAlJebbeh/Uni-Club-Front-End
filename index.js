@@ -826,83 +826,32 @@ app.post('/rejectMessage', (req, res) => {
     });
 });
  
-
-
-
-
 //Route Comparing 
 app.get("/comparing", (req, res) => {
 
     if(!(req.session.loggedIn)){
         res.redirect("/");
     }  
-
-    // Query to retrieve data from the 'TempPosts' table
-    connection.query("SELECT * FROM tempposts", (err, TempPosts) => {
+    connection.query(`SELECT club_id FROM club`, (err, clubNames) => {
         if (err) {
-            console.log(err.message);
-            return res.status(500).send("Internal Server Error2");
+            console.error("Error fetching temp posts:", err);
+            return res.status(500).send("Internal Server Error");
         }
 
-        connection.query("SELECT * FROM tempprofile", (err, tempprofile) => {
-            if (err) {
-                console.log(err.message);
-                return res.status(500).send("Internal Server Error2");
+    connection.query(`SELECT * FROM tempposts`, (err, results) => {
+        if (err) {
+            console.error("Error fetching temp posts:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        connection.query("Select * from tempprofile", (err, tempprofileedits) => {
+            if (err){
+                console.error("Error fetching temp profile:", err);
+                return res.status(500).send("Internal Server Error");
             }
-
-            // Array to store promises for fetching club names for TempPosts
-            const tempPromises = [];
-
-            // Iterate over each item in TempPosts to fetch club names asynchronously
-            TempPosts.forEach(item => {
-                // Create a promise for each query to fetch club name
-                const promise = new Promise((resolve, reject) => {
-                    connection.query("SELECT club_name FROM club WHERE club_id = ?", [item.club_id], (err, result) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            // Resolve the promise with club name or null if not found
-                            resolve(result.length > 0 ? result[0].club_name : null);
-                        }
-                    });
-                });
-                // Push the promise to the array of promises
-                tempPromises.push(promise);
-            });
-
-            // Array to store promises for fetching club names for PostEditRequests
-            const postPromises = [];
-
-            // Iterate over each item in PostEditRequests to fetch club names asynchronously
-            tempprofile.forEach(item => {
-                // Create a promise for each query to fetch club name
-                const promise = new Promise((resolve, reject) => {
-                    connection.query("SELECT club_name FROM club WHERE club_id = ?", [item.club_id], (err, result) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            // Resolve the promise with club name or null if not found
-                            resolve(result.length > 0 ? result[0].club_name : null);
-                        }
-                    });
-                });
-                // Push the promise to the array of promises
-                postPromises.push(promise);
-            });
-
-            // Wait for all promises to resolve using Promise.all
-            Promise.all([...tempPromises, ...postPromises])
-                .then(clubNames => {
-                    // Combine data from TempPosts and PostEditRequests into a single array
-                    const combinedData = [...TempPosts, ...tempprofile];
-                    // Render the 'StatusManager.ejs' template with the combined data and club names
-                    res.render("StatusManager.ejs", { combinedData, clubNames , loggedIn: req.session.loggedIn, role: "sks"});
+                    res.render("StatusManager.ejs", { clubNames, loggedIn: req.session.loggedIn, role: "sks", tempposts:results, tempprofileedits, results});
                 })
-                .catch(err => {
-                    console.error(err);
-                    // Handle error appropriately
-                    return res.status(500).send("Internal Server Error");
-                });
+                
         });
     });
 });
@@ -912,8 +861,6 @@ app.post("/approvePost", (req, res) => {
     const postId = req.query.postId; 
 
     console.log("Received postId:", postId);
-
-    // Fetch the post data from the tempposts table based on the postId
     connection.query('SELECT * FROM tempposts WHERE PostID = ?', [postId], (err, results) => {
         if (err) {
             console.error('Error fetching post data:', err);
@@ -921,15 +868,9 @@ app.post("/approvePost", (req, res) => {
         }
 
         console.log("Fetched post data:", results);
-
-        // Iterate over the fetched results
-            // Update the status of each post to 'approved'
             results[0].Status = 'approved';
-
-            // Extract required data for insertion into Posts table
             const { PostID, clubid, club_name, postText, postImageURL } = results[0];
 
-            // Insert the post into the Posts table
             connection.query('INSERT INTO posts (PostID, club_id, club_name, postText, postImageURL) VALUES (?, ?, ?, ?, ?)',
                 [PostID, clubid, club_name, postText, postImageURL], (err, result) => {
                     if (err) {
@@ -939,8 +880,6 @@ app.post("/approvePost", (req, res) => {
 
                 });
 
-
-            // Insert the post into the History_post table
             connection.query('INSERT INTO history_post (PostID, club_name, club_id, postText, postImageURL, Status) VALUES (?, ?, ?, ?, ?, ?)',
                 [PostID, club_name, clubid, postText, postImageURL, 'approved'], (err, result) => {
                     if (err) {
@@ -952,7 +891,6 @@ app.post("/approvePost", (req, res) => {
 
                 });
 
-            // Delete the post from the tempposts table
             connection.query('DELETE FROM tempposts WHERE PostID = ?', [postId], (err, result) => {
                 if (err) {
                     console.error("Error deleting post from tempposts table:", err);
@@ -963,147 +901,200 @@ app.post("/approvePost", (req, res) => {
             });
             
     });
-    res.redirect("/approvePost")
+    res.redirect("/comparing")
 });
 
 
-app.post("/approvePostEdit", (req, res) => {
-    const RequestId = req.query.temp_id; 
-    const requestTypeMap = {
-        'club_name_content': 'New Club Name',
-        'category_content': 'New Category',
-        'bio_content': 'New BIO',
-        'email_content': 'New Email'
-    };
-
-    console.log("Received post edit Id:", RequestId);
+app.post("/approveProfileEdit", (req, res) => {
+    const RequestId = req.query.temp_id;
+    
+    console.log("Received profile edit Id:", RequestId);
 
     connection.query('SELECT * FROM tempprofile WHERE temp_id = ?', [RequestId], (err, results) => {
         if (err) {
             console.error('Error fetching post data:', err);
             return res.status(500).send("Internal Server Error");
         }
-        console.log("Fetched post data:", results);
         
-        // Assuming there is only one result, as we are querying by temp_id
-        const post = results[0];
-
-        // Promises array to track all update queries
-        const promises = [];
-
-        // Handle different request types
-        for (const contentKey in requestTypeMap) {
-            const requestType = requestTypeMap[contentKey];
-            const fieldValue = post[contentKey];
+        if (results.length === 0) {
+            return res.status(404).send("Profile edit not found");
+        }
         
-            if (fieldValue) {
-                // Construct the query to update the corresponding field based on the request type
-                let updateQuery = `UPDATE club SET ${requestType} = ? WHERE club_id = ?`;
-                // Push the promise of the update query to promises array
-                promises.push(new Promise((resolve, reject) => {
-                    connection.query(updateQuery, [fieldValue, post.club_id], (err, result) => {
-                        if (err) {
-                            console.error(`Error updating ${requestType.toLowerCase()}:`, err);
-                            reject(err);
-                        } else {
-                            console.log(`${requestType} updated successfully!`);
-                            resolve();
-                        }
-                    });
-                }));
-            }
+        const profileEdit = results[0];
+        const { club_id, RequestType, input } = profileEdit;
+
+        if (RequestType === 'New Club Name') {
+            connection.query('UPDATE club SET club_name = ? WHERE club_id = ?', [input, club_id], (err, updateResult) => {
+                if (err) {
+                    console.error('Error updating club name:', err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                const historyRecord = {
+                    club_id: club_id,
+                    temp_id: RequestId,
+                    Status: 'approved',
+                    RequestType: RequestType,
+                    input: input
+                };
+                connection.query('INSERT INTO history_profile SET ?', historyRecord, (err, insertResult) => {
+                    if (err) {
+                        console.error('Error inserting into history_profile:', err);
+                        return res.status(500).send("Internal Server Error");
+                    }
+                    console.log("Profile edit approved and history record inserted");
+                   
+                });
+            });
+        } else if (RequestType === 'New Category') {
+            connection.query('UPDATE club SET category = ? WHERE club_id = ?', [input, club_id], (err, updateResult) => {
+                if (err) {
+                    console.error('Error updating category:', err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                const historyRecord = {
+                    club_id: club_id,
+                    temp_id: RequestId,
+                    Status: 'approved',
+                    RequestType: RequestType,
+                    input: input                  
+                };
+                connection.query('INSERT INTO history_profile SET ?', historyRecord, (err, insertResult) => {
+                    if (err) {
+                        console.error('Error inserting into history_profile:', err);
+                        return res.status(500).send("Internal Server Error");
+                    }
+                    console.log("Profile edit approved and history record inserted");
+                    
+                });
+            });
+        } else if (RequestType === 'New BIO') {
+            connection.query('UPDATE club SET bio = ? WHERE club_id = ?', [input, club_id], (err, updateResult) => {
+                if (err) {
+                    console.error('Error updating bio:', err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                const historyRecord = {
+                    club_id: club_id,
+                    temp_id: RequestId,
+                    Status: 'approved',
+                    RequestType: RequestType,
+                    input: input
+                };
+                connection.query('INSERT INTO history_profile SET ?', historyRecord, (err, insertResult) => {
+                    if (err) {
+                        console.error('Error inserting into history_profile:', err);
+                        return res.status(500).send("Internal Server Error");
+                    }
+                    console.log("Profile edit approved and history record inserted");
+                    
+                });
+            });
+        } else if (RequestType === 'New Email') {
+            connection.query('UPDATE club SET email = ? WHERE club_id = ?', [input, club_id], (err, updateResult) => {
+                if (err) {
+                    console.error('Error updating email:', err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                const historyRecord = {
+                    club_id: club_id,
+                    temp_id: RequestId,
+                    Status: 'approved',
+                    RequestType: RequestType,
+                    input: input
+                };
+                connection.query('INSERT INTO history_profile SET ?', historyRecord, (err, insertResult) => {
+                    if (err) {
+                        console.error('Error inserting into history_profile:', err);
+                        return res.status(500).send("Internal Server Error");
+                    }
+                    console.log("Profile edit approved and history record inserted");
+                    
+                });
+            });
+        } 
+        else if (RequestType === 'New Club Image') {
+            connection.query('UPDATE club SET clubImageUrl = ? WHERE club_id = ?', [input, club_id], (err, updateResult) => {
+                if (err) {
+                    console.error('Error updating club image:', err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                const historyRecord = {
+                    club_id: club_id,
+                    temp_id: RequestId,
+                    Status: 'approved',
+                    RequestType: RequestType,
+                    input: input
+                };
+                connection.query('INSERT INTO history_profile SET ?', historyRecord, (err, insertResult) => {
+                    if (err) {
+                        console.error('Error inserting into history_profile:', err);
+                        return res.status(500).send("Internal Server Error");
+                    }
+                    console.log("Profile edit approved and history record inserted");
+                    
+                });
+            });
+        }
+        else {
+            return res.status(400).send("Invalid RequestType");
         }
 
-        // When all update queries are finished
-        Promise.all(promises)
-            .then(() => {
-                // Insert the post edit into the history_profile table
-                connection.query('INSERT INTO history_profile (temp_id, club_id, Status) VALUES (?, ?, ?)',
-                    [post.temp_id, post.club_id, 'approved'], (err, result) => {
-                        if (err) {
-                            console.error("Error inserting post data into history_profile table:", err);
-                            return res.status(500).send("Internal Server Error");
-                        }
-                        console.log("Post approved and moved to history_profile table successfully!");
-
-                        // Delete the post from the tempprofile table
-                        connection.query('DELETE FROM tempprofile WHERE temp_id = ?', [RequestId], (err, result) => {
-                            if (err) {
-                                console.error("Error deleting post from tempprofile table:", err);
-                                return res.status(500).send("Internal Server Error");
-                            }
-                            console.log("Post deleted from tempprofile table successfully!");
-
-                            // Send response back to client
-                            res.send("Post approved successfully!");
-                        });
-                    });
-            })
-            .catch((error) => {
-                console.error("Error:", error);
+        connection.query('DELETE FROM tempprofile WHERE temp_id= ?', [RequestId], (err, result) => {
+            if (err) {
+                console.error("Error deleting post from tempprofile table:", err);
                 return res.status(500).send("Internal Server Error");
-            });
+            }
+            console.log("Profile edit deleted from tempprofile table successfully!");
+           
+        });
     });
+    res.redirect("/comparing")
 });
 
 
-
-
-
-app.post('/reject', (req, res) => {
-    const postId = req.body.postId;
+app.post("/rejectProfileEdit", (req, res) => {
+    const RequestId = req.query.temp_id;
     const rejectionReason = req.body.rejectionReason;
 
-    // Update the post status to 'rejected' in History_post table
-    const rejectQuery = `INSERT INTO history_post (PostID, Status, rejectionReason)
-                         VALUES (?, 'rejected', ?);
-                        `;
+    console.log("Received profile edit rejection for Id:", RequestId);
 
-    // Move post from TempPosts to History_post
-    const movePostQuery = `
-    INSERT INTO history_post (PostID, clm_id, club_id, club_name, postText, postImageURL, Status, rejectionReason)
-    SELECT PostID, clm_id, club_id, club_name, postText, postImageURL, 'rejected', ? FROM tempposts WHERE PostID = ?;
-    `;
-
-
-    connection.beginTransaction(err => {
+    // Retrieve the profile edit data from tempprofile table
+    connection.query('SELECT * FROM tempprofile WHERE temp_id = ?', [RequestId], (err, profileEditResults) => {
         if (err) {
-            console.error('Error starting transaction:', err);
-            res.status(500).send('Error rejecting post');
-            return;
+            console.error('Error fetching profile edit data:', err);
+            return res.status(500).send("Internal Server Error");
         }
 
-        connection.query(movePostQuery, [rejectionReason, postId], (err, results) => {
-            if (err) {
-                console.error('Error moving post to History_post:', err);
-                connection.rollback(() => {
-                    res.status(500).send('Error rejecting post');
-                });
-            } else {
-                connection.query(`DELETE FROM tempposts WHERE PostID = ?`, [postId], (err, results) => {
+        if (profileEditResults.length === 0) {
+            return res.status(404).send("Profile edit not found in tempprofile table");
+        }
+
+        const profileEdit = profileEditResults[0];
+        const { club_id, input, RequestType } = profileEdit;
+
+        // Insert the profile edit data into history_profile table with status "rejected" and rejection reason
+        connection.query('INSERT INTO history_profile (club_id, temp_id, Status, RequestType, input, rejectionReason) VALUES (?, ?, ?, ?, ?, ?)', 
+            [club_id, RequestId, 'rejected', RequestType, input, rejectionReason],
+            (err, insertResult) => {
+                if (err) {
+                    console.error('Error inserting into history_profile:', err);
+                    return res.status(500).send("Internal Server Error");
+                }
+
+                // Delete the profile edit from the tempprofile table
+                connection.query('DELETE FROM tempprofile WHERE temp_id = ?', [RequestId], (err, deleteResult) => {
                     if (err) {
-                        console.error('Error deleting post from TempPosts:', err);
-                        connection.rollback(() => {
-                            res.status(500).send('Error rejecting post');
-                        });
-                    } else {
-                        connection.commit(err => {
-                            if (err) {
-                                console.error('Error committing transaction:', err);
-                                connection.rollback(() => {
-                                    res.status(500).send('Error rejecting post');
-                                });
-                            } else {
-                                console.log('Post rejected and deleted successfully');
-                                res.status(200).send('Post rejected and deleted successfully');
-                            }
-                        });
+                        console.error("Error deleting profile edit from tempprofile table:", err);
+                        return res.status(500).send("Internal Server Error");
                     }
+                    console.log("Profile edit rejected and removed from tempprofile table");
+                    res.status(200).send("Profile edit rejected successfully");
                 });
-            }
         });
     });
 });
+
+
 
 
 

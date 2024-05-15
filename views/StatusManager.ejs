@@ -69,11 +69,13 @@
             </tr>
           </thead>
           <tbody>
-            <% let index; %> <% combinedData.forEach(function(item,index){ %> <%
-            let items = []; %> <% items.push(item); %> <% var buttonId; %>
+            <% var buttonId; %>
+            <% var postId %>
+            <% results.forEach((item) => { %>
+            <%  buttonId = 'button_' + item.PostID; %>
             <tr>
               <td>
-                <h4 style="color: black"><%=clubNames[index]%></h4>
+                <h4 style="color: black"><%=clubNames[item]%></h4>
               </td>
               <td><h4 style="color: black"><%=item.RequestType%></h4></td>
               <td>
@@ -81,20 +83,13 @@
               </td>
 
               <td>
-                <button
-                  class="approve-button"
-                  id="<%= buttonId %>"
-                  onclick="approvePost('<%= item.PostID %>', '<%= item.temp_id %>')"
-                >
-                  Approve
-                </button>
-                <button
-                  class="reject-button"
-                  id="<%= buttonId %>"
-                  onclick="rejectPost('<%= item.PostID %>', '<%= item.temp_id %>')"
-                >
-                  Reject
-                </button>
+                <form style="all:initial" action="/approvePost?postId=<%=item.PostID%>" method="POST">
+                  <button class="approve-button">Approve</button>
+              </form> 
+              <form style="all:initial" action="/rejectPost?temp_id=<%=item.temp_id%>" method="POST">
+                <button class="reject-button">Reject</button>
+              </form> 
+              </td>  
               </td>
               <td>
                 <button
@@ -107,38 +102,45 @@
               </td>
             </tr>
             <% }) %>
+
+            <% var buttonId; %>
+            <% var RequestId %>
+            <% tempprofileedits.forEach((item) => { %>
+            <%  buttonId = 'button_' + item.temp_id; %>
+            <tr>
+              <td>
+                <h4 style="color: black"><%=clubNames[item]%></h4>
+              </td>
+              <td><h4 style="color: black"><%=item.RequestType%></h4></td>
+              <td>
+                <p class="status pending">Pending</p>
+              </td>
+
+              <td>
+                <form style="all:initial" action="/approveProfileEdit?temp_id=<%=item.temp_id%>" method="POST">
+                  <button class="approve-button">Approve</button>    
+                </form>          
+                <button class="reject-button" onclick="showPopup2()" >Reject</button>
+             
+              </td>  
+              </td>
+              <td>
+                <button
+                  class="details-button"
+                  onclick="showDetails()"
+                  data-club-id="<%= item.club_id %>"
+                >
+                  <img src="public/images/Details.png" alt="Button Image" />
+                </button>
+              </td>
+            </tr>
+            <% }) %>
+
           </tbody>
         </table>
       </section>
 
-      <div id="popup" class="popup-card" style="display: none">
-        <div class="wrapper">
-          <div class="flip-card">
-            <div class="front card">
-              <table class="custom-table">
-                <tr>
-                  <td class="column1">
-                    <% if (combinedData[index - 1] && combinedData[index -
-                    1].requestType === 'newimg') { %>
-                    <img
-                      src="<%= tempResult[index - 1].newImage %>"
-                      alt="Old Image"
-                    />
-                    <% } else { %>
-                    <p id="beforetext"></p>
-                    <% } %>
-                  </td>
-                  <td class="column2">
-                    <p id="after"></p>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
-        </div>
-        <button id="closeButton" onclick="closePopup()">Close</button>
-      </div>
-
+   
       <div id="reject" class="reject-card1">
         <input
           type="text"
@@ -236,6 +238,5 @@
       </div>
     </footer>
     <script src="../public/scripts/StatusManagerScript.js"></script>
-    <script src="../public/scripts/clubManagerSks.js"></script>
   </body>
 </html>

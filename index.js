@@ -105,11 +105,13 @@ app.post('/login', (req, res) => {
                         }
                         req.session.clubID = results[0].club_id;
                         const clubID = req.session.clubID;
+                        console.log("CLub ID: " + clubID);
                         connection.query("select * from club where club_id = ?", [clubID], (err, result) => {
                             if (err) {
                                 console.log("Error fetching imageURL: " + err.message);
                                 return res.status(500).send("Internal Server Error");
                             }
+                            console.log("Club info of the clm that logged IN: " , result);
                             if (!result[0].clubImageUrl) {
                                 console.log("This club doesn't have an image and it will be set to null");
                                 req.session.ImageURL = null;
@@ -828,6 +830,37 @@ app.post('/rejectEvent', (req, res) => {
             }
 
             connection.query("Delete from tempevents where event_id = ?", [eventID], (err, result) => {
+
+                if (err) {
+                    console.log("Error deleteing from temp event ", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                res.redirect("/eventRequests");
+            });
+        });
+
+    });
+});
+
+app.post('/rejectEventEdit', (req, res) => {
+    const eventID = parseInt(req.query.eventID);
+    const message = req.body.rejectionReason;
+
+    connection.query('Select * from tempeventedits where event_id = ?', [eventID], (err, eventInfo) => {
+        if (err) {
+            console.log("Error fetching event from temp Events: " + err.message);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        console.log("Fetched Event from temp Events: " , eventInfo);
+        connection.query("INSERT INTO history_eventedits (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, status, comment, notificationstatus, club_name, clm_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+                                                    [eventID, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, eventInfo[0].club_id, 0, message, 0, eventInfo[0].club_name, eventInfo[0].clm_id], (err, result) => {
+            if (err) {
+                console.log("Error Inserting into history_event ", err);
+                return res.status(500).send("Internal Server Error");
+            }
+
+            connection.query("Delete from tempeventedits where event_id = ?", [eventID], (err, result) => {
 
                 if (err) {
                     console.log("Error deleteing from temp event ", err);

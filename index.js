@@ -843,7 +843,15 @@ app.post('/rejectEvent', (req, res) => {
                     console.log("Error deleteing from temp event ", err);
                     return res.status(500).send("Internal Server Error");
                 }
-                res.redirect("/eventRequests");
+                const notificationType = "Event Rejected";
+                connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)", [notificationType, eventInfo[0].event_name, eventInfo[0].club_id], (err) => {
+                    if (err) {
+                        console.log("error inseting to notifications approve event : " + err.message);
+                    } else {
+                        res.redirect("/eventRequests");              
+                        }
+                });
+                
             });
         });
 
@@ -861,8 +869,8 @@ app.post('/rejectEventEdit', (req, res) => {
         }
 
         console.log("Fetched Event from temp Events: " , eventInfo);
-        connection.query("INSERT INTO history_eventedits (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, status, comment, notificationstatus, club_name, clm_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-                                                    [eventID, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, eventInfo[0].club_id, 0, message, 0, eventInfo[0].club_name, eventInfo[0].clm_id], (err, result) => {
+        connection.query("INSERT INTO history_eventEdits (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, status, comment, notificationstatus, club_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+                                                    [eventID, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, eventInfo[0].club_id, 0, message, 0, eventInfo[0].club_name], (err, result) => {
             if (err) {
                 console.log("Error Inserting into history_event ", err);
                 return res.status(500).send("Internal Server Error");

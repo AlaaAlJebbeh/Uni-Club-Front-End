@@ -880,15 +880,17 @@ app.post("/approvePost", (req, res) => {
         }
         console.log("Fetched post data:", results);
         results[0].Status = 'approved';
-        const { PostID, clubid, club_name, postText, postImageURL } = results[0];
+        const { PostID, club_id, club_name, postText, postImageURL } = results[0];
+
         connection.query('INSERT INTO posts (PostID, club_id, club_name, postText, postImageURL) VALUES (?, ?, ?, ?, ?)',
-            [PostID, clubid, club_name, postText, postImageURL], (err, result) => {
+            [PostID, club_id, club_name, postText, postImageURL], (err, result) => {
                 if (err) {
                     console.error("Error inserting post data into Posts table:", err);
                     return res.status(500).send("Internal Server Error");
                 }
                 connection.query('INSERT INTO history_post (PostID, club_name, club_id, postText, postImageURL, Status) VALUES (?, ?, ?, ?, ?, ?)',
-                    [PostID, club_name, clubid, postText, postImageURL, 'approved'], (err, result) => {
+                    [PostID, club_name, club_id, postText, postImageURL, 'approved'], (err, result) => {
+
                         if (err) {
                             console.error("Error inserting post data into History_post table:", err);
                             return res.status(500).send("Internal Server Error");
@@ -900,7 +902,7 @@ app.post("/approvePost", (req, res) => {
                                 return res.status(500).send("Internal Server Error");
                             }
                             else {
-                                connection.query("INSERT INTO notifications_clm (notificationType, club_id) VALUES (?, ?)", [notificationType, clubid], (err) => {
+                                connection.query("INSERT INTO notifications_clm (notificationType, club_id) VALUES (?, ?)", [notificationType, club_id], (err) => {
                                     if (err) {
                                         console.log("error inseting to notifications: " + err.message);
                                     }

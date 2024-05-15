@@ -499,7 +499,7 @@ app.post("/approveEvent", (req, res) => {
 app.post("/approveEventedit", (req, res) => {
 
     const eventId = parseInt(req.query.eventID); // Retrieve eventId from the query string
-
+``
     connection.query("select club_id from event where event_id = ?", [eventId], (err, clubID) => {
         if (err){
             console.log("Error fetching club_id from event", err);
@@ -537,7 +537,7 @@ app.post("/approveEventedit", (req, res) => {
                             }
                             else{
                                 const notificationType = "Edit Event Approved";
-                                connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)" , [notificationType, event_name, clubId], (err) =>{
+                                connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)" , [notificationType, eventInfo[0].event_name, clubId], (err) =>{
                                     if(err){
                                         console.log("error inseting to notifications: " + err.message);
                                     } else{
@@ -601,6 +601,7 @@ app.post("/createEvent", async (req, res) => {
 
     const userId = req.session.userID;
 
+    console.log("Langauge: ", language);
     connection.query("SELECT club_name FROM club WHERE clm_id = ?", [userId], (err, resultClubName) => {
         const clubName = resultClubName[0].club_name;
 
@@ -616,9 +617,6 @@ app.post("/createEvent", async (req, res) => {
             const clubId = clubResult[0].club_id;
 
             connection.query(
-                `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl, club_name, request_type, status)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName, clubName, "New Event", 0],
                 `INSERT INTO tempevents (club_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id,  imageUrl, club_name, request_type, status)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [clubId, eventName, guestName, eventDate, eventTime, language, eventLocation, capacity, description, notes, category, userId, imageName, clubName, "New Event", 0],
@@ -661,13 +659,16 @@ app.post('/updateEvent', (req, res) => {
     let imgName;
     const userID           = req.session.userID;
     const clubImage        =  req.body.clubImage;
+
     if (req.files != null){
         const { uploadImage1 } = req.files;
         const imgPath = __dirname + '/public/images' + uploadImage1.name
         uploadImage1.mv(imgPath);
         imgName = uploadImage1.name;
+        console.log("update the image");
     }else {
-         imgName = clubImage;
+        console.log("didnt update the image" + clubImage);
+         imgName = clubImage.split('images/')[1];
     }
 
     const queryString = `INSERT INTO tempeventedits (event_id, club_name, event_name, date, time, location, language, guest_name, description, capacity, notes, imageUrl, clm_id, status, request_type, category)
@@ -785,8 +786,6 @@ app.post("/clubform", async (req, res) => {
     const imgName = ImagePost.name;
 
 
-
-
     connection.query('INSERT INTO club(club_name, category, clm_id, bio, contact, social_media1, social_media2, social_media3, email) VALUES(?,?,?,?,?,?,?,?,?)',
         [name, cars, manager, bio, number, media1, media2, media3, email], (err, result) => {
             if (err) {
@@ -799,7 +798,7 @@ app.post("/clubform", async (req, res) => {
         });
 });
 
-app.post('/rejectMessage', (req, res) => {
+app.post('/rejectEvent', (req, res) => {
     const eventID = parseInt(req.query.eventID);
     const message = req.body.rejectionReason;
 
@@ -810,7 +809,8 @@ app.post('/rejectMessage', (req, res) => {
         }
 
         console.log("Fetched Event from temp Events: " , eventInfo);
-        connection.query("INSERT INTO history_event (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, status, comment, notificationstatus, club_name, clm_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [eventID, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, clubId, 0, "", 0, clubName, eventInfo[0].clm_id], (err, result) => {
+        connection.query("INSERT INTO history_event (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, status, comment, notificationstatus, club_name, clm_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+                                                    [eventID, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, clubId, 0, message, 0, clubName, eventInfo[0].clm_id], (err, result) => {
             if (err) {
                 console.log("Error Inserting into history_event ", err);
                 return res.status(500).send("Internal Server Error");

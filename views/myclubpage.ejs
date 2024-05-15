@@ -288,10 +288,10 @@
                       <span class="event-name" contenteditable="true" id="eventName_<%= item.event_id %>"><%= item.event_name %></span>
                       <input type="hidden" name="eventName" value="<%= item.event_name %>" id="eventNameInput_<%= item.event_id %>" />
                   </div>
-                  <div class="card-details">
+                  <div class="card-details"> 
                       <span>Date:</span>
-                      <span class="event-date" contenteditable="true" id="eventDate_<%= item.event_id %>"><%= item.date.toString().substring(0, 11) %></span>
-                      <input type="hidden" name="eventDate" value="<%= item.date.toString().substring(0, 11) %>" id="eventDateInput_<%= item.event_id %>" />
+                      <span class="event-date" contenteditable="true" id="eventDate_<%= item.event_id %>"><%= item.date %></span>
+                      <input type="hidden" name="eventDate" value="<%= item.date %>" id="eventDateInput_<%= item.event_id %>" />
                   </div>
                   <div class="card-details">
                       <span>Time:</span>

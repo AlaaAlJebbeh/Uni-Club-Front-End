@@ -25,7 +25,7 @@
           <h2><%= event.club_name %></h2>
           <h2 class="nameE"><%= event.event_name%></h2>
           <h2>
-            Date:<span><%= event.date.toString().substring(0, 11) %></span>
+            Date:<span><%= event.date %></span>
           </h2>
           <h2>Time: <span><%= event.time%></span></h2>
           <h2>Location: <span><%= event.location%></span></h2>
@@ -63,7 +63,7 @@
           
           <h2 <% if(event.event_name !== oldEvent[0].event_name) {%> style = "background-color: yellow" <%}%>><%= event.event_name%></h2>
           <h2 <% if(event.date !== oldEvent[0].date) {%> style = "background-color: yellow" <%}%>>
-            Date:<span><%= event.date.toString().substring(0, 11) %></span>
+            Date:<span><%= event.date %></span>
           </h2>
           <h2 <% if(event.time !== oldEvent[0].time) {%> style = "background-color: yellow" <%}%>>Time: <span><%= event.time%></span></h2>
           <h2 <% if(event.location !== oldEvent[0].location) {%> style = "background-color: yellow" <%}%>>Location: <span><%= event.location%></span></h2>

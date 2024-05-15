@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const imageInput = document.createElement('input');
             imageInput.type = 'hidden';
             imageInput.name = 'eventImage';
-            imageInput.value = imageSrc;
+            imageInput.value = imageSrc.split('images/')[1];;
             form.appendChild(imageInput);
 
             // Submit the form

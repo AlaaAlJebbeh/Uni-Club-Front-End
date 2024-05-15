@@ -83,6 +83,13 @@
                             <button id="<%= buttonId %>" class="details-button" onclick="showPopup('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>
                         </td>
                         </tr>
+                        <div id="reject" class="reject-card1">
+                            <form id="rejectionForm-<%=item.event_id%>" action="/rejectEvent?eventID=<%=item.event_id%>" method="POST" onsubmit="return sendRejectionReason(event)">
+                                <input type="text" id="rejectionReason-<%=item.event_id%>" name="rejectionReason" placeholder="Enter rejection reason...">
+                                <button class="send-button" onclick="sendRejectionReason()" type="submit" style="padding: 10px 20px; margin: 0 10px; cursor: pointer; color: white; background-color: #289e46; margin-left: 30px;">Send</button>  
+                            </form>
+                            <button id="closeButton2" onclick="closePopup2()">Close</button>
+                        </div>
                         <% }); %>
 
                         <!--  NEWWWW LINEEE   -->
@@ -114,13 +121,7 @@
                     </div>
 
                     
-                    <div id="reject" class="reject-card1">
-                        <form id="rejectionForm-<%=item.event_id%>" action="/rejectMessage?eventID=<%=item.event_id%>" method="POST" onsubmit="return sendRejectionReason(event)">
-                            <input type="text" id="rejectionReason-<%=item.event_id%>" name="rejectionReason" placeholder="Enter rejection reason...">
-                            <button class="send-button" onclick="sendRejectionReason()" type="submit" style="padding: 10px 20px; margin: 0 10px; cursor: pointer; color: white; background-color: #289e46; margin-left: 30px;">Send</button>  
-                        </form>
-                        <button id="closeButton2" onclick="closePopup2()">Close</button>
-                    </div>
+                  
                       <% }); %>    
                 </tbody>
             </table>

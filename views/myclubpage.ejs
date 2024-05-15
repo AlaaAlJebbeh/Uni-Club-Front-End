@@ -243,13 +243,12 @@
             <div class="indivisual-card-container">
             <div class="card">
               <div class="image-container">
-                <img src="../public/images/<%=item.imageURL  %>" id="clubImage-<%=item.event_id  %>"/>
+                <img class="eventImage" src="../public/images/<%=item.imageURL  %>" id="clubImage-<%=item.event_id  %>"/>
                 <% const currentDate = new Date();
                 currentDate.setHours(0, 0, 0, 0); const eventDate = new
                 Date(item.date); eventDate.setHours(0, 0, 0, 0); if
                 (currentDate.getTime() === eventDate.getTime()) { %>
-                <div class=" Active">Active
-              </div>
+                <div class=" Active">Active</div>
               <% } else if (currentDate.getTime()> eventDate.getTime()) { %>
                 <div class="canceled">Finished</div>
                 <% } else { %>

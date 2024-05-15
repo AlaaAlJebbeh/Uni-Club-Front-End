@@ -1,0 +1,22 @@
+<!-- HTML -->
+<head>
+    <link rel="stylesheet" href="../public/styles/popupPost.css" />
+  </head>
+  
+
+<div class="popup-post" id="popupPost">
+    <h1 style="text-align: center">Detailed Post</h1>
+    <% results.forEach((posts) => { %>
+        <div class="container">
+            <div class="Post-card-footer">
+                <span><%= posts.postText %></span>
+            </div>
+
+            <div class="Post-card-body">
+                <img width="100%" height="100%" src="../public/images/<%= posts.postImageURL %>" alt="">
+            </div>
+        </div>
+    <% }); %>
+    <button id="closeButton" onclick="closePopup()">Close</button>
+</div>
+

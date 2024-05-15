@@ -1022,6 +1022,25 @@ app.post("/approvePost", (req, res) => {
     });
 });
 
+app.get("/popupPost", (req, res) => {
+    const buttonId = req.query.buttonId;
+    const lastIndex = buttonId.lastIndexOf('_');
+    const postId = buttonId.substring(lastIndex + 1); // Extract the substring after the last '_'
+    // Get the button ID from the query string
+
+    console.log(postId);
+    // Fetch popup content based on button ID from the database or any other source
+    console.log("this is the button id" + postId);
+    connection.query('SELECT * FROM tempposts where PostID = ?', [postId], (err, results) => {
+        if (err) {
+            console.log('didnt get', err);
+        }
+        console.log({ results });
+        res.render('popupPost.ejs', { results });
+    });
+
+});
+
 app.post("/rejectPost", (req, res) => {
     const postId = req.query.postId;
     const rejectionReason = req.body.rejectionReason;

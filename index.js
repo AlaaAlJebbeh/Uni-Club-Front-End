@@ -882,7 +882,15 @@ app.post('/rejectEventEdit', (req, res) => {
                     console.log("Error deleteing from temp event ", err);
                     return res.status(500).send("Internal Server Error");
                 }
-                res.redirect("/eventRequests");
+                const notificationType = "Reject Edit Event";
+                connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id, RejectionReason) VALUES (?, ?, ?, ?)", [notificationType, eventInfo[0].event_name, eventInfo[0].club_id, message ], (err) => {
+                    if (err) {
+                        console.log("error inseting to notifications approve event : " + err.message);
+                    } else {
+                        res.redirect("/eventRequests");             
+                        }
+                });
+
             });
         });
 
@@ -1393,167 +1401,19 @@ app.post('/updateProfile', (req, res) => {
 
 app.get("/notificationsClub", (req, res) => {
     const email = req.session.email;
+    const clubImage = req.session.ImageURL;
+
     connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
-        if (err) {
-            console.error("Error fetching club id:", err);
-            return res.status(500).send("Internal Server Error");
-        }
-        let clubID = result[0].club_id;
-
-        connection.query(`SELECT event_name, status, comment, event_id, notificationstatus FROM history_event WHERE club_id = ?`, [clubID], (err, resultsHistoryNot) => {
-            if (err) {
-                console.error("Error fetching temp events:", err);
-                return res.status(500).send("Internal Server Error");
-            } else {
-                connection.query(`SELECT Status, rejectionReason, PostID, notificationstatus FROM history_post WHERE club_id = ?`, [clubID], (err, resultsHistoryPostNot) => {
-                    if (err) {
-                        console.error("Error fetching temp events:", err);
-                        return res.status(500).send("Internal Server Error");
-                    } else {
-                        connection.query(`SELECT status, rejectionReason, edit_id, notificationstatus, requestType FROM historyprofileEdits WHERE club_id = ?`, [clubID], (err, resultsHistoryPostEditsNot) => {
-                            if (err) {
-                                console.error("Error fetching temp events:", err);
-                                return res.status(500).send("Internal Server Error");
-                            } else {
-                                res.render("notifications.ejs", { loggedIn: true, role: "club", email: email, resultsHistoryNot, resultsHistoryPostNot, resultsHistoryPostEditsNot });
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    });
-});
-
-app.post("/changeNotificationStatusEvents", (req, res) => {
-    const email = req.session.email;
-    const eventID = req.query.eventId;
-
-    connection.query("UPDATE history_event SET notificationstatus = 1 WHERE event_id = ?", [eventID], (err) => {
-        if (err) {
-            console.log("can't update the notifiction status")
-        } else {
-            console.log("The status has been updated");
-
-            connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
-                if (err) {
-                    console.error("Error fetching club id:", err);
-                    return res.status(500).send("Internal Server Error");
+        if(err){
+            console.log("Error fetching club id notification");
+        } else{
+            const clubID = result[0].club_id;
+            connection.query("Select * from notifications_clm where club_id = ?", [clubID], (err, resultsNotificationsClub)=>{
+                if(err){
+                    console.log("Error fetching notifications club manager" + err.message);
+                } else{
+                    res.render("notifications.ejs", {resultsNotificationsClub, loggedIn: true, role: "club", email: email, clubImage: clubImage });
                 }
-                let clubID = result[0].club_id;
-
-                connection.query(`SELECT event_name, status, comment, event_id, notificationstatus FROM history_event WHERE club_id = ?`, [clubID], (err, resultsHistoryNot) => {
-                    if (err) {
-                        console.error("Error fetching temp events:", err);
-                        return res.status(500).send("Internal Server Error");
-                    } else {
-                        connection.query(`SELECT Status, rejectionReason, PostID, notificationstatus FROM history_post WHERE club_id = ?`, [clubID], (err, resultsHistoryPostNot) => {
-                            if (err) {
-                                console.error("Error fetching temp events:", err);
-                                return res.status(500).send("Internal Server Error");
-                            } else {
-                                connection.query(`SELECT status, rejectionReason, edit_id, notificationstatus, requestType FROM historyprofileEdits WHERE club_id = ?`, [clubID], (err, resultsHistoryPostEditsNot) => {
-                                    if (err) {
-                                        console.error("Error fetching temp events:", err);
-                                        return res.status(500).send("Internal Server Error");
-                                    } else {
-                                        res.render("notifications.ejs", { loggedIn: true, role: "club", email: email, resultsHistoryNot, resultsHistoryPostNot, resultsHistoryPostEditsNot });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            });
-        }
-    });
-});
-
-app.post("/changeNotificationStatusPosts", (req, res) => {
-    console.log("form has been sent");
-    const email = req.session.email;
-    const PostID = req.query.PostID;
-
-    connection.query("UPDATE history_post SET notificationstatus = 1 WHERE PostID = ?", [PostID], (err) => {
-        if (err) {
-            console.log("can't update the notifiction status")
-        } else {
-            console.log("The status has been updated");
-
-            connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
-                if (err) {
-                    console.error("Error fetching club id:", err);
-                    return res.status(500).send("Internal Server Error");
-                }
-                let clubID = result[0].club_id;
-
-                connection.query(`SELECT event_name, status, comment, event_id, notificationstatus FROM history_event WHERE club_id = ?`, [clubID], (err, resultsHistoryNot) => {
-                    if (err) {
-                        console.error("Error fetching temp events:", err);
-                        return res.status(500).send("Internal Server Error");
-                    } else {
-                        connection.query(`SELECT Status, rejectionReason, PostID, notificationstatus FROM history_post WHERE club_id = ?`, [clubID], (err, resultsHistoryPostNot) => {
-                            if (err) {
-                                console.error("Error fetching temp events:", err);
-                                return res.status(500).send("Internal Server Error");
-                            } else {
-                                connection.query(`SELECT status, rejectionReason, edit_id, notificationstatus, requestType FROM historyprofileEdits WHERE club_id = ?`, [clubID], (err, resultsHistoryPostEditsNot) => {
-                                    if (err) {
-                                        console.error("Error fetching temp events:", err);
-                                        return res.status(500).send("Internal Server Error");
-                                    } else {
-                                        res.render("notifications.ejs", { loggedIn: true, role: "club", email: email, resultsHistoryNot, resultsHistoryPostNot, resultsHistoryPostEditsNot });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            });
-        }
-    });
-});
-
-app.post("/changeNotificationStatusPostEdits", (req, res) => {
-    console.log("form has been sent");
-    const email = req.session.email;
-    const edit_id = req.query.edit_id;
-
-    connection.query("UPDATE historyprofileEdits SET notificationstatus = 1 WHERE edit_id = ?", [edit_id], (err) => {
-        if (err) {
-            console.log("can't update the notifiction status")
-        } else {
-            console.log("The status has been updated");
-
-            connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
-                if (err) {
-                    console.error("Error fetching club id:", err);
-                    return res.status(500).send("Internal Server Error");
-                }
-                let clubID = result[0].club_id;
-
-                connection.query(`SELECT event_name, status, comment, event_id, notificationstatus FROM history_event WHERE club_id = ?`, [clubID], (err, resultsHistoryNot) => {
-                    if (err) {
-                        console.error("Error fetching temp events:", err);
-                        return res.status(500).send("Internal Server Error");
-                    } else {
-                        connection.query(`SELECT Status, rejectionReason, PostID, notificationstatus FROM history_post WHERE club_id = ?`, [clubID], (err, resultsHistoryPostNot) => {
-                            if (err) {
-                                console.error("Error fetching temp events:", err);
-                                return res.status(500).send("Internal Server Error");
-                            } else {
-                                connection.query(`SELECT status, rejectionReason, edit_id, notificationstatus, requestType FROM historyprofileEdits WHERE club_id = ?`, [clubID], (err, resultsHistoryPostEditsNot) => {
-                                    if (err) {
-                                        console.error("Error fetching temp events:", err);
-                                        return res.status(500).send("Internal Server Error");
-                                    } else {
-                                        res.render("notifications.ejs", { loggedIn: true, role: "club", email: email, resultsHistoryNot, resultsHistoryPostNot, resultsHistoryPostEditsNot });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
             });
         }
     });
@@ -1753,6 +1613,34 @@ app.post("/changeNotificationStatusSks", (req, res) => {
                     console.log("error with join");
                 } else {
                     res.render("notificationsSks.ejs", { loggedIn: true, role: "sks", email: email, resultNotiNewEvent });
+                }
+            });
+        }
+    });
+});
+
+app.post("/changeNotificationStatusClubManager", (req, res) => {
+    const email = req.session.email;
+    const notify_id = req.query.notify_id;
+    const clubImage = req.session.ImageURL;
+
+    
+    connection.query("UPDATE notifications_clm SET status_notification = 1 WHERE notify_id = ?", [notify_id], (err) => {
+        if (err) {
+            console.log("Error notification updated" + err.message);
+        } else {
+            connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
+                if(err){
+                    console.log("Error fetching club id notification");
+                } else{
+                    const clubID = result[0].club_id;
+                    connection.query("Select * from notifications_clm where club_id = ?", [clubID], (err, resultsNotificationsClub)=>{
+                        if(err){
+                            console.log("Error fetching notifications club manager" + err.message);
+                        } else{
+                            res.render("notifications.ejs", {resultsNotificationsClub, loggedIn: true, role: "club", email: email, clubImage: clubImage });
+                        }
+                    });
                 }
             });
         }

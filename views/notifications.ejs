@@ -18,127 +18,30 @@
                 <p id="mark-as-read">Mark as All Read</p>
             </header>
             <main>
-                <% resultsHistoryNot.forEach((itemEN, index)=> { %>
-                    <% var eventName = itemEN.event_name; %>
-                    <% var eventComment = itemEN.comment; %>
-                    <% var eventID=parseInt(itemEN.event_id); %>
-                    <% var divId='button_' + itemEN.event_id; %>
-                    
-                    <%if (itemEN.notificationstatus == 0){%>
-                        <%console.log("notificationn " + eventID + "Event Name" + eventName)%>
-                        <form id="readNotificationForm" action="/changeNotificationStatusEvents?eventId=<%= eventID%>" method="POST">
+                <%resultsNotificationsClub.forEach((notification, index) => {%>
+                    <% var notify_id = parseInt(notification.notify_id); %>
+                    <% var divId='button_' + notification.notify_id; %>
+                    <% if(notification.status_notification == 0){ %>
+                        <form id="readNotificationFormClub" action="/changeNotificationStatusClubManager?notify_id=<%= notify_id%>" method="POST">
                             <div class="notificationCard unread read-notification" id="<%= divId %>">
-                                <img alt="photo" src="../public/images/pixel.jpg" />
-                                <div class="description">
-                                        <%if(itemEN.status == 1){%>
-                                            <p>Your Event "<%=eventName%>" Request has been approved</p>
-                                        <%} else if(itemEN.status == 0){%>
-                                            <p>Your Event "<%=eventName%>" Request has not been approved</p>
-                                            <p>Rejection Reason "<%=eventComment%>"</p>
-                                            <%}%>
+                                <img src="../public/images/<%=clubImage%>"/>
+                                 <div class="description">
+                                    <% if(notification.notificationType == "Approve Edit Profile"){%>
+                                        <p>Your Profile edit has been approved</p>  
+                                    <% } else if(notification.notificationType == "Your Post has been approved") {%>   
+                                        <p>Your Profile edit has been approved"</p>  
+                                        <% } else if(notification.notificationType == "Edit Event Approved") {%>
+                                            <p>Your Edit Event Request has been approved</p>  
+                                            <% } else if(notification.notificationType == "Event Rejected"){ %>
+                                            <p>Your event has been rejected. Rejection reason"<%=resultsNotificationsClub.RejectionReason%>"</p>  
+                                            <% }  else if(notification.notificationType == "Reject Edit Event") {%>
+                                                <p>Your edit event has been rejected. Rejection reason"<%=resultsNotificationsClub.RejectionReason%>"</p>  
+                                                <% } %>
                                 </div>
                             </div>
                         </form>
-                        
-                    <%} else if((itemEN.notificationstatus == 1)){%>
-                        <div class="notificationCard">
-                            <img alt="photo" src="../public/images/pixel.jpg" />
-                            <div class="description">
-                                    <%if(itemEN.status == 1){%>
-                                        <p>Your Event "<%=eventName%>" Request has been approved</p>
-                                    <%} else if(itemEN.status == 0){%>
-                                        <p>Your Event "<%=eventName%>" Request has not been approved</p>
-                                        <p>Rejection Reason "<%=eventComment%>"</p>
-                                        <%}%>
-                            </div>
-                        </div>
-                        <%}%>
-                <%})%>
-
-                <!--Notifications For  Create Posts-->
-                <% resultsHistoryPostNot.forEach((itemHP, index)=> { %>
-                    <% var postComment = itemHP.rejectionReason; %>
-                    <% var PostID=parseInt(itemHP.PostID); %>
-                    <% var divId='button_' + itemHP.PostID; %>
-                    
-                    <%if (itemHP.notificationstatus == 0){%>
-                        <%console.log("notificationn posts" + PostID)%>
-                        <%console.log("status" + itemHP.Status)%>
-
-                        <form id="readNotificationFormPosts" action="/changeNotificationStatusPosts?PostID=<%= PostID%>" method="POST">
-                            <div class="notificationCard unread2 read-notification" id="<%= divId %>">
-                                <img alt="photo" src="../public/images/pixel.jpg" />
-                                <div class="description">
-                                        <%if(itemHP.Status == "approved"){%>
-                                            <%console.log("approved post print")%>
-
-                                            <p>Your Post Request has been approved</p>
-                                        <%} else if(itemHP.Status == "rejected"){%>
-                                            <p>Your Post Request has not been approved</p>
-                                            <p>Rejection Reason "<%=postComment%>"</p>
-                                            <%}%>
-                                </div>
-                            </div>
-                        </form>
-                        
-                    <%} else if((itemHP.notificationstatus == 1)){%>
-                        <div class="notificationCard">
-                            <img alt="photo" src="../public/images/pixel.jpg" />
-                            <div class="description">
-                                    <%if(itemHP.Status == "approved"){%>
-                                        <p>Your Post Request has been approved</p>
-                                    <%} else if(itemHP.Status == "rejected"){%>
-                                        <p>Your Post Request has not been approved</p>
-                                        <p>Rejection Reason "<%=postComment%>"</p>
-                                        <%}%>
-                            </div>
-                        </div>
-                        <%}%>
-                <%})%>
-
-                <!--Notifications For  Edit Posts-->
-                <% resultsHistoryPostEditsNot.forEach((itemHEP, index)=> { %>
-                    <% var postEditRejectionReason = itemHEP.rejectionReason; %>
-                    <% var edit_id=parseInt(itemHEP.edit_id); %>
-                    <% var divId='button_' + itemHEP.edit_id; %>
-                    
-                    <%if (itemHEP.notificationstatus == 0){%>
-                        <%console.log("notificationn posts" + edit_id)%>
-                        <%console.log("status" + itemHEP.status)%>
-
-                        <form id="readNotificationFormPostsEdits" action="/changeNotificationStatusPostEdits?edit_id=<%= edit_id%>" method="POST">
-                            <div class="notificationCard unread3 read-notification" id="<%= divId %>">
-                                <img alt="photo" src="../public/images/pixel.jpg" />
-                                <div class="description">
-                                        <%if(itemHEP.status == 1){%>
-                                            <%console.log("approved post print")%>
-
-                                            <p>Your Post Edit Request <%=itemHEP.requestType%> has been approved</p>
-                                        <%} else if(itemHEP.status == 0){%>
-                                                <p>Your Post Edit Request <%=itemHEP.requestType%> has not been approved</p>
-                                                <p>Rejection Reason "<%=postEditRejectionReason%>"</p>
-                                            <%}%>
-                                </div>
-                            </div>
-                        </form>
-                        
-                    <%} else if((itemHEP.notificationstatus == 1)){%>
-                        <div class="notificationCard">
-                            <img alt="photo" src="../public/images/pixel.jpg" />
-                            <div class="description">
-                                    <%if(itemHEP.status == 1){%>
-                                        <p>Your Post Edit Request <%=itemHEP.requestType%> has been approved</p>
-                                        <%} else if(itemHEP.status == 0){%>
-                                            <p>Your Post Edit Request <%=itemHEP.requestType%> has not been approved</p>
-                                            <p>Rejection Reason "<%=postEditRejectionReason%>"</p>
-                                        <%}%>
-                            </div>
-                        </div>
-                        <%}%>
-                <%})%>
-
-
-                
+                        <% } %>      
+                <%});%>  
             </main>
         </div>
     </div>

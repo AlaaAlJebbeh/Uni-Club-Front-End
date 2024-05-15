@@ -710,7 +710,7 @@ app.post('/updateEvent', (req, res) => {
 
     if (req.files != null){
         const { uploadImage1 } = req.files;
-        const imgPath = __dirname + '/public/images' + uploadImage1.name
+        const imgPath = __dirname + '/public/images/' + uploadImage1.name
         uploadImage1.mv(imgPath);
         imgName = uploadImage1.name;
         console.log("update the image");
@@ -1446,7 +1446,7 @@ app.post('/updateProfile', (req, res) => {
             if (req.files) {
                 const { uploadImage1 } = req.files;
                 console.log(uploadImage1.name);
-                const imgPath = __dirname + '/public/images' + uploadImage1.name
+                const imgPath = __dirname + '/public/images/' + uploadImage1.name
                 uploadImage1.mv(imgPath);
                 let imageName = uploadImage1.name;
                 connection.query("INSERT INTO tempprofile (club_id, input, RequestType) VALUES (?, ?, ?)", [clubid, imageName, "New Club Image"], (err, result) => {

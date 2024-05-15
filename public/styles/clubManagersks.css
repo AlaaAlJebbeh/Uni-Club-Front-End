@@ -671,6 +671,7 @@ footer{
 .custom-table {
     border-collapse: collapse; /* Merge cell borders */
     width: fit-content; /* Set table width */
+    height: fit-content;
   }
   
   .custom-table td {
@@ -703,7 +704,7 @@ footer{
     left: 50%; /* Adjust the left position */
     transform: translate(-50%, -50%); /* Center the popup */
     z-index: 9999; 
-    width: 30%; 
+    width: 33%; 
     max-width: 800px; /* Adjust the maximum width */
     height: 30%; /* Adjust the height */
     max-height: 400px; /* Adjust the maximum height */

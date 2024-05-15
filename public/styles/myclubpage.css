@@ -14,6 +14,7 @@ body {
     margin: 0;
     padding: 0;
 }
+
 h1 {
     color: #193635;
 }
@@ -120,9 +121,11 @@ a:active {
     }
 }
 .ContentBody {
-    flex: 1;
+    max-width: 100%; /* Ensure content does not exceed parent's width */
     background-color: #FFFFFF;
-    padding: 20px; /* Add padding for spacing */
+    
+    width: 100%; /* Expand to full available width */
+    flex:1;
 }
 
 #my-profile-content {
@@ -258,7 +261,7 @@ a:active {
     flex: 1;
     margin-bottom: 20px;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 .table-container {
@@ -275,8 +278,8 @@ a:active {
     display: flex;
     flex-direction: column;
     border-radius: 15px;
-    max-width: 400px;
-    max-height: 600px;
+    width: 400px;
+    height: 600px;
     overflow: hidden;
 }
 
@@ -292,8 +295,8 @@ a:active {
     border-bottom: 5px solid black;
 }
 .text-container{
-    width: 100%;
-    height: 35%;
+    width: 500px;
+    height: 200px;
     background-color: whitesmoke;
     display: flex;
     flex-wrap: wrap;
@@ -313,8 +316,8 @@ a:active {
 }
 
 .image-container img{
-    width: 100%;
-    height: 100%;
+    width: 400px;
+    height: 300px;
     
 }
 
@@ -435,8 +438,11 @@ a:active {
 
 
 .indivisual-card-container{
-    display: flex;
-    flex-direction: column;
+    display: relative;
+    display: block;
+    width: 400px;
+    height: 600px;
+    margin-bottom: 20px;
 }
 
 .events-save-button {

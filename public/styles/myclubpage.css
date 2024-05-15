@@ -14,7 +14,6 @@ body {
     margin: 0;
     padding: 0;
 }
-
 h1 {
     color: #193635;
 }
@@ -121,11 +120,9 @@ a:active {
     }
 }
 .ContentBody {
-    max-width: 100%; /* Ensure content does not exceed parent's width */
+    flex: 1;
     background-color: #FFFFFF;
-    
-    width: 100%; /* Expand to full available width */
-    flex:1;
+    padding: 20px; /* Add padding for spacing */
 }
 
 #my-profile-content {
@@ -261,7 +258,7 @@ a:active {
     flex: 1;
     margin-bottom: 20px;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 .table-container {
@@ -278,8 +275,8 @@ a:active {
     display: flex;
     flex-direction: column;
     border-radius: 15px;
-    width: 400px;
-    height: 600px;
+    max-width: 400px;
+    max-height: 600px;
     overflow: hidden;
 }
 
@@ -295,8 +292,8 @@ a:active {
     border-bottom: 5px solid black;
 }
 .text-container{
-    width: 500px;
-    height: 200px;
+    width: 100%;
+    height: 35%;
     background-color: whitesmoke;
     display: flex;
     flex-wrap: wrap;
@@ -316,8 +313,8 @@ a:active {
 }
 
 .image-container img{
-    width: 400px;
-    height: 300px;
+    width: 100%;
+    height: 100%;
     
 }
 
@@ -427,6 +424,11 @@ a:active {
     background: transparent; /* Make background transparent */
 }
 
+.editanddeleteContainer form button img {
+    width: 100%;
+    height: 100%;
+}
+
 .editanddeleteContainer button:hover {
     cursor: pointer;
 }
@@ -435,14 +437,14 @@ a:active {
 .editanddeleteContainer img:hover {
    cursor: pointer;
 } 
-
+.editanddeleteContainer form {
+    width: 100%;
+    height: 100%;
+}
 
 .indivisual-card-container{
-    display: relative;
-    display: block;
-    width: 400px;
-    height: 600px;
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .events-save-button {

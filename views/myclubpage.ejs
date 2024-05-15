@@ -249,21 +249,22 @@
                 <% if(loggedIn) { %>
                 <div class="editanddeleteContainer">
                   <div class="image">
-                    <img src="../public/images/edit.png" alt="edit icon" class="edit-icon" data-eventid="<%= item.event_id %>" style="background-color: aliceblue;"/>
+                    <button type="submit" style="background-color: white; border:none;">
+                      <img src="../public/images/edit.png" alt="edit icon" class="edit-icon" data-eventid="<%= item.event_id %>" style="background-color: aliceblue;"/>
+                    </button>
                   </div>
                   <% var eventID=parseInt(item.event_id); %>
-                  <form action="/deleteEvent?eventID=<%=eventID%>" method="post">
+                  <form action="/deleteEvent?eventID=<%=eventID%>" method="post" sty>
                     <button type="submit" style="background-color: white; border:none;">
                       <img src="../public/images/delete.png" alt="delete icon"/>
                     </button>
                   </form>
                  
-                   <form action="/album" method="get" class="add-button"> 
+                   <form action="/album" method="get" class="add-button" style="all: initial;"> 
                    <button id="<%= item.event_id %>" name="event_id" value="<%= item.event_id %>"  onclick="album()">
                    <img src="../public/images/add_icon.png" style="background-color: aliceblue;">
                    </button>
                     </form>
-
 
                   
                 </div>

@@ -471,7 +471,7 @@ app.post("/approveEvent", (req, res) => {
                         console.log("Error Inserting into history_event ", err);
                         return res.status(500).send("Internal Server Error");
                     }
-                    connection.query("INSERT INTO event (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, club_name, clm_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )", [eventId, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, clubId, clubName, clubInfo[0].clm_id], (err, result) => {
+                    connection.query("INSERT INTO toshareevents (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, club_name, clm_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )", [eventId, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, clubId, clubName, clubInfo[0].clm_id], (err, result) => {
                         if (err) {
                             console.log("Error Inserting into event ", err);
                             return res.status(500).send("Internal Server Error");
@@ -610,9 +610,11 @@ app.post("/createEvent", async (req, res) => {
     const language = req.body.language; // Get the selected language
 
     const userId = req.session.userID;
+    console.log("UserID: " + userId)
 
     connection.query("SELECT club_name FROM club WHERE clm_id = ?", [userId], (err, resultClubName) => {
         const clubName = resultClubName[0].club_name;
+        console.log("ClubNAme : " + clubName);
 
         connection.query("SELECT club_id FROM club WHERE clm_id = ?", [userId], (err, clubResult) => {
             if (err) {
@@ -819,7 +821,7 @@ app.post('/rejectEvent', (req, res) => {
 
         console.log("Fetched Event from temp Events: " , eventInfo);
         connection.query("INSERT INTO history_event (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, status, comment, notificationstatus, club_name, clm_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-                                                    [eventID, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, clubId, 0, message, 0, clubName, eventInfo[0].clm_id], (err, result) => {
+                                                    [eventID, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, eventInfo[0].club_id, 0, message, 0, eventInfo[0].club_name, eventInfo[0].clm_id], (err, result) => {
             if (err) {
                 console.log("Error Inserting into history_event ", err);
                 return res.status(500).send("Internal Server Error");

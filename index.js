@@ -1761,20 +1761,6 @@ app.get("/album", (req, res) => {
 
 });
 
-app.post('/filter-events', (req, res) => {
-    const { startDate, endDate } = req.body;
-  
-    // Query events from database within the specified date range
-    const sql = 'SELECT * FROM events WHERE date BETWEEN ? AND ?';
-    connection.query(sql, [startDate, endDate], (err, results) => {
-      if (err) {
-        return res.status(500).send('Database error');
-      }
-      res.json(results);
-    });
-  });
-
-
 //listining to the port 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

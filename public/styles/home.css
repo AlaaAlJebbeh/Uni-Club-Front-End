@@ -12,6 +12,14 @@ body{
   justify-content: center;
   background: #343F4F;
 }
+input[type="date"] {
+  padding: 12px; /* Increase padding for more height and spacing */
+  font-size: 16px; /* Increase font size for better readability */
+  border: 1px solid #ccc; /* Add border for a clearer boundary */
+  border-radius: 5px; /* Add border radius for rounded corners */
+  box-sizing: border-box; /* Include padding in total width/height */
+  width: 250px; /* Set width to desired size */
+}
 
 li a{
     text-decoration: none;

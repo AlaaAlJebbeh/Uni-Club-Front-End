@@ -859,6 +859,44 @@ app.post("/approvePost", (req, res) => {
     res.redirect("/comparing")
 });
 
+app.post("/rejectPost", (req, res) => {
+    const postId = req.query.postId;
+    const rejectionReason = req.body.rejectionReason;
+
+    console.log("Received post rejection for Id:", postId);
+
+    connection.query('SELECT * FROM tempprofile WHERE temp_id = ?', [postId], (err, postRejectionResults) => {
+        if (err) {
+            console.error('Error fetching profile edit data:', err);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        if (postRejectionResults.length === 0) {
+            return res.status(404).send("Profile edit not found in tempprofile table");
+        }
+
+        const postReject = postRejectionResults[0];
+        const { club_id, input, RequestType } = postReject;
+
+        connection.query('INSERT INTO history_post (PostID, club_name, club_id, postText, postImageURL, Status, rejectionReason) VALUES (?, ?, ?, ?, ?, ?,?)',
+        [PostID, club_name, clubid, postText, postImageURL, 'rejected',rejectionReason],
+            (err, insertResult) => {
+                if (err) {
+                    console.error('Error inserting into history_profile:', err);
+                    return res.status(500).send("Internal Server Error");
+                }
+
+                connection.query('DELETE FROM temppost WHERE PostID = ?', [postId], (err, deleteResult) => {
+                    if (err) {
+                        console.error("Error deleting post from temppost table:", err);
+                        return res.status(500).send("Internal Server Error");
+                    }
+                    console.log("post rejected and removed from temppost table");
+                    
+                });
+        });
+    });
+});
 
 app.post("/approveProfileEdit", (req, res) => {
     const RequestId = req.query.temp_id;
@@ -1013,7 +1051,6 @@ app.post("/rejectProfileEdit", (req, res) => {
 
     console.log("Received profile edit rejection for Id:", RequestId);
 
-    // Retrieve the profile edit data from tempprofile table
     connection.query('SELECT * FROM tempprofile WHERE temp_id = ?', [RequestId], (err, profileEditResults) => {
         if (err) {
             console.error('Error fetching profile edit data:', err);
@@ -1027,7 +1064,6 @@ app.post("/rejectProfileEdit", (req, res) => {
         const profileEdit = profileEditResults[0];
         const { club_id, input, RequestType } = profileEdit;
 
-        // Insert the profile edit data into history_profile table with status "rejected" and rejection reason
         connection.query('INSERT INTO history_profile (club_id, temp_id, Status, RequestType, input, rejectionReason) VALUES (?, ?, ?, ?, ?, ?)', 
             [club_id, RequestId, 'rejected', RequestType, input, rejectionReason],
             (err, insertResult) => {
@@ -1036,22 +1072,18 @@ app.post("/rejectProfileEdit", (req, res) => {
                     return res.status(500).send("Internal Server Error");
                 }
 
-                // Delete the profile edit from the tempprofile table
                 connection.query('DELETE FROM tempprofile WHERE temp_id = ?', [RequestId], (err, deleteResult) => {
                     if (err) {
                         console.error("Error deleting profile edit from tempprofile table:", err);
                         return res.status(500).send("Internal Server Error");
                     }
                     console.log("Profile edit rejected and removed from tempprofile table");
-                    res.status(200).send("Profile edit rejected successfully");
+                    
                 });
         });
     });
+    res.redirect("/comparing")
 });
-
-
-
-
 
 app.get("/ezz", (req, res) => {
     connection.query("select * from event where clm_id = 1", (err, result) => {

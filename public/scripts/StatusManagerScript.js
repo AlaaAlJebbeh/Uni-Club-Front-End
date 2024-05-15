@@ -241,11 +241,26 @@ details.addEventListener("click", (e) => {
 approvePost(PostId, temp_id, requestTypeMap);*/
 
 
-function sendRejectionReason(RequestId) {
+function reject(temp_id) {
+    window.selectedRequestId = temp_id;
+    showPopup2();
+}
+
+function reject(postId) {
+    window.selectedRequestId = postId;
+    showPopup2();
+}
+
+function sendRejectionReason() {
     const rejectionReason = document.getElementById('rejectionReason').value;
+    const RequestId = window.selectedRequestId;
     // Send rejection reason to server
-    fetch(`/rejectProfileEdit?temp_id=${RequestId}&rejectionReason=${rejectionReason}`, {
-        method: 'POST'
+    fetch(`/rejectProfileEdit?temp_id=${RequestId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ rejectionReason: rejectionReason })
     }).then(response => {
         if (response.ok) {
             // Profile edit rejected successfully, close popup or do something else
@@ -258,6 +273,30 @@ function sendRejectionReason(RequestId) {
         // Handle error
     });
 }
+
+function sendRejectionReason() {
+    const rejectionReason = document.getElementById('rejectionReason').value;
+    const postId = window.selectedPostID;
+    // Send rejection reason to server
+    fetch(`/rejectPost?postId=${postId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ rejectionReason: rejectionReason })
+    }).then(response => {
+        if (response.ok) {
+            // Post rejected successfully, close popup or do something else
+            closePopup2();
+        } else {
+            // Handle error
+        }
+    }).catch(error => {
+        console.error('Error sending rejection reason:', error);
+        // Handle error
+    });
+}
+
 
 
   // Function to display the popup

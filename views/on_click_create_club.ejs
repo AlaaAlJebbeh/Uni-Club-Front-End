@@ -30,7 +30,7 @@
   <body>
     <!--Header-->
     <header><%- include("partials/sks_header.ejs") %></header>
-    <form action="/clubform" class="form" method="POST">
+    <form action="/clubform" class="form" method="POST" enctype="multipart/form-data">
     <section class="container">
       <h1 class="btne-01">Create Club</h1>
      
@@ -42,6 +42,19 @@
             placeholder="Enter club name"
             required
           />
+        </div>
+        <label style="font-size: medium">Manager ID</label>
+        <div class="select-box" style="width:270px;">
+          <select name="newManagerID" class="manager_choose" required>
+              <option value="" disabled selected>New Manager Id</option>
+              <%resultsClubManagers.forEach((item, index)=> {%>
+                  <option>
+                      <%=item.clm_id%>
+                  </option>
+                  <%})%>
+
+          </select>
+          <span class="error-message" style="color: red; display: none">Please select a manager.</span>
         </div>
 
         <div class="gender-box">
@@ -115,23 +128,6 @@
           </div>
         </div>
 
-        <div class="input-box">
-          <label style="font-size: medium">Manager ID</label>
-          <input
-            type="text"
-            name="manager"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            placeholder="Manager ID"
-            required
-          />
-          <span class="error-message" style="color: red; display: none"
-            >Please enter only numbers.</span
-          >
-        </div>
-
-       
-
         <div class="input-box address">
           <label style="font-size: medium">BIO</label>
           <input type="text" name="bio" placeholder="write your bio" required />
@@ -184,6 +180,10 @@
           <span class="error-message" style="color: red; display: none"
             >Please enter a valid email address.</span
           >
+        </div>
+
+        <div class="upload image">
+          <input type="file" name="uploadImage1" />
         </div>
 
         <button type="submit" id="sendButton">Submit</button>

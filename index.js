@@ -105,11 +105,13 @@ app.post('/login', (req, res) => {
                         }
                         req.session.clubID = results[0].club_id;
                         const clubID = req.session.clubID;
+                        console.log("CLub ID: " + clubID);
                         connection.query("select * from club where club_id = ?", [clubID], (err, result) => {
                             if (err) {
                                 console.log("Error fetching imageURL: " + err.message);
                                 return res.status(500).send("Internal Server Error");
                             }
+                            console.log("Club info of the clm that logged IN: " , result);
                             if (!result[0].clubImageUrl) {
                                 console.log("This club doesn't have an image and it will be set to null");
                                 req.session.ImageURL = null;
@@ -487,7 +489,7 @@ app.post("/approveEvent", (req, res) => {
                                     console.log("fetching event name");
                                 } else {
                                     const event_name = result[0].event_name;
-                                    connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)", [notificationType, event_name, clubId], (err) => {
+                                    connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)", [notificationType, eventInfo[0].event_name, clubId], (err) => {
                                         if (err) {
                                             console.log("error inseting to notifications approve event : " + err.message);
                                         } else {
@@ -599,7 +601,7 @@ app.get("/createEvent", (req, res) => {
 
 app.post("/createEvent", async (req, res) => {
     const { uploadImage1 } = req.files;
-    const imgPath = __dirname + '/public/images' + uploadImage1.name
+    const imgPath = __dirname + '/public/images/' + uploadImage1.name
     // Move the uploaded image to our upload folder
     uploadImage1.mv(imgPath);
     const imageName = uploadImage1.name;
@@ -713,7 +715,7 @@ app.post("/createPost", async (req, res) => {
     console.log("The requuest is");
     const { ImagePost } = req.files;
 
-    const imgPath = __dirname + '/public/images' + ImagePost.name
+    const imgPath = __dirname + '/public/images/' + ImagePost.name
     // Move the uploaded image to our upload folder
     ImagePost.mv(imgPath);
     const imgName = ImagePost.name;
@@ -776,7 +778,14 @@ app.post("/createPost", async (req, res) => {
 //Route createClub
 app.get("/createclub", (req, res) => {
 
-    res.render("on_click_create_club.ejs", { role: 'sks', email: req.session.email, loggedIn: true });
+    connection.query('SELECT clm_id FROM club_manager', (err, resultsClubManagers) => {
+        if (err) {
+            console.log("couldn't fetch club managers", err);
+        }
+        console.log({ resultsClubManagers });
+        res.render("on_click_create_club.ejs", { role: 'sks', email: req.session.email, loggedIn: true, resultsClubManagers});
+    });
+
 });
 
 app.post("/clubform", async (req, res) => {
@@ -790,15 +799,15 @@ app.post("/clubform", async (req, res) => {
     const media3 = req.body.media3;
     const email = req.body.email;
 
-    const { ImagePost } = req.files;
-    const imgPath = __dirname + '/public/images' + ImagePost.name
+    const { uploadImage1 } = req.files;
+    const imgPath = __dirname + '/public/images/' + uploadImage1.name
     // Move the uploaded image to our upload folder
-    ImagePost.mv(imgPath);
-    const imgName = ImagePost.name;
+    uploadImage1.mv(imgPath);
+    const imageName = uploadImage1.name;
 
 
-    connection.query('INSERT INTO club(club_name, category, clm_id, bio, contact, social_media1, social_media2, social_media3, email) VALUES(?,?,?,?,?,?,?,?,?)',
-        [name, cars, manager, bio, number, media1, media2, media3, email], (err, result) => {
+    connection.query('INSERT INTO club(club_name, category, clm_id, bio, contact, social_media1, social_media2, social_media3, email, clubImageUrl) VALUES(?,?,?,?,?,?,?,?,?,?)',
+        [name, cars, manager, bio, number, media1, media2, media3, email, imageName], (err, result) => {
             if (err) {
                 console.error("Error inserting club:", error);
                 res.status(500).send("Error creating club");
@@ -808,6 +817,7 @@ app.post("/clubform", async (req, res) => {
             res.send('Club successfully created');
         });
 });
+
 
 app.post('/rejectEvent', (req, res) => {
     const eventID = parseInt(req.query.eventID);
@@ -833,6 +843,45 @@ app.post('/rejectEvent', (req, res) => {
                     console.log("Error deleteing from temp event ", err);
                     return res.status(500).send("Internal Server Error");
                 }
+                const notificationType = "Event Rejected";
+                connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id, RejectionReason) VALUES (?, ?, ?, ?)", [notificationType, eventInfo[0].event_name, eventInfo[0].club_id, message ], (err) => {
+                    if (err) {
+                        console.log("error inseting to notifications approve event : " + err.message);
+                    } else {
+                        res.redirect("/eventRequests");              
+                        }
+                });
+                
+            });
+        });
+
+    });
+});
+
+app.post('/rejectEventEdit', (req, res) => {
+    const eventID = parseInt(req.query.eventID);
+    const message = req.body.rejectionReason;
+
+    connection.query('Select * from tempeventedits where event_id = ?', [eventID], (err, eventInfo) => {
+        if (err) {
+            console.log("Error fetching event from temp Events: " + err.message);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        console.log("Fetched Event from temp Events: " , eventInfo);
+        connection.query("INSERT INTO history_eventEdits (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, status, comment, notificationstatus, club_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+                                                    [eventID, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, eventInfo[0].club_id, 0, message, 0, eventInfo[0].club_name], (err, result) => {
+            if (err) {
+                console.log("Error Inserting into history_event ", err);
+                return res.status(500).send("Internal Server Error");
+            }
+
+            connection.query("Delete from tempeventedits where event_id = ?", [eventID], (err, result) => {
+
+                if (err) {
+                    console.log("Error deleteing from temp event ", err);
+                    return res.status(500).send("Internal Server Error");
+                }
                 res.redirect("/eventRequests");
             });
         });
@@ -842,63 +891,30 @@ app.post('/rejectEvent', (req, res) => {
 
 //Route Comparing 
 app.get("/comparing", (req, res) => {
-    if (!req.session.loggedIn) {
+
+    if (!(req.session.loggedIn)) {
         res.redirect("/");
     }
-    connection.query(`SELECT * FROM tempposts`, (err, results) => {
+    connection.query(`SELECT club_id FROM club`, (err, clubNames) => {
         if (err) {
             console.error("Error fetching temp posts:", err);
             return res.status(500).send("Internal Server Error");
-        }   
-        connection.query("SELECT * FROM tempprofile", (err, tempprofileedits) => {
+        }
+
+        connection.query(`SELECT * FROM tempposts`, (err, results) => {
             if (err) {
-                console.error("Error fetching temp profile:", err);
+                console.error("Error fetching temp posts:", err);
                 return res.status(500).send("Internal Server Error");
             }
-                const fetchClubName = (item, callback) => {
-                connection.query(`SELECT club_name FROM club WHERE club_id = ${item.club_id}`, (err, club) => {
-                    if (err) {
-                        console.error(`Error fetching club name:`, err);
-                        callback(err);
-                    } else {
-                        item.clubName = club[0].club_name;
-                        callback(null);
-                    }
-                });
-            };
-                const promises = [];
-                results.forEach((item) => {
-                const promise = new Promise((resolve, reject) => {
-                    fetchClubName(item, (err) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve();
-                        }
-                    });
-                });
-                promises.push(promise);
-            });
-                tempprofileedits.forEach((item) => {
-                const promise = new Promise((resolve, reject) => {
-                    fetchClubName(item, (err) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve();
-                        }
-                    });
-                });
-                promises.push(promise);
-            });
-                Promise.all(promises)
-                .then(() => {
-                    res.render("StatusManager.ejs", { results: results, tempprofileedits: tempprofileedits, loggedIn: req.session.loggedIn, role: "sks" });
-                })
-                .catch((err) => {
-                    console.error("Error fetching club names:", err);
+
+            connection.query("Select * from tempprofile", (err, tempprofileedits) => {
+                if (err) {
+                    console.error("Error fetching temp profile:", err);
                     return res.status(500).send("Internal Server Error");
-                });
+                }
+                res.render("StatusManager.ejs", { clubNames, loggedIn: req.session.loggedIn, role: "sks", tempposts: results, tempprofileedits, results });
+            })
+
         });
     });   
 });
@@ -1008,6 +1024,11 @@ app.post("/approveProfileEdit", (req, res) => {
     const RequestId = req.query.temp_id;
 
     console.log("Received profile edit Id:", RequestId);
+
+    
+
+
+
 
     connection.query('SELECT * FROM tempprofile WHERE temp_id = ?', [RequestId], (err, results) => {
         if (err) {
@@ -1146,7 +1167,22 @@ app.post("/approveProfileEdit", (req, res) => {
             console.log("Profile edit deleted from tempprofile table successfully!");
             res.redirect("/comparing")
         });
-    }); 
+    });
+
+    connection.query("Select club_id from tempprofile where temp_id = ?",  [RequestId], (err, resultsClubID) =>{
+        const clubID = resultsClubID[0].club_id;
+        if(err){
+            console.log("can't get club id from approve profile");
+        }
+        const notificationType = "Approve Edit Profile";
+        connection.query("INSERT INTO notifications_clm (notificationType, club_id) VALUES (?, ?)", [notificationType, clubID], (err) => {
+        if (err) {
+            console.log("error inseting to notifications approve event : " + err.message);
+        }
+        });
+    });
+    
+    res.redirect("/comparing");
 });
 
 
@@ -1317,7 +1353,7 @@ app.post('/updateProfile', (req, res) => {
             if (req.files) {
                 const { uploadImage1 } = req.files;
                 console.log(uploadImage1.name);
-                const imgPath = __dirname + '/public/' + uploadImage1.name
+                const imgPath = __dirname + '/public/images' + uploadImage1.name
                 uploadImage1.mv(imgPath);
                 let imageName = uploadImage1.name;
                 connection.query("INSERT INTO tempprofile (club_id, input, RequestType) VALUES (?, ?, ?)", [clubid, imageName, "New Club Image"], (err, result) => {

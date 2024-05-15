@@ -346,25 +346,18 @@ app.get("/eventRequests", (req, res) => {
             return res.status(500).send("Internal Server Error");
         }
         // Extracting event IDs from the results of the first query
-        const eventIds = results.map(row => row.eventid);
 
-        // Performing a second query to fetch events based on the event IDs
-        connection.query(`SELECT * FROM event WHERE event_id IN (?)`, [eventIds], (err, events) => {
-            if (err) {
-                console.error("Error fetching events:", err);
-                return res.status(500).send("Internal Server Error");
-            }
             connection.query("Select * from tempeventedits", (err, tempeventedits) => {
                 if (err){
                     console.error("Error fetching temp event Edits:", err);
                     return res.status(500).send("Internal Server Error");
                 }
 
-                res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, results, events, tempeventedits });
+                res.render('eventRequests.ejs', { role: 'sks', email: req.session.email, loggedIn: true, results, tempeventedits });
 
             });
         }); 
-    });
+    
 });
 
 

@@ -895,28 +895,74 @@ app.get("/comparing", (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/");
     }
-    connection.query(`SELECT club_id FROM club`, (err, clubNames) => {
+    connection.query(`SELECT * FROM tempposts`, (err, results) => {
         if (err) {
             console.error("Error fetching temp posts:", err);
             return res.status(500).send("Internal Server Error");
         }
-
-        connection.query(`SELECT * FROM tempposts`, (err, results) => {
+    
+        connection.query("SELECT * FROM tempprofile", (err, tempprofileedits) => {
             if (err) {
-                console.error("Error fetching temp posts:", err);
+                console.error("Error fetching temp profile:", err);
                 return res.status(500).send("Internal Server Error");
             }
-
-            connection.query("Select * from tempprofile", (err, tempprofileedits) => {
-                if (err) {
-                    console.error("Error fetching temp profile:", err);
+    
+            // Function to fetch club name for a single item
+            const fetchClubName = (item, callback) => {
+                connection.query(`SELECT club_name FROM club WHERE club_id = ${item.club_id}`, (err, club) => {
+                    if (err) {
+                        console.error(`Error fetching club name:`, err);
+                        callback(err);
+                    } else {
+                        item.clubName = club[0].club_name;
+                        callback(null);
+                    }
+                });
+            };
+    
+            // Array to store promises
+            const promises = [];
+    
+            // Processing tempposts
+            results.forEach((item) => {
+                const promise = new Promise((resolve, reject) => {
+                    fetchClubName(item, (err) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve();
+                        }
+                    });
+                });
+                promises.push(promise);
+            });
+    
+            // Processing tempprofileedits
+            tempprofileedits.forEach((item) => {
+                const promise = new Promise((resolve, reject) => {
+                    fetchClubName(item, (err) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve();
+                        }
+                    });
+                });
+                promises.push(promise);
+            });
+    
+            // Wait for all promises to resolve
+            Promise.all(promises)
+                .then(() => {
+                    // All club names fetched, render the template
+                    res.render("StatusManager.ejs", { results: results, tempprofileedits: tempprofileedits, loggedIn: req.session.loggedIn, role: "sks" });
+                })
+                .catch((err) => {
+                    console.error("Error fetching club names:", err);
                     return res.status(500).send("Internal Server Error");
-                }
-                res.render("StatusManager.ejs", { clubNames, loggedIn: req.session.loggedIn, role: "sks", tempposts: results, tempprofileedits, results });
-            })
-
+                });
         });
-    });   
+    });    
 });
 
 // Route to handle approving a new post
@@ -1024,12 +1070,6 @@ app.post("/approveProfileEdit", (req, res) => {
     const RequestId = req.query.temp_id;
 
     console.log("Received profile edit Id:", RequestId);
-
-    
-
-
-
-
     connection.query('SELECT * FROM tempprofile WHERE temp_id = ?', [RequestId], (err, results) => {
         if (err) {
             console.error('Error fetching post data:', err);

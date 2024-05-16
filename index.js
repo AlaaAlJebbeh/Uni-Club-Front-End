@@ -1309,7 +1309,14 @@ app.post("/rejectProfileEdit", (req, res) => {
                         return res.status(500).send("Internal Server Error");
                     }
                     console.log("Profile edit rejected and removed from tempprofile table");
-                    res.redirect("/comparing")
+                    const notificationType = "Edit Profile Rejected";
+                    connection.query("INSERT INTO notifications_clm (notificationType, club_id, RejectionReason) VALUES ( ?, ?, ?)", [notificationType, club_id, rejectionReason ], (err) => {
+                        if (err) {
+                            console.log("error inseting to notifications approve event : " + err.message);
+                        } else {
+                            res.redirect("/comparing")
+                        }
+                    });
                 });
             });
     });

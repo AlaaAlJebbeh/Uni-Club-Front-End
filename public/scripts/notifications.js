@@ -6,16 +6,13 @@ const unReadMessages5 = document.querySelectorAll('.unread5');
 const unReadMessages6 = document.querySelectorAll('.unread6');
 const unReadMessages7 = document.querySelectorAll('.unread7');
 const unReadMessages8 = document.querySelectorAll('.unread8');
-
-
-
-
+const unReadMessages9 = document.querySelectorAll('.unread9');
 
 
 const unReadMessagesCount = document.getElementById('num-of-notif');
 const markAll = document.getElementById('mark-as-read');
 
-unReadMessagesCount.innerText = unReadMessages1.length + unReadMessages2.length + unReadMessages3.length + unReadMessages4.length + unReadMessages5.length + unReadMessages6.length + unReadMessages7.length + unReadMessages8.length ;
+unReadMessagesCount.innerText = unReadMessages1.length + unReadMessages2.length + unReadMessages3.length + unReadMessages4.length + unReadMessages5.length + unReadMessages6.length + unReadMessages7.length + unReadMessages8.length + unReadMessages9.length ;
 
 unReadMessages1.forEach((message) => {
     message.addEventListener('click', () => {
@@ -153,6 +150,23 @@ unReadMessages8.forEach((message) => {
     });
 });
 
+unReadMessages9.forEach((message) => {
+    message.addEventListener('click', () => {
+        message.classList.remove('unread9');
+        const newUnreadMessages = document.querySelectorAll('.unread9');
+        unReadMessagesCount.innerText = newUnreadMessages.length;
+
+        unReadMessages9.forEach((button) => {
+            button.addEventListener('click', () => {
+                const form = document.getElementById('readNotificationFormClub9');
+                if (form) {
+                    form.submit();
+                }
+            });
+        });
+    });
+});
+
 
 // Mark as All read part
 markAll.addEventListener('click', () => {
@@ -180,7 +194,11 @@ markAll.addEventListener('click', () => {
     unReadMessages8.forEach((message) => {
         message.classList.remove('unread8');
     });
-    const newUnreadMessages = document.querySelectorAll('.unread1 .unread2 .unread3 .unread4 .unread5 .unread6 .unread7 .unread8');
+    unReadMessages9.forEach((message) => {
+        message.classList.remove('unread9');
+    });
+
+    const newUnreadMessages = document.querySelectorAll('.unread1 .unread2 .unread3 .unread4 .unread5 .unread6 .unread7 .unread8 .unread9');
     unReadMessagesCount.innerHTML = newUnreadMessages.length;
 
     

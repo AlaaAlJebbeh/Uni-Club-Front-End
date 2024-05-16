@@ -93,11 +93,17 @@
                                                             <p>Your event request is approved</p>  
                                                         </div>
                                                     </form>
-                                                    <% } %>
-                                    
-                        
-
-                            
+                                                    <% } else if(notification.notificationType == "Edit Profile Rejected"){%>
+                                                        <% var notify_id9 = parseInt(notification.notify_id); %>
+                                                        <% var divId9='button_' + notification.notify_id; %>
+                                                        <form id="readNotificationFormClub9" action="/changeNotificationStatusClubManager?notify_id=<%= notify_id9%>" method="POST">
+                                                            <div class="notificationCard unread9 read-notification" id="<%= notify_id9 %>">
+                                                                <img src="../public/images/<%=clubImage%>"/>
+                                                                <p>Your edit profile has been rejected. Rejection reason"<%=notification.RejectionReason%>"</p>  
+                                                            </div>
+                                                        </form>
+                                                        <% } %>
+                                                         
                     <% } %>
                               
                 <%});%>  

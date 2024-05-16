@@ -1,0 +1,71 @@
+<link rel="stylesheet" href="../public/styles/popup-content-ProfileEdits.css" />
+
+<div class="popup-content-ProfileEdits">
+  <div class="mainprofilecontainer">
+    <h2>The request Type is <%= profileEdits[0].RequestType %></h2>
+    <div class="up">
+      <h2>Before Edit</h2>
+      <% if(profileEdits[0].RequestType == "New Email") {%>
+      <h3><%= clubInfo[0].email %></h3>
+      <% } %> <% if(profileEdits[0].RequestType == "New BIO") {%>
+      <h3><%= clubInfo[0].bio %></h3>
+      <% } %> <% if(profileEdits[0].RequestType == "New Club Name") {%>
+      <h3><%= clubInfo[0].club_name %></h3>
+      <% } %> <% if(profileEdits[0].RequestType == "New Category") {%>
+      <h3><%= clubInfo[0].category %></h3>
+      <% } %> <% if(profileEdits[0].RequestType == "New Club Image") {%>
+      <img
+        src="../public/images/<%= clubInfo[0].clubImageUrl%>"
+        alt="Not loading"
+        style="height: 200px; width: 200px"
+      />
+      <% } %> <% if(profileEdits[0].RequestType == "update ProfilePic") {%>
+      <img
+        src="../public/images/<%= managerInfo[0].clubImageUrl%>"
+        alt="No Image"
+        style="height: 200px; width: 200px"
+      />
+      <% } %>
+    </div>
+    <div class="down">
+      <h2>After Edit</h2>
+      <% if(profileEdits[0].RequestType == "New Email") {%>
+      <h3><%= profileEdits[0].input %></h3>
+      <% } %> <% if(profileEdits[0].RequestType == "New BIO") {%>
+      <h3><%= profileEdits[0].input %></h3>
+      <% } %> <% if(profileEdits[0].RequestType == "New Club Name") {%>
+      <h3><%= profileEdits[0].input %></h3>
+      <% } %> <% if(profileEdits[0].RequestType == "New Category") {%>
+      <h3><%= profileEdits[0].input %></h3>
+      <% } %> <% if(profileEdits[0].RequestType == "New Club Image") {%>
+      <img
+        src="../public/images/<%= profileEdits[0].input%>"
+        alt="Not loading"
+        style="height: 200px; width: 200px"
+      />
+      <% } %> <% if(profileEdits[0].RequestType == "update ProfilePic") {%>
+      <img
+        src="../public/images/<%= profileEdits[0].input%>"
+        alt="No Image"
+        style="height: 200px; width: 200px"
+      />
+      <% } %>
+    </div>
+    <button
+      id="closeButton"
+      class="close"
+      onclick="closePopup()"
+      style="
+        all: initial;
+        padding: 10px 20px;
+        background-color: rgb(214, 60, 60);
+        cursor: pointer;
+        color: white;
+        font-size: 24px;
+        scale: 0.7;
+      "
+    >
+      Close
+    </button>
+  </div>
+</div>

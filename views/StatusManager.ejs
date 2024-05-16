@@ -29,7 +29,6 @@
     />
     <link rel="stylesheet" href="../public/styles/details.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
   </head>
 
   <body>
@@ -71,43 +70,81 @@
             </tr>
           </thead>
           <tbody>
-            <% var buttonId; %>
-            <% var postId %>
-            <% results.forEach((item) => { %>
-            <%  buttonId = 'button_' + item.PostID; %>
+            <% var buttonId; %> <% var postId %> <% tempPosts.forEach((item) =>
+            { %> <% buttonId = 'button_' + item.PostID; %>
             <tr>
               <td>
-                <h4 style="color: black"><%=item.clubName%></h4>
+                <h4 style="color: black"><%=item.club_name%></h4>
               </td>
               <td><h4 style="color: black"><%=item.RequestType%></h4></td>
               <td>
                 <p class="status pending">Pending</p>
               </td>
-
               <td>
-                <form style="all:initial" action="/approvePost?postId=<%=item.PostID%>" method="POST">
+                <form
+                  style="all: initial"
+                  action="/approvePost?postId=<%=item.PostID%>"
+                  method="POST"
+                >
                   <button class="approve-button">Approve</button>
-              </form> 
-              <button class="reject-button" onclick="reject2('<%=item.PostID%>')">Reject</button>
-              </td>  
+                </form>
+                <button
+                  class="reject-button"
+                  onclick="showRejectPopup('<%=item.PostID%>')"
+                >
+                  Reject
+                </button>
               </td>
-              <td>    
-                <button id="<%= buttonId %>" class="details-button" onclick="showPopup('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>
-            </td>
+              <td>
+                <button
+                  id="<%= buttonId %>"
+                  class="details-button"
+                  onclick="showPopup('<%= item.PostID %>')"
+                >
+                  <img
+                    src="/images/images/Details.png"
+                    alt="Button Image"
+                  />Details
+                </button>
+              </td>
             </tr>
-            <div id="reject" class="reject-card1">
-              <form id="rejectionForm-<%=item.PostID%>" action="/rejectPost?postId=<%=item.PostID%>" method="POST" onsubmit="return sendRejectionReason(event)">
-                  <input type="text" id="rejectionReason-<%=item.PostID%>" name="rejectionReason" placeholder="Enter rejection reason...">
-                  <button class="send-button" onclick="sendRejectionReason()" type="submit" style="padding: 10px 20px; margin: 0 10px; cursor: pointer; color: white; background-color: #289e46; margin-left: 30px;">Send</button>  
+            <div
+              id="reject-<%=item.PostID%>"
+              class="reject-card1"
+              style="display: none"
+            >
+              <form
+                id="rejectionForm-<%=item.PostID%>"
+                action="/rejectPost?postId=<%=item.PostID%>"
+                method="POST"
+                onsubmit="return sendRejectionReason(event)"
+              >
+                <input
+                  type="text"
+                  id="rejectionReason-<%=item.PostID%>"
+                  name="rejectionReason"
+                  placeholder="Enter rejection reason..."
+                />
+                <button
+                  class="send-button"
+                  type="submit"
+                  style="
+                    padding: 10px 20px;
+                    margin: 0 10px;
+                    cursor: pointer;
+                    color: white;
+                    background-color: #289e46;
+                    margin-left: 30px;
+                  "
+                >
+                  Send
+                </button>
               </form>
-          <button id="closeButton2" onclick="closePopup2()">Close</button>
-          </div>
-            <% }) %>
-
-            <% var buttonId; %>
-            <% var RequestId %>
-            <% tempprofileedits.forEach((item) => { %>
-            <%  buttonId = 'button_' + item.temp_id; %>
+              <button onclick="closePopup2('<%=item.PostID%>')">Close</button>
+            </div>
+            <% }) %> <% var buttonId; %> <% var RequestId %> <%
+            tempprofileedits.forEach((item) => { %> <% buttonId = 'button_' +
+            item.temp_id; %>
             <tr>
               <td>
                 <h4 style="color: black"><%=item.clubName%></h4>
@@ -116,78 +153,131 @@
               <td>
                 <p class="status pending">Pending</p>
               </td>
-
               <td>
-                <form style="all:initial" action="/approveProfileEdit?temp_id=<%=item.temp_id%>" method="POST">
-                  <button class="approve-button">Approve</button>    
-                </form>                      
-                  <button class="reject-button" onclick="reject('<%=item.temp_id%>')">Reject</button>              
-              </td>  
+                <form
+                  style="all: initial"
+                  action="/approveProfileEdit?temp_id=<%=item.temp_id%>"
+                  method="POST"
+                >
+                  <button class="approve-button">Approve</button>
+                </form>
+                <button
+                  class="reject-button"
+                  onclick="showRejectPopup('<%=item.temp_id%>')"
+                >
+                  Reject
+                </button>
               </td>
-              <td>    
-                <button id="<%= buttonId %>" class="details-button" onclick="showPopupedit('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>
-            </td>
+              <td>
+                <button
+                  id="<%= buttonId %>"
+                  class="details-button"
+                  onclick="showPopup_ProfileEdits('<%= item.temp_id %>')"
+                >
+                  <img
+                    src="/images/images/Details.png"
+                    alt="Button Image"
+                  />Details
+                </button>
+              </td>
             </tr>
-            <div id="reject" class="reject-card1">
-              <form id="rejectionForm-<%=item.temp_id%>" action="/rejectProfileEdit?temp_id=<%=item.temp_id%>" method="POST" onsubmit="return sendRejectionReason(event)">
-                  <input type="text" id="rejectionReason-<%=item.temp_id%>" name="rejectionReason" placeholder="Enter rejection reason...">
-                  <button class="send-button" onclick="sendRejectionReason()" type="submit" style="padding: 10px 20px; margin: 0 10px; cursor: pointer; color: white; background-color: #289e46; margin-left: 30px;">Send</button>  
+            <div
+              id="reject-<%=item.temp_id%>"
+              class="reject-card1"
+              style="display: none"
+            >
+              <form
+                id="rejectionForm-<%=item.temp_id%>"
+                action="/rejectProfileEdit?temp_id=<%=item.temp_id%>"
+                method="POST"
+              >
+                <input
+                  type="text"
+                  id="rejectionReason-<%=item.temp_id%>"
+                  name="rejectionReason"
+                  placeholder="Enter rejection reason..."
+                />
+                <button
+                  class="send-button"
+                  type="submit"
+                  style="
+                    padding: 10px 20px;
+                    margin: 0 10px;
+                    cursor: pointer;
+                    color: white;
+                    background-color: #289e46;
+                    margin-left: 30px;
+                  "
+                >
+                  Send
+                </button>
               </form>
-          <button id="closeButton2" onclick="closePopup2()">Close</button>
-          </div>
+              <button
+                id="closeButton2"
+                onclick="closePopup2('<%=item.temp_id%>')"
+              >
+                Close
+              </button>
+            </div>
             <% }) %>
-
           </tbody>
         </table>
       </section>
-     
+
       <section>
-        <div id="popupedit" class="popup-card" style="display: none;"></div>
-    </section>
+        <div
+          id="popup-profileEdits"
+          class="popup-card"
+          style="display: none"
+        ></div>
+      </section>
 
-    <section>
-      <div id="popupPost" class="popup-card2" style="display: none;"></div>
-  </section>
-  
-  <script>
-    // Function to show the popup card
-    function showPopup() {
-        document.getElementById("popupPost").style.display = "block"      
-    }
-
-    // Function to close the popup card
-    function closePopup() {
-        document.getElementById("popupPost").style.display = "none";
-    }
-
-    // Attach click event listener to the button
-    var buttons = document.querySelectorAll('.details-button');
-         buttons.forEach(function(button)
-            {
-                button.addEventListener('click', showPopup);
-            });
-</script>
-
+      <section>
+        <div id="popupPost" class="popup-card2" style="display: none"></div>
+      </section>
 
       <script>
-        function showPopup2() {
-            var popup = document.getElementById("reject");
-            popup.style.display = "block";
+        // Function to show the popup card
+        function showPopup(postId) {
+          document.getElementById("popupPost").style.display = "block";
         }
-        
-        function closePopup2() {
-            var popup = document.getElementById("reject");
-            popup.style.display = "none";
+
+        // Function to close the popup card
+        function closePopup() {
+          document.getElementById("popupPost").style.display = "none";
+          document.getElementById("popup-profileEdits").style.display = "none";
         }
-        
-        var rejectButtons = document.querySelectorAll('.reject-button');
-        
-        rejectButtons.forEach(function(button) {
-            button.addEventListener('click', showPopup2);
+
+        // Attach click event listener to the button
+        var buttons = document.querySelectorAll(".details-button");
+        buttons.forEach(function (button) {
+          button.addEventListener("click", showPopup);
         });
-    </script>
 
-      <script>
+        // Function to show the reject popup
+        function showRejectPopup(postId) {
+          var popup = document.getElementById("reject-" + postId);
+          if (popup) {
+            popup.style.display = "block";
+          }
+        }
+
+        // Function to close the reject popup
+        function closePopup2(postId) {
+          var popup = document.getElementById("reject-" + postId);
+          if (popup) {
+            popup.style.display = "none";
+          }
+        }
+
+        var rejectButtons = document.querySelectorAll(".reject-button");
+        rejectButtons.forEach(function (button) {
+          button.addEventListener("click", function () {
+            var postId = this.getAttribute("data-post-id");
+            showRejectPopup(postId);
+          });
+        });
+
         document.addEventListener("DOMContentLoaded", () => {
           const approveButtons = document.querySelectorAll(".approve-button");
           approveButtons.forEach((button) => {
@@ -201,9 +291,6 @@
           });
         });
       </script>
-
-      
-
     </main>
     <footer>
       <div class="footerContainer">

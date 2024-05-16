@@ -458,6 +458,31 @@ app.get("/popupContent", (req, res) => {
 
 });
 
+app.get("/popupProfileEdits", (req, res) => {
+
+    const tempID = parseInt(req.query.tempID);
+
+    connection.query("select * from tempprofile where temp_id = ?", [tempID], (err, profileEdits) => {
+        if(err) {
+            console.log("Error fetching profile edits", err);
+            return res.status(404).send("Internal Server Error");
+        }
+        const clubID = profileEdits[0].club_id;
+        connection.query("select * from club where club_id = ?", [clubID], (err, clubInfo) => {
+            if(err) {
+                console.log("Error fetching club Info", err);
+                return res.status(404).send("Internal Server Error");
+            }
+
+            res.render("popupProfileEdits.ejs", {profileEdits, clubInfo});
+        });
+    });
+
+
+
+});
+
+
 app.get("/popupContentedit", (req, res) => {
     const buttonId = req.query.buttonId;
     const lastIndex = buttonId.lastIndexOf('_');
@@ -934,7 +959,7 @@ app.get("/comparing", (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/");
     }
-    connection.query(`SELECT * FROM tempposts`, (err, results) => {
+    connection.query(`SELECT * FROM tempposts`, (err, tempPosts) => {
         if (err) {
             console.error("Error fetching temp posts:", err);
             return res.status(500).send("Internal Server Error");
@@ -963,7 +988,7 @@ app.get("/comparing", (req, res) => {
             const promises = [];
     
             // Processing tempposts
-            results.forEach((item) => {
+            tempprofileedits.forEach((item) => {
                 const promise = new Promise((resolve, reject) => {
                     fetchClubName(item, (err) => {
                         if (err) {
@@ -994,7 +1019,7 @@ app.get("/comparing", (req, res) => {
             Promise.all(promises)
                 .then(() => {
                     // All club names fetched, render the template
-                    res.render("StatusManager.ejs", { results: results, tempprofileedits: tempprofileedits, loggedIn: req.session.loggedIn, role: "sks" });
+                    res.render("StatusManager.ejs", { tempPosts, tempprofileedits, loggedIn: req.session.loggedIn, role: "sks" });
                 })
                 .catch((err) => {
                     console.error("Error fetching club names:", err);

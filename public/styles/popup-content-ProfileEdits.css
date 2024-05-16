@@ -1,0 +1,24 @@
+.mainprofilecontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    flex-direction: column;
+}
+
+.popup-content-ProfileEdits {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.down {
+    display: relative;
+}
+.close {
+    display: absolute;
+    bottom: 0;
+    left: -50px;
+    
+}

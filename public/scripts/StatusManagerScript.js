@@ -204,13 +204,42 @@ const downloadFile = function (data, fileType, fileName = '') {
 }
 
 
-let details = document.getElementById("details.button");
-
-details.addEventListener("click", (e) => {
-
-
-
+$(document).ready(function() {
+    // Add click event listener to all buttons with the class 'post-button'
+    $('.details-button').click(function() {
+        // Retrieve the post ID from the button's ID
+        var PostID = parseInt($(this).attr('id').split('_')[1]);
+        console.log('Button clicked for profile edit ID:', PostID);
+        // Perform further actions if needed
+    });
 });
+
+function showPopup(buttonId) {
+    // Make a GET request to fetch the popup content for the given button ID
+    fetch(`/popupPost?buttonId=${buttonId}`)
+    .then(response => response.text())
+    .then(data => {
+        // Insert the fetched popup content into the popup container
+        document.getElementById("popupPost").innerHTML = data;
+        // Display the popup
+        document.getElementById("popupPost").style.display = "block";
+    })
+    .catch(error => console.error('Error fetching popup content:', error));
+}
+
+function showPopupedit(buttonId) {
+    // Make a GET request to fetch the popup content for the given button ID
+    fetch(`/popupContentedit?buttonId=${buttonId}`)
+    .then(response => response.text())
+    .then(data => {
+        // Insert the fetched popup content into the popup container
+        document.getElementById("popupedit").innerHTML = data;
+        // Display the popup
+        document.getElementById("popupedit").style.display = "block";
+    })
+    .catch(error => console.error('Error fetching popup content:', error));
+}
+
 
 /////DONT TOUCH THIS CODE YET/////
 

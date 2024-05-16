@@ -1288,24 +1288,22 @@ app.post("/approveProfileEdit", (req, res) => {
                 return res.status(500).send("Internal Server Error");
             }
             console.log("Profile edit deleted from tempprofile table successfully!");
-            res.redirect("/comparing")
+            connection.query("Select club_id from history_profile where temp_id = ?",  [RequestId], (err, resultsClubID) =>{
+                const clubID = resultsClubID[0].club_id;
+                if(err){
+                    console.log("can't get club id from approve profile" + err.message);
+                }
+                const notificationType = "Approve Edit Profile";
+                connection.query("INSERT INTO notifications_clm (notificationType, club_id) VALUES (?, ?)", [notificationType, clubID], (err) => {
+                    if (err) {
+                        console.log("error inseting to notifications approve event : " + err.message);
+                    }
+                    res.redirect("/comparing");
+                });
+            });
         });
-    });
-
-    connection.query("Select club_id from tempprofile where temp_id = ?",  [RequestId], (err, resultsClubID) =>{
-        const clubID = resultsClubID[0].club_id;
-        if(err){
-            console.log("can't get club id from approve profile");
-        }
-        const notificationType = "Approve Edit Profile";
-        connection.query("INSERT INTO notifications_clm (notificationType, club_id) VALUES (?, ?)", [notificationType, clubID], (err) => {
-        if (err) {
-            console.log("error inseting to notifications approve event : " + err.message);
-        }
-        });
-    });
+    }); 
     
-    res.redirect("/comparing");
 });
 
 
@@ -1341,8 +1339,14 @@ app.post("/rejectProfileEdit", (req, res) => {
                         console.error("Error deleting profile edit from tempprofile table:", err);
                         return res.status(500).send("Internal Server Error");
                     }
-                    console.log("Profile edit rejected and removed from tempprofile table");
-
+                    const notificationType = "Edit Profile Rejected";
+                    connection.query("INSERT INTO notifications_clm (notificationType, RejectionReason, club_id) VALUES (?, ?, ?)", [notificationType, rejectionReason, club_id], (err) => {
+                        if (err) {
+                            console.log("error inseting to notifications approve event : " + err.message);
+                        } else {
+                            console.log("Profile edit rejected and removed from tempprofile table");
+                        }
+                    });                
                 });
             });
     });

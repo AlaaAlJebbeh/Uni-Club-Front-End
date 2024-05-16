@@ -1,31 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Create Album Form</title>
-    <link rel="stylesheet" href="/styles/createPost.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Event Registration Form</title>
+  <link rel="stylesheet" href="/styles/createPost.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 </head>
 <body>
-    <section class="container">
-        <header>Album Creation Form</header>
-        <form
-            action="/createAlbum"
-            method="POST"
-            class="form"
-            name="createAlbum"
-            id="createAlbum"
-            enctype="multipart/form-data"
-        >
+  <section class="container">
+    <header>Create Album</header>
+    <form
+      action="/createAlbum"
+      method="POST"
+      class="form"
+      name="createAlbum"
+      id="createAlbum"
+      enctype="multipart/form-data"
+    >
+      <div class="upload image">
+        <p>
+         
+          <input type="file" name="ImagePost" required multiple />
+        </p>
+      </div>
+      <button type="submit">Send Share Request To SKS</button>
+    </form>
+  </section>
+  <script>
+    
+document.getElementById("submitBtn").addEventListener("click", function(event) {
+  event.preventDefault(); // Prevent default form submission
 
-            <div class="upload image">
-                <label>Upload Images</label>
-                <input type="file" name="images" multiple />
-            </div>
-            <button type="submit">Send Share Request To SKS</button>
-        </form>
-    </section>
+  // Perform any client-side validation if necessary
+
+  // Submit the form using JavaScript
+  document.getElementById("createAlbum").submit();
+});
+
+  </script>
 </body>
 </html>

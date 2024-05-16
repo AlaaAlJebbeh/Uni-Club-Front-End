@@ -243,7 +243,7 @@
             <div class="indivisual-card-container">
             <div class="card">
               <div class="image-container">
-                <img class="eventImage" src="../public/images/<%=item.imageURL  %>" id="clubImage-<%=item.event_id  %>"/>
+                <img class="eventImage" src="../public/images/<%=item.imageURL%>" id="clubImage-<%=item.event_id%>"/>
                 <% const currentDate = new Date();
                 currentDate.setHours(0, 0, 0, 0); const eventDate = new
                 Date(item.date); eventDate.setHours(0, 0, 0, 0); if
@@ -275,12 +275,11 @@
                    </button>
                     </form>
 
-                    <form action="/createAlbum" method="POST" class="add-button" style="all: initial;"> 
-                   <button id="<%= item.event_id %>" name="event_id" value="<%= item.event_id %>">
-                   <img src="../public/images/add_icon.png" style="background-color: aliceblue;">
-                   </button>
+                    <form action="/createAlbum" method="GET" class="add-button" style="all: initial;">
+                    <button id="<%= item.event_id %>" name="event_id" value="<%= item.event_id %>">
+                    <img src="../public/images/add_icon.png" style="background-color: aliceblue;">
+                    </button>
                     </form>
-
 
                   
                 </div>

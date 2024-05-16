@@ -360,6 +360,7 @@ app.post("/updatePictureManager", (req, res) => {
             return res.status(404).send("internal Server Error");
         }
 
+
         res.redirect("/myclubpage");
     });
 
@@ -520,13 +521,13 @@ app.post("/approveEvent", (req, res) => {
                                 console.log("Error deleteing the requst from temp event edit : ", err);
                                 return res.status(500).send("Internal Server Error");
                             }
-                            const notificationType = "Apprpve new Event";
-                            connection.query("Select event_name from event where event_id = ?", [eventId], (err, result) => {
+                            connection.query("Select event_name from history_event where event_id = ?", [eventId], (err, resultN) => {
                                 if (err) {
                                     console.log("fetching event name");
                                 } else {
-                                    const event_name = result[0].event_name;
-                                    connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)", [notificationType, eventInfo[0].event_name, clubId], (err) => {
+                                    const event_name = resultN[0].event_name;
+                                    const notificationType = "Apprpve new Event";
+                                    connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)", [notificationType, event_name, clubId], (err) => {
                                         if (err) {
                                             console.log("error inseting to notifications approve event : " + err.message);
                                         } else {
@@ -1470,7 +1471,7 @@ app.post('/updateProfile', (req, res) => {
             if (err) {
                 console.log("Error fetching club details:", err.message);
                 return res.status(500).send("Internal Server Error");
-            }
+            } const clubName = clubResult[0].club_name;
 
             if (req.files) {
                 const { uploadImage1 } = req.files;
@@ -1482,7 +1483,13 @@ app.post('/updateProfile', (req, res) => {
                     if (err) {
                         console.log("Error Inserting Image: " + err.message);
                         return res.status(404).send("Internal Server Error");
-                    }
+                    } 
+                    const notificationType = "Edit Profile Request";
+                    connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)", [notificationType, clubName, clubid], (err) => {
+                        if (err) {
+                            console.log("error inseting to notifications: " + err.message);
+                        }
+                    });
                 });
 
             }
@@ -1516,6 +1523,12 @@ app.post('/updateProfile', (req, res) => {
                             console.log("Error inserting data:", err.message);
                             return res.status(500).send("Internal Server Error");
                         }
+                        const notificationType = "Edit Profile Request";
+                        connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)", [notificationType, clubName, clubid], (err) => {
+                            if (err) {
+                                console.log("error inseting to notifications: " + err.message);
+                            }
+                        });
                     });
                 }
             }

@@ -75,7 +75,16 @@
                                                     <p>Your edit event has been rejected. Rejection reason"<%=notification.RejectionReason%>"</p>  
                                                 </div>
                                             </form>
-                                            <% } %>
+                                            <% } else if(notification.notificationType == "Apprpve new Event"){ %>
+                                                <% var notify_id7 = parseInt(notification.notify_id); %>
+                                                <% var divId7='button_' + notification.notify_id; %>
+                                                <form id="readNotificationFormClub7" action="/changeNotificationStatusClubManager?notify_id=<%= notify_id7%>" method="POST">
+                                                    <div class="notificationCard unread7 read-notification" id="<%= notify_id7 %>">
+                                                        <img src="../public/images/<%=clubImage%>"/>
+                                                        <p>Your event request is approved</p>  
+                                                    </div>
+                                                </form>
+                                                <% } %>
                                     
                         
 

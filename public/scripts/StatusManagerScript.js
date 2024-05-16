@@ -214,9 +214,9 @@ $(document).ready(function() {
     });
 });
 
-function showPopup(buttonId) {
+function showPopup(postID) {
     // Make a GET request to fetch the popup content for the given button ID
-    fetch(`/popupPost?buttonId=${buttonId}`)
+    fetch(`/popupPost?postID=${postID}`)
     .then(response => response.text())
     .then(data => {
         // Insert the fetched popup content into the popup container

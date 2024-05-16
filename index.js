@@ -1516,6 +1516,19 @@ app.post('/updateProfile', (req, res) => {
     });
 });
 
+app.get("/popupPost" , (req, res) => {
+
+    const postID = parseInt(req.query.postID);
+
+    connection.query("select * from tempposts where  PostID = ?", [postID], (err, posts) => {
+        if (err) {
+            console.log("Error fetching post", err);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        res.render('popupPost.ejs', {posts});
+    });
+});
 
 app.get("/notificationsClub", (req, res) => {
     const email = req.session.email;

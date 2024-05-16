@@ -77,7 +77,7 @@
             <%  buttonId = 'button_' + item.PostID; %>
             <tr>
               <td>
-                <h4 style="color: black"><%=item.clubName%></h4>
+                <h4 style="color: black"><%=item.club_name%></h4>
               </td>
               <td><h4 style="color: black"><%=item.RequestType%></h4></td>
               <td>
@@ -92,7 +92,7 @@
               </td>  
               </td>
               <td>    
-                <button id="<%= buttonId %>" class="details-button" onclick="showPopup('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>
+                <button id="<%= buttonId %>" class="details-button" onclick="showPopup('<%= item.PostID %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>
             </td>
             </tr>
             <div id="reject" class="reject-card1">
@@ -146,7 +146,7 @@
     </section>
 
     <section>
-      <div id="popupPost" class="popup-card2" style="display: none;"></div>
+        <div id="popupPost" class="popup-card2" style="display: none;"></div>
   </section>
   
   <script>

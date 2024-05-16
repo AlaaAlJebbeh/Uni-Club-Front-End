@@ -518,6 +518,14 @@ app.post("/approveEvent", (req, res) => {
                                 console.log("Error deleteing the requst from temp event edit : ", err);
                                 return res.status(500).send("Internal Server Error");
                             }
+                            const notificationType = "Event approved";
+                            connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)" , [notificationType, eventInfo[0].event_name, clubId], (err) =>{
+                                if(err){
+                                    console.log("error inseting to notifications: " + err.message);
+                                } else {
+                                    res.redirect("/eventRequests");
+                                }
+                            }); 
                         
                         });
                     });

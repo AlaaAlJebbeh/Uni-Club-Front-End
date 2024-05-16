@@ -1134,7 +1134,15 @@ app.post("/rejectPost", (req, res) => {
                         return res.status(500).send("Internal Server Error");
                     }
                     console.log("post rejected and removed from tempposts table");
-                    res.redirect("/comparing");
+                    const notificationType = "Post Rejected";
+                    connection.query("INSERT INTO notifications_clm (notificationType, club_id, RejectionReason) VALUES (?, ?, ?)", [notificationType, club_id, rejectionReason ], (err) => {
+                        if (err) {
+                            console.log("error inseting to notifications reject post : " + err.message);
+                        } else {
+                            console.log("post rejected and removed from tempposts table");
+                            res.redirect("/comparing");             
+                            }
+                    });
                 });
             });
     });

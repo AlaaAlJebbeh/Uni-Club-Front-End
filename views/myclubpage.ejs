@@ -247,7 +247,7 @@
                 <% const currentDate = new Date();
                 currentDate.setHours(0, 0, 0, 0); const eventDate = new
                 Date(item.date); eventDate.setHours(0, 0, 0, 0); if
-                (currentDate.getTime() === eventDate.getTime()) { %>
+                (currentDate.getDate() === item.date) { %>
                 <div class=" Active">Active</div>
               <% } else if (currentDate.getTime()> eventDate.getTime()) { %>
                 <div class="canceled">Finished</div>

@@ -18,8 +18,6 @@ const port = 8000;
 //Body barser use
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
-
 
 //Connection To Database
 const connection = mysql.createConnection({
@@ -38,16 +36,7 @@ connection.connect((err) => {
     console.log("connected successfully to the database");
 });
 
-// Set view engine to EJS
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-// Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
 //Uses public - views - json - serUser middleware
-app.use(fileUpload({
-    limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit
-  }));
 app.use('/public', express.static(path.join(__dirname, '/public')));
 app.use(express.static("public"));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -59,7 +48,7 @@ app.set('view engine', 'ejs');
 // Set the views directory
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
-app.use(fileUpload());
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session({
@@ -68,7 +57,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
-
+app.use(fileUpload());
 
 app.get('/', (req, res) => {
 
@@ -369,7 +358,6 @@ app.post("/updatePictureManager", (req, res) => {
             return res.status(404).send("internal Server Error");
         }
 
-
         res.redirect("/myclubpage");
     });
 
@@ -515,7 +503,7 @@ app.post("/approveEvent", (req, res) => {
                     console.log("Error fetching event Information from temp Events", err);
                     return res.status(404).send("Internal Server Error");
                 }
-                connection.query("INSERT INTO history_event (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, status, comment, notificationstatus, club_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [eventId, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, clubId, 1, "", 0, clubName], (err, result) => {
+                connection.query("INSERT INTO history_event (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, status, comment, notificationstatus, club_name, clm_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [eventId, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, clubId, 1, "", 0, clubName, clubInfo[0].clm_id], (err, result) => {
                     if (err) {
                         console.log("Error Inserting into history_event ", err);
                         return res.status(500).send("Internal Server Error");
@@ -530,12 +518,12 @@ app.post("/approveEvent", (req, res) => {
                                 console.log("Error deleteing the requst from temp event edit : ", err);
                                 return res.status(500).send("Internal Server Error");
                             }
-                            connection.query("Select event_name from history_event where event_id = ?", [eventId], (err, resultN) => {
+                            const notificationType = "Apprpve new Event";
+                            connection.query("Select event_name from event where event_id = ?", [eventId], (err, result) => {
                                 if (err) {
                                     console.log("fetching event name");
                                 } else {
-                                    const event_name = resultN[0].event_name;
-                                    const notificationType = "Apprpve new Event";
+                                    const event_name = result[0].event_name;
                                     connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)", [notificationType, event_name, clubId], (err) => {
                                         if (err) {
                                             console.log("error inseting to notifications approve event : " + err.message);
@@ -1079,25 +1067,6 @@ app.post("/approvePost", (req, res) => {
     });
 });
 
-app.get("/popupPost", (req, res) => {
-    const buttonId = req.query.buttonId;
-    const lastIndex = buttonId.lastIndexOf('_');
-    const postId = buttonId.substring(lastIndex + 1); // Extract the substring after the last '_'
-    // Get the button ID from the query string
-
-    console.log(postId);
-    // Fetch popup content based on button ID from the database or any other source
-    console.log("this is the button id" + postId);
-    connection.query('SELECT * FROM tempposts where PostID = ?', [postId], (err, results) => {
-        if (err) {
-            console.log('didnt get', err);
-        }
-        console.log({ results });
-        res.render('popupPost.ejs', { results });
-    });
-
-});
-
 app.post("/rejectPost", (req, res) => {
     const postId = req.query.postId;
     const rejectionReason = req.body.rejectionReason;
@@ -1142,16 +1111,8 @@ app.post("/rejectPost", (req, res) => {
                         console.error("Error deleting post from temppost table:", err);
                         return res.status(500).send("Internal Server Error");
                     }
-                    const notificationType = "Post Rejected";
-                    connection.query("INSERT INTO notifications_clm (notificationType, club_id, RejectionReason) VALUES (?, ?, ?)", [notificationType, club_id, rejectionReason ], (err) => {
-                        if (err) {
-                            console.log("error inseting to notifications reject post : " + err.message);
-                        } else {
-                            console.log("post rejected and removed from tempposts table");
-                            res.redirect("/comparing");             
-                            }
-                    });
-                    
+                    console.log("post rejected and removed from tempposts table");
+                    res.redirect("/comparing");
                 });
             });
     });
@@ -1297,22 +1258,24 @@ app.post("/approveProfileEdit", (req, res) => {
                 return res.status(500).send("Internal Server Error");
             }
             console.log("Profile edit deleted from tempprofile table successfully!");
-            connection.query("Select club_id from history_profile where temp_id = ?",  [RequestId], (err, resultsClubID) =>{
-                const clubID = resultsClubID[0].club_id;
-                if(err){
-                    console.log("can't get club id from approve profile" + err.message);
-                }
-                const notificationType = "Approve Edit Profile";
-                connection.query("INSERT INTO notifications_clm (notificationType, club_id) VALUES (?, ?)", [notificationType, clubID], (err) => {
-                    if (err) {
-                        console.log("error inseting to notifications approve event : " + err.message);
-                    }
-                    res.redirect("/comparing");
-                });
-            });
+            res.redirect("/comparing")
         });
-    }); 
+    });
+
+    connection.query("Select club_id from tempprofile where temp_id = ?",  [RequestId], (err, resultsClubID) =>{
+        const clubID = resultsClubID[0].club_id;
+        if(err){
+            console.log("can't get club id from approve profile");
+        }
+        const notificationType = "Approve Edit Profile";
+        connection.query("INSERT INTO notifications_clm (notificationType, club_id) VALUES (?, ?)", [notificationType, clubID], (err) => {
+        if (err) {
+            console.log("error inseting to notifications approve event : " + err.message);
+        }
+        });
+    });
     
+    res.redirect("/comparing");
 });
 
 
@@ -1348,14 +1311,8 @@ app.post("/rejectProfileEdit", (req, res) => {
                         console.error("Error deleting profile edit from tempprofile table:", err);
                         return res.status(500).send("Internal Server Error");
                     }
-                    const notificationType = "Edit Profile Rejected";
-                    connection.query("INSERT INTO notifications_clm (notificationType, RejectionReason, club_id) VALUES (?, ?, ?)", [notificationType, rejectionReason, club_id], (err) => {
-                        if (err) {
-                            console.log("error inseting to notifications approve event : " + err.message);
-                        } else {
-                            console.log("Profile edit rejected and removed from tempprofile table");
-                        }
-                    });                
+                    console.log("Profile edit rejected and removed from tempprofile table");
+
                 });
             });
     });
@@ -1484,7 +1441,7 @@ app.post('/updateProfile', (req, res) => {
             if (err) {
                 console.log("Error fetching club details:", err.message);
                 return res.status(500).send("Internal Server Error");
-            } const clubName = clubResult[0].club_name;
+            }
 
             if (req.files) {
                 const { uploadImage1 } = req.files;
@@ -1496,13 +1453,7 @@ app.post('/updateProfile', (req, res) => {
                     if (err) {
                         console.log("Error Inserting Image: " + err.message);
                         return res.status(404).send("Internal Server Error");
-                    } 
-                    const notificationType = "Edit Profile Request";
-                    connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)", [notificationType, clubName, clubid], (err) => {
-                        if (err) {
-                            console.log("error inseting to notifications: " + err.message);
-                        }
-                    });
+                    }
                 });
 
             }
@@ -1536,12 +1487,6 @@ app.post('/updateProfile', (req, res) => {
                             console.log("Error inserting data:", err.message);
                             return res.status(500).send("Internal Server Error");
                         }
-                        const notificationType = "Edit Profile Request";
-                        connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)", [notificationType, clubName, clubid], (err) => {
-                            if (err) {
-                                console.log("error inseting to notifications: " + err.message);
-                            }
-                        });
                     });
                 }
             }
@@ -1816,53 +1761,7 @@ app.get("/album", (req, res) => {
 
 });
 
-app.get("/createAlbum", (req, res)=>{
-    res.render('createAlbum');
-})
 
-app.post("/createAlbum", async (req, res) => {
-    try {
-        const { event_id } = req.body;
-
-        if (!req.files || !req.files.ImagePost) {
-            return res.status(400).send('No files were uploaded.');
-        }
-
-        let files = req.files.ImagePost;
-        if (!Array.isArray(files)) {
-            files = [files];
-        }
-
-        if (files.length > 10) {
-            return res.status(400).send('You can upload a maximum of 10 images.');
-        } else if (files.length < 1) {
-            return res.status(400).send('You must upload at least one image.');
-        }
-        
-        let imageUrls = {};
-        await Promise.all(files.map((file, index) => {
-            const savePath = path.join(__dirname, 'public', 'images', file.name);
-            file.mv(savePath);
-            imageUrls[`ImageAlbum${index + 1}Url`] = `/images/${file.name}`;
-        }));
-
-        // Prepare SQL query to insert data
-        const sql = `INSERT INTO event_album (event_id, ${Object.keys(imageUrls).join(', ')}) VALUES (?, ${Object.keys(imageUrls).map(() => '?').join(', ')})`;
-        const values = [event_id, ...Object.values(imageUrls).slice(1)]; // Exclude the first value (event_id)
-
-
-        db.query(sql, values, (err, result) => {
-            if (err) {
-                console.error('Error inserting data into MySQL:', err);
-                return res.status(500).send('Error uploading files');
-            }
-            res.redirect('/myclubpage');
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error uploading files');
-    }
-});
 //listining to the port 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

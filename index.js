@@ -546,6 +546,9 @@ app.get("/popupContentedit", (req, res) => {
         }
         console.log("NEW EVENT:");
         console.log(newEvent);
+        newEvent.forEach(item => {
+            item.date = new Date(item.date);
+        });
         connection.query("Select * from event where event_id = ?", [eventId], (err, oldEvent) => {
             if (err) {
                 console.log('error fetching new event ', err);
@@ -553,6 +556,9 @@ app.get("/popupContentedit", (req, res) => {
             }
             console.log("OLD EVENT:");
             console.log(oldEvent);
+            oldEvent.forEach(item => {
+                item.date = new Date(item.date);
+            });
             res.render('popupContentedit.ejs', { newEvent, oldEvent });
         });
 
@@ -793,10 +799,6 @@ app.post('/updateEvent', (req, res) => {
     }else {
         console.log("didnt update the image" + clubImage);
          imgName = clubImage.split('images/')[1];
-    }
-
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(eventDate)) {
-        return res.status(400).send('Invalid date format');
     }
 
     const queryString = `INSERT INTO tempeventedits (event_id, club_name, event_name, date, time, location, language, guest_name, description, capacity, notes, imageUrl, clm_id, status, request_type, category)

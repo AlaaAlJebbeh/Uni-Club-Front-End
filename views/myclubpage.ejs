@@ -386,7 +386,7 @@
 
               // Update event date
               const eventDate = document.getElementById(`eventDate_${eventID}`).innerText;
-              document.getElementById(`eventDateInput_${eventID}`).value = eventDate;
+              document.getElementById(`eventDateInput_${eventID}`).value =  new Date(eventDate).toISOString().split('T')[0];;
 
               // Update event time
               const eventTime = document.getElementById(`eventTime_${eventID}`).innerText;

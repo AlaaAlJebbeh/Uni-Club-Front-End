@@ -9,6 +9,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 import session from "express-session";
 import fileUpload from "express-fileupload";
 import { constrainedMemory } from "process";
+import { connect } from "http2";
 
 //Constants
 const app = express();
@@ -473,8 +474,13 @@ app.get("/popupProfileEdits", (req, res) => {
                 console.log("Error fetching club Info", err);
                 return res.status(404).send("Internal Server Error");
             }
-
-            res.render("popupProfileEdits.ejs", {profileEdits, clubInfo});
+            connection.query("select * from club_manager where club_id = ?", [clubID], (err, managerInfo) => {
+                if(err) {
+                    console.log("Error fetching club manager Info", err);
+                    return res.status(404).send("Internal Server Error");
+                }
+                res.render("popupProfileEdits.ejs", {profileEdits, clubInfo, managerInfo});
+            });         
         });
     });
 
@@ -1177,6 +1183,10 @@ app.post("/approveProfileEdit", (req, res) => {
                 break;
             case 'New Club Image':
                 updateQuery = 'UPDATE club SET clubImageUrl = ? WHERE club_id = ?';
+                updateParams = [input, club_id];
+                break;
+            case 'update ProfilePic':
+                updateQuery = 'UPDATE club_manager SET imageURL = ? WHERE club_id = ?';
                 updateParams = [input, club_id];
                 break;
             default:

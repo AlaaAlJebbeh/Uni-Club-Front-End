@@ -19,6 +19,12 @@
         alt="Not loading"
         style="height: 200px; width: 200px"
       />
+      <% } %> <% if(profileEdits[0].RequestType == "update ProfilePic") {%>
+      <img
+        src="../public/images/<%= managerInfo[0].clubImageUrl%>"
+        alt="No Image"
+        style="height: 200px; width: 200px"
+      />
       <% } %>
     </div>
     <div class="down">
@@ -35,6 +41,12 @@
       <img
         src="../public/images/<%= profileEdits[0].input%>"
         alt="Not loading"
+        style="height: 200px; width: 200px"
+      />
+      <% } %> <% if(profileEdits[0].RequestType == "update ProfilePic") {%>
+      <img
+        src="../public/images/<%= profileEdits[0].input%>"
+        alt="No Image"
         style="height: 200px; width: 200px"
       />
       <% } %>

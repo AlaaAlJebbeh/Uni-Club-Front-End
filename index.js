@@ -315,7 +315,7 @@ app.post("/ToShareEvent", (req, res) => {
             const notes = eventData.notes;
             const category = eventData.category;
             const language = eventData.language;
-            const uploadImage1 = eventData.uploadImage1;
+            const uploadImage1 = eventData.imageUrl;
             const clubMId = eventData.clm_id;
 
             connection.query(`INSERT INTO event (club_id, event_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category,clm_id, imageURL) 

@@ -1142,6 +1142,7 @@ app.post("/approveProfileEdit", (req, res) => {
     const RequestId = req.query.temp_id;
 
     console.log("Received profile edit Id:", RequestId);
+
     connection.query('SELECT * FROM tempprofile WHERE temp_id = ?', [RequestId], (err, results) => {
         if (err) {
             console.error('Error fetching post data:', err);
@@ -1154,148 +1155,79 @@ app.post("/approveProfileEdit", (req, res) => {
 
         const profileEdit = results[0];
         const { club_id, RequestType, input } = profileEdit;
+        let updateQuery;
+        let updateParams;
 
-        if (RequestType === 'New Club Name') {
-            connection.query('UPDATE club SET club_name = ? WHERE club_id = ?', [input, club_id], (err, updateResult) => {
-                if (err) {
-                    console.error('Error updating club name:', err);
-                    return res.status(500).send("Internal Server Error");
-                }
-                const historyRecord = {
-                    club_id: club_id,
-                    temp_id: RequestId,
-                    Status: 'approved',
-                    RequestType: RequestType,
-                    input: input
-                };
-                connection.query('INSERT INTO history_profile SET ?', historyRecord, (err, insertResult) => {
-                    if (err) {
-                        console.error('Error inserting into history_profile:', err);
-                        return res.status(500).send("Internal Server Error");
-                    }
-                    console.log("Profile edit approved and history record inserted");
-
-                });
-            });
-        } else if (RequestType === 'New Category') {
-            connection.query('UPDATE club SET category = ? WHERE club_id = ?', [input, club_id], (err, updateResult) => {
-                if (err) {
-                    console.error('Error updating category:', err);
-                    return res.status(500).send("Internal Server Error");
-                }
-                const historyRecord = {
-                    club_id: club_id,
-                    temp_id: RequestId,
-                    Status: 'approved',
-                    RequestType: RequestType,
-                    input: input
-                };
-                connection.query('INSERT INTO history_profile SET ?', historyRecord, (err, insertResult) => {
-                    if (err) {
-                        console.error('Error inserting into history_profile:', err);
-                        return res.status(500).send("Internal Server Error");
-                    }
-                    console.log("Profile edit approved and history record inserted");
-
-                });
-            });
-        } else if (RequestType === 'New BIO') {
-            connection.query('UPDATE club SET bio = ? WHERE club_id = ?', [input, club_id], (err, updateResult) => {
-                if (err) {
-                    console.error('Error updating bio:', err);
-                    return res.status(500).send("Internal Server Error");
-                }
-                const historyRecord = {
-                    club_id: club_id,
-                    temp_id: RequestId,
-                    Status: 'approved',
-                    RequestType: RequestType,
-                    input: input
-                };
-                connection.query('INSERT INTO history_profile SET ?', historyRecord, (err, insertResult) => {
-                    if (err) {
-                        console.error('Error inserting into history_profile:', err);
-                        return res.status(500).send("Internal Server Error");
-                    }
-                    console.log("Profile edit approved and history record inserted");
-
-                });
-            });
-        } else if (RequestType === 'New Email') {
-            connection.query('UPDATE club SET email = ? WHERE club_id = ?', [input, club_id], (err, updateResult) => {
-                if (err) {
-                    console.error('Error updating email:', err);
-                    return res.status(500).send("Internal Server Error");
-                }
-                const historyRecord = {
-                    club_id: club_id,
-                    temp_id: RequestId,
-                    Status: 'approved',
-                    RequestType: RequestType,
-                    input: input
-                };
-                connection.query('INSERT INTO history_profile SET ?', historyRecord, (err, insertResult) => {
-                    if (err) {
-                        console.error('Error inserting into history_profile:', err);
-                        return res.status(500).send("Internal Server Error");
-                    }
-                    console.log("Profile edit approved and history record inserted");
-
-                });
-            });
-        }
-        else if (RequestType === 'New Club Image') {
-            connection.query('UPDATE club SET clubImageUrl = ? WHERE club_id = ?', [input, club_id], (err, updateResult) => {
-                if (err) {
-                    console.error('Error updating club image:', err);
-                    return res.status(500).send("Internal Server Error");
-                }
-                const historyRecord = {
-                    club_id: club_id,
-                    temp_id: RequestId,
-                    Status: 'approved',
-                    RequestType: RequestType,
-                    input: input
-                };
-                connection.query('INSERT INTO history_profile SET ?', historyRecord, (err, insertResult) => {
-                    if (err) {
-                        console.error('Error inserting into history_profile:', err);
-                        return res.status(500).send("Internal Server Error");
-                    }
-                    console.log("Profile edit approved and history record inserted");
-
-                });
-            });
-        }
-        else {
-            return res.status(400).send("Invalid RequestType");
+        switch (RequestType) {
+            case 'New Club Name':
+                updateQuery = 'UPDATE club SET club_name = ? WHERE club_id = ?';
+                updateParams = [input, club_id];
+                break;
+            case 'New Category':
+                updateQuery = 'UPDATE club SET category = ? WHERE club_id = ?';
+                updateParams = [input, club_id];
+                break;
+            case 'New BIO':
+                updateQuery = 'UPDATE club SET bio = ? WHERE club_id = ?';
+                updateParams = [input, club_id];
+                break;
+            case 'New Email':
+                updateQuery = 'UPDATE club SET email = ? WHERE club_id = ?';
+                updateParams = [input, club_id];
+                break;
+            case 'New Club Image':
+                updateQuery = 'UPDATE club SET clubImageUrl = ? WHERE club_id = ?';
+                updateParams = [input, club_id];
+                break;
+            default:
+                return res.status(400).send("Invalid RequestType");
         }
 
-        connection.query('DELETE FROM tempprofile WHERE temp_id= ?', [RequestId], (err, result) => {
+        connection.query(updateQuery, updateParams, (err, updateResult) => {
             if (err) {
-                console.error("Error deleting post from tempprofile table:", err);
+                console.error('Error updating club information:', err);
                 return res.status(500).send("Internal Server Error");
             }
-            console.log("Profile edit deleted from tempprofile table successfully!");
-            res.redirect("/comparing")
-        });
-    });
 
-    connection.query("Select club_id from tempprofile where temp_id = ?",  [RequestId], (err, resultsClubID) =>{
-        const clubID = resultsClubID[0].club_id;
-        if(err){
-            console.log("can't get club id from approve profile");
-        }
-        const notificationType = "Approve Edit Profile";
-        connection.query("INSERT INTO notifications_clm (notificationType, club_id) VALUES (?, ?)", [notificationType, clubID], (err) => {
-        if (err) {
-            console.log("error inseting to notifications approve event : " + err.message);
-        }
+            const historyRecord = {
+                club_id: club_id,
+                temp_id: RequestId,
+                Status: 'approved',
+                RequestType: RequestType,
+                input: input
+            };
+
+            connection.query('INSERT INTO history_profile SET ?', historyRecord, (err, insertResult) => {
+                if (err) {
+                    console.error('Error inserting into history_profile:', err);
+                    return res.status(500).send("Internal Server Error");
+                }
+
+                console.log("Profile edit approved and history record inserted");
+
+                connection.query('DELETE FROM tempprofile WHERE temp_id= ?', [RequestId], (err, result) => {
+                    if (err) {
+                        console.error("Error deleting post from tempprofile table:", err);
+                        return res.status(500).send("Internal Server Error");
+                    }
+
+                    console.log("Profile edit deleted from tempprofile table successfully!");
+
+                    const notificationType = "Approve Edit Profile";
+                    connection.query("INSERT INTO notifications_clm (notificationType, club_id) VALUES (?, ?)", [notificationType, club_id], (err) => {
+                        if (err) {
+                            console.log("Error inserting to notifications approve event: " + err.message);
+                            return res.status(500).send("Internal Server Error");
+                        }
+
+                        res.redirect("/comparing");
+                    });
+                });
+            });
         });
     });
-    
-    res.redirect("/comparing");
 });
+
 
 
 app.post("/rejectProfileEdit", (req, res) => {

@@ -391,10 +391,22 @@ app.post("/updatePictureManager", (req, res) => {
             console.log("error inserting clm image", err);
             return res.status(404).send("internal Server Error");
         }
-
-        res.redirect("/myclubpage");
+        const notificationType = "Edit Profile Request";
+        connection.query("select club_name from club where club_id = ?", [clubid], (err, reusultClubName)=>{
+            if(err){
+                console.log("error fetching club name from update picture" + err.message);
+            }
+            const club_name = reusultClubName[0].club_name;
+            connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)", [notificationType, club_name, clubid], (err) => {
+                if (err) {
+                    console.log("error inseting to notifications: " + err.message);
+                }
+                res.redirect("/myclubpage");
+            });
+            
+        });
+        
     });
-
 });
 
 //to open social media link sin the database
@@ -1012,72 +1024,18 @@ app.get("/comparing", (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/");
     }
-    connection.query(`SELECT * FROM tempposts`, (err, tempPosts) => {
+    connection.query(`SELECT tempposts.*, club.club_name FROM tempposts JOIN club ON tempposts.club_id = club.club_id;`, (err, tempPosts) => {
         if (err) {
             console.error("Error fetching temp posts:", err);
             return res.status(500).send("Internal Server Error");
         }
     
-        connection.query("SELECT * FROM tempprofile", (err, tempprofileedits) => {
+        connection.query("SELECT tempprofile.*, club.club_name FROM tempprofile JOIN club ON tempprofile.club_id = club.club_id;", (err, tempprofileedits) => {
             if (err) {
                 console.error("Error fetching temp profile:", err);
                 return res.status(500).send("Internal Server Error");
             }
-    
-            // Function to fetch club name for a single item
-            const fetchClubName = (item, callback) => {
-                connection.query(`SELECT club_name FROM club WHERE club_id = ${item.club_id}`, (err, club) => {
-                    if (err) {
-                        console.error(`Error fetching club name:`, err);
-                        callback(err);
-                    } else {
-                        item.clubName = club[0].club_name;
-                        callback(null);
-                    }
-                });
-            };
-    
-            // Array to store promises
-            const promises = [];
-    
-            // Processing tempposts
-            tempprofileedits.forEach((item) => {
-                const promise = new Promise((resolve, reject) => {
-                    fetchClubName(item, (err) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve();
-                        }
-                    });
-                });
-                promises.push(promise);
-            });
-    
-            // Processing tempprofileedits
-            tempprofileedits.forEach((item) => {
-                const promise = new Promise((resolve, reject) => {
-                    fetchClubName(item, (err) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve();
-                        }
-                    });
-                });
-                promises.push(promise);
-            });
-    
-            // Wait for all promises to resolve
-            Promise.all(promises)
-                .then(() => {
-                    // All club names fetched, render the template
-                    res.render("StatusManager.ejs", { tempPosts, tempprofileedits, loggedIn: req.session.loggedIn, role: "sks" });
-                })
-                .catch((err) => {
-                    console.error("Error fetching club names:", err);
-                    return res.status(500).send("Internal Server Error");
-                });
+            res.render("StatusManager.ejs", { tempPosts, tempprofileedits, loggedIn: req.session.loggedIn, role: "sks" });
         });
     });    
 });
@@ -1462,6 +1420,12 @@ app.post('/updateProfile', (req, res) => {
                         console.log("Error Inserting Image: " + err.message);
                         return res.status(404).send("Internal Server Error");
                     }
+                    const notificationType = "Edit Profile Request";
+                    connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)", [notificationType, clubName, clubid], (err) => {
+                        if (err) {
+                            console.log("error inseting to notifications: " + err.message);
+                        }
+                    });
                 });
 
             }

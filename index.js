@@ -286,13 +286,43 @@ app.get("/myclubpage", (req, res) => {
 app.post("/deleteEvent", (req, res) => {
 
     const eventID = parseInt(req.query.eventID);
-    connection.query("DELETE From event WHERE event_id = ?", [eventID], (err, resultsToDelete) => {
-        if (err) {
-            console.log("Error deleting row " + err.message);
-            res.status(500).send("Internal Error");
-        }
+    connection.query("select * from event where event_id = ?", [eventID], (err, resultEventToBeDeleted) =>{
+        const event_id = resultEventToBeDeleted[0].event_id;
+        const clm_id = resultEventToBeDeleted[0].clm_id;
+        const language = resultEventToBeDeleted[0].language;
+        const date = resultEventToBeDeleted[0].date;
+        const time = resultEventToBeDeleted[0].time;
+        const guest_name =resultEventToBeDeleted[0].guest_name;
+        const description = resultEventToBeDeleted[0].description;
+        const event_name = resultEventToBeDeleted[0].event_name;
+        const notes = resultEventToBeDeleted[0].notes;
+        const location = resultEventToBeDeleted[0].location;
+        const capacity = resultEventToBeDeleted[0].capacity;
+        const category = resultEventToBeDeleted[0].category;
+        const imageUrL = resultEventToBeDeleted[0].imageURL;
+        const club_name = resultEventToBeDeleted[0].club_name;
+        const club_id = resultEventToBeDeleted[0].club_id;
+        const request_type = "Delete Event";
 
-        res.redirect("/myclubpage");
+        if(err){
+            console.log("Error fetching the deleted event" + err.message);
+        } else{
+            connection.query(`INSERT INTO tempeventedits (event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id, imageUrl, club_name, request_type, event_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [event_name, guest_name, date, time, language, location, capacity, description, notes, category, clm_id, imageUrL, club_name, request_type, event_id], (err, resultInsert) =>{
+                if(err){
+                    console.log("Error inserting delete temp event" + err.message);
+                }
+                const notificationType = "Delete Event Request";
+                connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)", [notificationType, club_name, club_id], (err) => {
+                    if (err) {
+                        console.log("error inseting to notifications: " + err.message);
+                    } else {
+                        res.redirect("/myclubpage");                
+                        }
+                });
+                
+            });
+        }
     });
 });
 
@@ -537,7 +567,7 @@ app.post("/approveEvent", (req, res) => {
                     console.log("Error fetching event Information from temp Events", err);
                     return res.status(404).send("Internal Server Error");
                 }
-                connection.query("INSERT INTO history_event (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, status, comment, notificationstatus, club_name, clm_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [eventId, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, clubId, 1, "", 0, clubName, clubInfo[0].clm_id], (err, result) => {
+                connection.query("INSERT INTO history_event (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl, club_id, status, comment, notificationstatus, club_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [eventId, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl, clubId, 1, "", 0, clubName], (err, result) => {
                     if (err) {
                         console.log("Error Inserting into history_event ", err);
                         return res.status(500).send("Internal Server Error");
@@ -552,15 +582,21 @@ app.post("/approveEvent", (req, res) => {
                                 console.log("Error deleteing the requst from temp event edit : ", err);
                                 return res.status(500).send("Internal Server Error");
                             }
-                            const notificationType = "Event approved";
-                            connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)" , [notificationType, eventInfo[0].event_name, clubId], (err) =>{
-                                if(err){
-                                    console.log("error inseting to notifications: " + err.message);
+                            connection.query("Select event_name from history_event where event_id = ?", [eventId], (err, resultN) => {
+                                if (err) {
+                                    console.log("fetching event name");
                                 } else {
-                                    res.redirect("/eventRequests");
+                                    const event_name = resultN[0].event_name;
+                                    const notificationType = "Apprpve new Event";
+                                    connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)", [notificationType, event_name, clubId], (err) => {
+                                        if (err) {
+                                            console.log("error inseting to notifications approve event : " + err.message);
+                                        } else {
+                                            res.redirect("/eventRequests");
+                                        }
+                                    });
                                 }
-                            }); 
-                        
+                            });
                         });
                     });
                 });
@@ -858,7 +894,7 @@ app.get("/createclub", (req, res) => {
 app.post("/clubform", async (req, res) => {
     const name = req.body.name;
     const cars = req.body.cars;
-    const manager = req.body.manager;
+    const manager = req.body.newManagerID;
     const bio = req.body.bio;
     const number = req.body.number;
     const media1 = req.body.media1;
@@ -1825,6 +1861,37 @@ app.post("/createAlbum", async (req, res) => {
                 );
             });
         });
+    });
+});
+
+app.post("/approveDeleteEvent", (req, res) =>{
+    const eventID = parseInt(req.query.eventID);
+
+    connection.query("select club_id from history_event where event_id = ?", [eventID], (err, resultClubId)=>{
+        if (err) {
+            console.log("Error occurred while fetching club id: " + err.message);
+        } else {
+            if (resultClubId.length > 0) {
+                const clubID = resultClubId[0].club_id;
+                connection.query("DELETE From event WHERE event_id = ?", [eventID], (err) => {
+                    if (err) {
+                        console.log("Error deleting row " + err.message);
+                    }
+                    connection.query("DELETE From tempeventedits WHERE event_id = ?", [eventID], (err) => {
+                        if (err) {
+                            console.log("Error deleting row " + err.message);
+                        }
+                        const notificationType = "Delete Event Approved";
+                        connection.query("INSERT INTO notifications_clm (notificationType, club_id) VALUES (?, ?)", [notificationType, clubID], (err) => {
+                            if (err) {
+                                console.log("error inseting to notifications approve event : " + err.message);
+                            }
+                            res.redirect("/eventRequests");
+                        });
+                    });
+                });
+            } 
+        }
     });
 });
 

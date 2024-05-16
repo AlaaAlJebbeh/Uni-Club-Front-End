@@ -61,7 +61,6 @@
                     <% var buttonId; %>
                     <% var eventID %>
                     <% results.forEach((item) => { %>
-                        <% console.log("In Here") %>
                         <%  buttonId = 'button_' + item.event_id; %>
                     <tr>
                         <td><img src="../public/images/<%=item.imageUrl%>"/></td>
@@ -108,11 +107,19 @@
                         <td>
                             <%= item.request_type%>
                             </td>
-                        <td>
-                            <form style="all:initial" action="/approveEventedit?eventID=<%=item.event_id%>" method="POST">
-                            <button class="approve-button">Approve</button>
-                            </form> 
-                            <button  class="reject-button" onclick="reject('<%= item.event_id %>')">Reject</button>
+                        <td> 
+                            <% if(item.request_type == "Event Edits"){ %>
+                                <form style="all:initial" action="/approveEventedit?eventID=<%=item.event_id%>" method="POST">
+                                    <button class="approve-button" type ="submit">Approve</button>
+                                </form> 
+                                <button  class="reject-button" onclick="reject('<%= item.event_id %>')">Reject</button>
+                            <% } else if(item.request_type == "Delete Event") {%>
+                                <form style="all:initial" action="/approveDeleteEvent?eventID=<%=item.event_id%>" method="POST">
+                                    <button class="approve-button" type ="submit">Approve</button>
+                                </form>
+                                <button  class="reject-button" onclick="reject('<%= item.event_id %>')">Reject</button>
+                                <% } %>
+                            
                             </td>   
                             <td>    
                                 <button id="<%= buttonId %>" class="details-button" onclick="showPopupedit('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>

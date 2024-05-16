@@ -1,20 +1,32 @@
-
 <html lang="en">
   <head>
     <link rel="stylesheet" href="../public/styles/album.css" />
-    <script src="../public/scripts/album.js" defer></script>
   </head>
-  
+  <body>
     <section class="wrapper">
-      <% results.forEach((item, index) => { %>
-      <i class="fa-solid fa-arrow-left button" id="prev"></i>
-      <div class="image-container">
-        <div class="carousel">
-          <img src="../public/images/<%= item.AlbumImage[index].Url%>" alt="" />  
+        <i class="fa-solid fa-arrow-left button" id="prev"></i>
+        <div class="image-container">
+          <div class="carousel">
+            <% results.forEach((item,index) => { %>
+              <% console.log("Image 1" + item.AlbumImage1Url ); %>
+              <% console.log("Image 2" + item.AlbumImage2Url ); %>
+              <img src="../public/images/<%= item.AlbumImage1Url %>"/>
+              <img src="../public/images/<%= item.AlbumImage2Url %>"/>
+              <img src="../public/images/<%= item.AlbumImage3Url %>"/>
+              <img src="../public/images/<%= item.AlbumImage4Url %>"/>
+              <img src="../public/images/<%= item.AlbumImage5Url %>"/>
+              <img src="../public/images/<%= item.AlbumImage6Url %>"/>
+              <img src="../public/images/<%= item.AlbumImage7Url %>"/>
+              <img src="../public/images/<%= item.AlbumImage8Url %>"/>
+              <img src="../public/images/<%= item.AlbumImage9Url %>"/>
+              <img src="../public/images/<%= item.AlbumImage10Url %>"/>
+
+              <% }); %>
+          </div>
+          <i class="fa-solid fa-arrow-right button" id="next"></i>
         </div>
-        <i class="fa-solid fa-arrow-right button" id="next"></i>
-      </div>
-      <% }); %>
     </section>
-    
+    <script src="../public/scripts/album.js" ></script>
+  </body>
 </html>
+

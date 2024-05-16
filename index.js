@@ -18,6 +18,8 @@ const port = 8000;
 //Body barser use
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 //Connection To Database
 const connection = mysql.createConnection({
@@ -1760,6 +1762,94 @@ app.get("/album", (req, res) => {
 
 });
 
+app.get("/createPost", (req, res) => {
+    res.render('createPost.ejs');
+});
+
+app.post("/createAlbum", async (req, res) => {
+    const event_id = req.body.event_id;
+    const { postText } = req.body;
+    const email = req.session.email;
+
+    // Check if files were uploaded
+    if (!req.files || !req.files.images) {
+        return res.status(400).send("No files were uploaded.");
+    }
+
+    const images = Array.isArray(req.files.images) ? req.files.images : [req.files.images];
+    const imagePaths = [];
+
+    // Move each uploaded image to the public/images directory
+    for (let i = 0; i < images.length; i++) {
+        const image = images[i];
+        const imgPath = path.join(__dirname, 'public', 'images', image.name);
+        await image.mv(imgPath);
+        imagePaths.push(image.name);
+    }
+
+    // Fill in the AlbumImageXUrl columns
+    const albumImages = Array(10).fill(null);
+    imagePaths.forEach((imageName, index) => {
+        albumImages[index] = imageName;
+    });
+
+    connection.query("SELECT user_id FROM users WHERE email = ?", [email], (err, userResult) => {
+        if (err) {
+            console.error("Error fetching userID:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+        if (userResult.length === 0) {
+            return res.status(404).send("User not found");
+        }
+
+        const userId = userResult[0].user_id;
+
+        connection.query("SELECT club_name FROM club WHERE clm_id = ?", [userId], (err, resultClubName) => {
+            if (err) {
+                console.error("Error fetching club name:", err);
+                return res.status(500).send("Internal Server Error");
+            }
+            if (resultClubName.length === 0) {
+                return res.status(404).send("Club not found for the user");
+            }
+
+            const clubName = resultClubName[0].club_name;
+
+            connection.query("SELECT club_id FROM club WHERE clm_id = ?", [userId], (err, clubResult) => {
+                if (err) {
+                    console.error("Error fetching club id:", err);
+                    return res.status(500).send("Internal Server Error");
+                }
+                if (clubResult.length === 0) {
+                    return res.status(404).send("Club not found for the user");
+                }
+
+                const clubId = clubResult[0].club_id;
+
+                connection.query(
+                    `INSERT INTO event_album (event_id, AlbumImage1Url, AlbumImage2Url, AlbumImage3Url, AlbumImage4Url, AlbumImage5Url, AlbumImage6Url, AlbumImage7Url, AlbumImage8Url, AlbumImage9Url, AlbumImage10Url) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    [event_id, ...albumImages],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error inserting image into database:', error);
+                            return res.status(500).send('Failed to insert');
+                        }
+
+                        const notificationType = "Create New Post";
+                        connection.query("INSERT INTO notifications_sks (notificationType, club_name, club_id) VALUES (?, ?, ?)", [notificationType, clubName, clubId], (err) => {
+                            if (err) {
+                                console.log("error inserting to notification");
+                            } else {
+                                res.redirect("/myclubpage");
+                            }
+                        });
+                    }
+                );
+            });
+        });
+    });
+});
 
 //listining to the port 
 app.listen(port, () => {

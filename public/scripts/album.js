@@ -1,29 +1,9 @@
 
-// Function to show the popup card
-function showPopup() {
- document.getElementById("popup").style.display = "block"
-                
-   }
-        
- // Function to close the popup card
-function closePopup() {
-  document.getElementById("popup").style.display = "none";
-   }
-        
- // Attach click event listener to the button
-var buttons = document.querySelectorAll('.details-button');
-  buttons.forEach(function(button)
-   {
-   button.addEventListener('click', showPopup);
-  });
-    
-
 // Get the DOM elements for the image carousel
 const wrapper = document.querySelector(".wrapper"),
   carousel = document.querySelector(".carousel"),
   images = document.querySelectorAll("img"),
   buttons = document.querySelectorAll(".button");
-
 let imageIndex = 1,
   intervalId;
 

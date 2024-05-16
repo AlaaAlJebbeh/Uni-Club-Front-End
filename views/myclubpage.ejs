@@ -261,11 +261,18 @@
                     </button>
                   </form>
                  
-                   <form action="/album" method="get" class="add-button" style="all: initial;"> 
+                   <form action="/album" method="get" class="see-button" style="all: initial;"> 
                    <button id="<%= item.event_id %>" name="event_id" value="<%= item.event_id %>"  onclick="album()">
+                   <img src="../public/images/eye_icon.png" style="background-color: aliceblue;">
+                   </button>
+                    </form>
+
+                    <form action="/createAlbum" method="POST" class="add-button" style="all: initial;"> 
+                   <button id="<%= item.event_id %>" name="event_id" value="<%= item.event_id %>">
                    <img src="../public/images/add_icon.png" style="background-color: aliceblue;">
                    </button>
                     </form>
+
 
                   
                 </div>

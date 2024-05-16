@@ -19,62 +19,22 @@
             </header>
             <main>
                     <% resultNotiNewEvent.forEach((itemNE, index) => { %>
+                        <% var clubName = itemNE.club_name; %>
+                        <% var notificationType = itemNE.notificationType%>
+                        <% var notify_id = parseInt(itemNE.notify_id); %>
+                        <% var divId='button_' + itemNE.notify_id; %>
+    
                         <%if(itemNE.status_notification == 0){%>
-                            <% if (itemNE.notificationType == "Create New Post"){ %>
-                                <% var clubName = itemNE.club_name; %>
-                                <% var notificationType = itemNE.notificationType%>
-                                <% var notify_id = parseInt(itemNE.notify_id); %>
-                                <% var divId='button_' + itemNE.notify_id; %>
-                                <form id="readNotificationSks1" action="/changeNotificationStatusSks?notify_id=<%= notify_id%>" method="POST">
-                                    <div class="notificationCard unread1 read-notification" id="<%= notify_id %>">
-                                        <img src="../public/images/<%=itemNE.clubImageUrl%>"/>
-                                        <div class="description">
-                                            <p>Your Have <%=itemNE.notificationType%> From "<%=clubName%>"</p>       
-                                        </div>
+                            <form id="readNotificationFormNewEvent" action="/changeNotificationStatusSks?notify_id=<%= notify_id%>" method="POST">
+                                <div class="notificationCard unread read-notification" id="<%= notify_id %>">
+                                    <img src="../public/images/<%=itemNE.clubImageUrl%>"/>
+                                     <div class="description">
+                                        <p>Your Have <%=itemNE.notificationType%> From "<%=clubName%>"</p>       
                                     </div>
-                                </form>
-                            <%} else if(itemNE.notificationType == "Create New Event"){%>
-                                <% var clubName = itemNE.club_name; %>
-                                <% var notificationType = itemNE.notificationType%>
-                                <% var notify_id = parseInt(itemNE.notify_id); %>
-                                <% var divId='button_' + itemNE.notify_id; %>
-                                <form id="readNotificationSks2" action="/changeNotificationStatusSks?notify_id=<%= notify_id%>" method="POST">
-                                    <div class="notificationCard unread2 read-notification" id="<%= notify_id %>">
-                                        <img src="../public/images/<%=itemNE.clubImageUrl%>"/>
-                                        <div class="description">
-                                            <p>Your Have <%=itemNE.notificationType%> From "<%=clubName%>"</p>       
-                                        </div>
-                                    </div>
-                                </form>  
-                                <% } else if(itemNE.notificationType == "Edit Event Request"){%>
-                                    <% var clubName = itemNE.club_name; %>
-                                    <% var notificationType = itemNE.notificationType%>
-                                    <% var notify_id = parseInt(itemNE.notify_id); %>
-                                    <% var divId='button_' + itemNE.notify_id; %>
-                                    <form id="readNotificationSks3" action="/changeNotificationStatusSks?notify_id=<%= notify_id%>" method="POST">
-                                        <div class="notificationCard unread3 read-notification" id="<%= notify_id %>">
-                                            <img src="../public/images/<%=itemNE.clubImageUrl%>"/>
-                                            <div class="description">
-                                                <p>Your Have <%=itemNE.notificationType%> From "<%=clubName%>"</p>       
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <% } else if(itemNE.notificationType == "Edit Profile Request"){ %>
-                                        <% var clubName = itemNE.club_name; %>
-                                        <% var notificationType = itemNE.notificationType%>
-                                        <% var notify_id = parseInt(itemNE.notify_id); %>
-                                        <% var divId='button_' + itemNE.notify_id; %>
-                                        <form id="readNotificationSks4" action="/changeNotificationStatusSks?notify_id=<%= notify_id%>" method="POST">
-                                            <div class="notificationCard unread4 read-notification" id="<%= notify_id %>">
-                                                <img src="../public/images/<%=itemNE.clubImageUrl%>"/>
-                                                <div class="description">
-                                                    <p>Your Have <%=itemNE.notificationType%> From "<%=clubName%>"</p>       
-                                                </div>
-                                            </div>
-                                        </form>
-                                    <% } %>
-                        <% } %>  
-                    <%});%> 
+                                </div>
+                            </form>
+                        <%}%>    
+                    <%})%> 
             </main>
         </div>
     </div>

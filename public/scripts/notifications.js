@@ -4,13 +4,14 @@ const unReadMessages3 = document.querySelectorAll('.unread3');
 const unReadMessages4 = document.querySelectorAll('.unread4');
 const unReadMessages5 = document.querySelectorAll('.unread5');
 const unReadMessages6 = document.querySelectorAll('.unread6');
-const unReadMessages7 = document.querySelectorAll('.unread7');
+
+
 
 
 const unReadMessagesCount = document.getElementById('num-of-notif');
 const markAll = document.getElementById('mark-as-read');
 
-unReadMessagesCount.innerText = unReadMessages1.length + unReadMessages2.length + unReadMessages3.length + unReadMessages4.length + unReadMessages5.length + unReadMessages6.length + unReadMessages7.length ;
+unReadMessagesCount.innerText = unReadMessages1.length + unReadMessages2.length + unReadMessages3.length + unReadMessages4.length + unReadMessages5.length + unReadMessages6.length ;
 
 unReadMessages1.forEach((message) => {
     message.addEventListener('click', () => {
@@ -113,24 +114,6 @@ unReadMessages6.forEach((message) => {
         });
     });
 });
-
-unReadMessages7.forEach((message) => {
-    message.addEventListener('click', () => {
-        message.classList.remove('unread7');
-        const newUnreadMessages = document.querySelectorAll('.unread7');
-        unReadMessagesCount.innerText = newUnreadMessages.length;
-
-        unReadMessages7.forEach((button) => {
-            button.addEventListener('click', () => {
-                const form = document.getElementById('readNotificationFormClub7');
-                if (form) {
-                    form.submit();
-                }
-            });
-        });
-    });
-});
-
 
 
 // Mark as All read part

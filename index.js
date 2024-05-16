@@ -526,9 +526,6 @@ app.post("/approveEvent", (req, res) => {
                                     const event_name = result[0].event_name;
 <<<<<<< HEAD
                                     connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)", [notificationType, event_name, clubId], (err) => {
-=======
-                                    connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id) VALUES (?, ?, ?)", [notificationType, eventInfo[0].event_name, clubId], (err) => {
->>>>>>> parent of 374e098 (new event approve clm notification)
                                         if (err) {
                                             console.log("error inseting to notifications approve event : " + err.message);
                                         } else {

@@ -210,7 +210,7 @@
             </script>
            
             <hr />
-            <h1 style="text-align: center; font-size: 42px; margin-bottom: 75px">
+            <h1 style="text-align: center; font-size: 36px; margin-bottom: 75px">
               Club Manager Information
             </h1>
 
@@ -218,10 +218,19 @@
               <% clubManager.forEach((item)=> { %>
                 <div class="CLMNAMES">
                   <img src="../public/images/<%= item.imageURL%>" />
-                  <h1>
+                  <h2>
                     <span style="color: #193635">Club Manager Name:</span><br />
                     <%=item.name%>
-                  </h1>
+                  </h2>
+                  <% if(loggedIn) { %>
+                  <form action = "/updatePictureManager" method="post" style="all:initial" enctype="multipart/form-data">
+                    <div>
+                      <input type="file" name="uploadImage1" />
+                    </div>
+
+                    <button type="submit" class="uploadbutton">Upload</button>
+                    </form>
+                    <% } %>
                 </div>
                 <% }); %>
             </div>
@@ -234,13 +243,12 @@
             <div class="indivisual-card-container">
             <div class="card">
               <div class="image-container">
-                <img src="../public/images/<%=item.imageURL  %>" id="clubImage-<%=item.event_id  %>"/>
+                <img class="eventImage" src="../public/images/<%=item.imageURL  %>" id="clubImage-<%=item.event_id  %>"/>
                 <% const currentDate = new Date();
                 currentDate.setHours(0, 0, 0, 0); const eventDate = new
                 Date(item.date); eventDate.setHours(0, 0, 0, 0); if
                 (currentDate.getTime() === eventDate.getTime()) { %>
-                <div class=" Active">Active
-              </div>
+                <div class=" Active">Active</div>
               <% } else if (currentDate.getTime()> eventDate.getTime()) { %>
                 <div class="canceled">Finished</div>
                 <% } else { %>
@@ -281,81 +289,84 @@
               <!-- Inside the HTML template -->
               <div class="text-container" id="text-container-<%= item.event_id %>">
                   <form id="edit-form-<%= item.event_id %>" class="text-container" method="POST" action="/updateEvent" enctype="multipart/form-data">
-                    <div class="upload image" id="upload-button-<%= item.event_id %>">
+                    <div class="upload image" id="upload-button-<%= item.event_id %>" >
                       <input type="file" name="uploadImage1" />
                     </div>
                     <input type="hidden" name="eventID" value="<%= item.event_id %>">
                     <input type="hidden" name="clubImage" value="" id="clubimageInput_<%= item.event_id %>">
                     <div class="card-details">
                       <span>Club Name:</span>
-                      <span class="club-name" contenteditable="true" id="clubName_<%= item.event_id %>"><%= clubInformation[0].club_name %></span>
+                      <span class="club-name" contenteditable="false" id="clubName_<%= item.event_id %>"><%= clubInformation[0].club_name %></span>
                       <input type="hidden" name="clubName" value="<%= clubInformation[0].club_name %>" id="clubNameInput_<%= item.event_id %>" />
                   </div>
                   <div class="card-details">
                       <span>Event Name:</span>
-                      <span class="event-name" contenteditable="true" id="eventName_<%= item.event_id %>"><%= item.event_name %></span>
+                      <span class="event-name" contenteditable="false" id="eventName_<%= item.event_id %>"><%= item.event_name %></span>
                       <input type="hidden" name="eventName" value="<%= item.event_name %>" id="eventNameInput_<%= item.event_id %>" />
                   </div>
-                  <div class="card-details"> 
-                      <span>Date:</span>
-                      <span class="event-date" contenteditable="true" id="eventDate_<%= item.event_id %>"><%= item.date %></span>
-                      <input type="hidden" name="eventDate" value="<%= item.date %>" id="eventDateInput_<%= item.event_id %>" />
+                  <!--Date-->
+                  <div class="card-details">
+                    <span>Date:</span>
+                    <span class="event-date" contenteditable="false" id="eventDate_<%= item.event_id %>">
+                        <%= item.date.toISOString().split('T')[0] %>
+                    </span>
+                    <input type="hidden" name="eventDate" value="<%= item.date.toISOString().split('T')[0] %>" id="eventDateInput_<%= item.event_id %>" />
                   </div>
                   <div class="card-details">
                       <span>Time:</span>
-                      <span class="event-time" contenteditable="true" id="eventTime_<%= item.event_id %>"><%= item.time %></span>
+                      <span class="event-time" contenteditable="false" id="eventTime_<%= item.event_id %>"><%= item.time %></span>
                       <input type="hidden" name="eventTime" value="<%= item.time %>" id="eventTimeInput_<%= item.event_id %>" />
                   </div>
               
                   <!-- Location -->
                   <div class="card-details">
                       <span>Location:</span>
-                      <span class="event-location" contenteditable="true" id="eventLocation_<%= item.event_id %>"><%= item.location %></span>
+                      <span class="event-location" contenteditable="false" id="eventLocation_<%= item.event_id %>"><%= item.location %></span>
                       <input type="hidden" name="eventLocation" value="<%= item.location %>" id="eventLocationInput_<%= item.event_id %>" />
                   </div>
               
                   <!-- Language -->
                   <div class="card-details">
                       <span>Language:</span>
-                      <span class="event-language" contenteditable="true" id="eventLanguage_<%= item.event_id %>"><%= item.language %></span>
+                      <span class="event-language" contenteditable="false" id="eventLanguage_<%= item.event_id %>"><%= item.language %></span>
                       <input type="hidden" name="eventLanguage" value="<%= item.language %>" id="eventLanguageInput_<%= item.event_id %>" />
                   </div>
               
                   <!-- Guest -->
                   <div class="card-details">
                       <span>Guest:</span>
-                      <span class="event-guest" contenteditable="true" id="eventGuest_<%= item.event_id %>"><%= item.guest_name %></span>
+                      <span class="event-guest" contenteditable="false" id="eventGuest_<%= item.event_id %>"><%= item.guest_name %></span>
                       <input type="hidden" name="eventGuest" value="<%= item.guest_name %>" id="eventGuestInput_<%= item.event_id %>" />
                   </div>
 
                   <!-- Category -->
                   <div class="card-details">
                       <span>Category:</span>
-                      <span class="event-Category" contenteditable="true" id="eventCategory_<%= item.event_id %>"><%= item.category %></span>
+                      <span class="event-Category" contenteditable="false" id="eventCategory_<%= item.event_id %>"><%= item.category %></span>
                       <input type="hidden" name="eventCategory" value="<%= item.category %>" id="eventCategoryInput_<%= item.event_id %>" />
                   </div>
               
                   <!-- Description -->
                   <div class="card-details">
                       <span>Description:</span>
-                      <span class="event-description" contenteditable="true" id="eventDescription_<%= item.event_id %>"><%= item.description %></span>
+                      <span class="event-description" contenteditable="false" id="eventDescription_<%= item.event_id %>"><%= item.description %></span>
                       <input type="hidden" name="eventDescription" value="<%= item.description %>" id="eventDescriptionInput_<%= item.event_id %>" />
                   </div>
               
                   <!-- Capacity -->
                   <div class="card-details">
                       <span>Capacity:</span>
-                      <span class="event-capacity" contenteditable="true" id="eventCapacity_<%= item.event_id %>"><%= item.capacity %></span>
+                      <span class="event-capacity" contenteditable="false" id="eventCapacity_<%= item.event_id %>"><%= item.capacity %></span>
                       <input type="hidden" name="eventCapacity" value="<%= item.capacity %>" id="eventCapacityInput_<%= item.event_id %>" />
                   </div>
               
                   <!-- Notes -->
                   <div class="card-details">
                       <span>Notes:</span>
-                      <span class="event-notes" contenteditable="true" id="eventNotes_<%= item.event_id %>"><%= item.notes %></span>
-                      <input type="hidden" name="eventNotes" value="<%= item.notes %>" id="eventNotesInput_<%= item.event_id %>" />
+                      <span class="event-notes" contenteditable="false" id="eventNotes_<%=item.event_id %>"><%=item.notes %></span>
+                      <input type="hidden" name="eventNotes" value="<%=item.notes %>" id="eventNotesInput_<%=item.event_id %>" />
                   </div>
-                  <button type="button" class="events-save-button" data-eventid="<%= item.event_id %>">Save</button>
+                  <button type="button" class="events-save-button" data-eventid="<%=item.event_id %>">Save</button>
                   
               </div>
             </div>
@@ -390,36 +401,37 @@
 
               // Repeat similar steps for other fields
                // Update location
-            const eventLocation = document.getElementById(`eventLocation_${eventID}`).innerText;
-            document.getElementById(`eventLocationInput_${eventID}`).value = eventLocation;
+              const eventLocation = document.getElementById(`eventLocation_${eventID}`).innerText;
+              document.getElementById(`eventLocationInput_${eventID}`).value = eventLocation;
 
-            // Update language
-            const eventLanguage = document.getElementById(`eventLanguage_${eventID}`).innerText;
-            document.getElementById(`eventLanguageInput_${eventID}`).value = eventLanguage;
+              // Update language
+              const eventLanguage = document.getElementById(`eventLanguage_${eventID}`).innerText;
+              document.getElementById(`eventLanguageInput_${eventID}`).value = eventLanguage;
 
-            // Update guest
-            const eventGuest = document.getElementById(`eventGuest_${eventID}`).innerText;
-            document.getElementById(`eventGuestInput_${eventID}`).value = eventGuest;
+              // Update guest
+              const eventGuest = document.getElementById(`eventGuest_${eventID}`).innerText;
+              document.getElementById(`eventGuestInput_${eventID}`).value = eventGuest;
 
-            // Update description
-            const eventDescription = document.getElementById(`eventDescription_${eventID}`).innerText;
-            document.getElementById(`eventDescriptionInput_${eventID}`).value = eventDescription;
+              // Update description
+              const eventDescription = document.getElementById(`eventDescription_${eventID}`).innerText;
+              document.getElementById(`eventDescriptionInput_${eventID}`).value = eventDescription;
 
-            // Update capacity
-            const eventCapacity = document.getElementById(`eventCapacity_${eventID}`).innerText;
-            document.getElementById(`eventCapacityInput_${eventID}`).value = eventCapacity;
+              // Update capacity
+              const eventCapacity = document.getElementById(`eventCapacity_${eventID}`).innerText;
+              document.getElementById(`eventCapacityInput_${eventID}`).value = eventCapacity;
 
-            // Update capacity
-            const eventCategory = document.getElementById(`eventCategory_${eventID}`).innerText;
-            document.getElementById(`eventCategoryInput_${eventID}`).value = eventCategory;
+              // Update capacity
+              const eventCategory = document.getElementById(`eventCategory_${eventID}`).innerText;
+              document.getElementById(`eventCategoryInput_${eventID}`).value = eventCategory;
 
-            // Update notes
-            const eventNotes = document.getElementById(`eventNotes_${eventID}`).innerText;
-            document.getElementById(`eventNotesInput_${eventID}`).value = eventNotes;
+              // Update notes
+              const eventNotes = document.getElementById(`eventNotes_${eventID}`).innerText;
+              document.getElementById(`eventNotesInput_${eventID}`).value = eventNotes;
 
-            const clubImage = document.getElementById(`clubImage-${eventID}`).getAttribute('src');
-            document.getElementById(`clubimageInput_${eventID}`).value = clubImage;
+              const clubImage = document.getElementById(`clubImage-${eventID}`).getAttribute('src');
+              document.getElementById(`clubimageInput_${eventID}`).value = clubImage;
 
+              form.appendChild(clubImage);
               // Submit the form
               form.submit();
           });

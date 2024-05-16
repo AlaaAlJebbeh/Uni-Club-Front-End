@@ -28,6 +28,8 @@
       referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" href="../public/styles/details.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   </head>
 
   <body>
@@ -50,7 +52,7 @@
 
     <main class="table" id="customers_table">
       <section class="table__header">
-        <h1>Content Management</h1>
+        <h1>Posts Management</h1>
         <div class="input-group">
           <input type="search" placeholder="Search Request..." />
           <img src="images/search.png" alt="" />
@@ -75,7 +77,7 @@
             <%  buttonId = 'button_' + item.PostID; %>
             <tr>
               <td>
-                <h4 style="color: black"><%=clubNames[item]%></h4>
+                <h4 style="color: black"><%=item.clubName%></h4>
               </td>
               <td><h4 style="color: black"><%=item.RequestType%></h4></td>
               <td>
@@ -86,19 +88,20 @@
                 <form style="all:initial" action="/approvePost?postId=<%=item.PostID%>" method="POST">
                   <button class="approve-button">Approve</button>
               </form> 
-              <button class="reject-button" onclick="reject('<%=item.PostID%>')">Reject</button>
+              <button class="reject-button" onclick="reject2('<%=item.PostID%>')">Reject</button>
               </td>  
               </td>
-              <td>
-                <button
-                  class="details-button"
-                  onclick="showDetails()"
-                  data-club-id="<%= item.club_id %>"
-                >
-                  <img src="public/images/Details.png" alt="Button Image" />
-                </button>
-              </td>
+              <td>    
+                <button id="<%= buttonId %>" class="details-button" onclick="showPopup('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>
+            </td>
             </tr>
+            <div id="reject" class="reject-card1">
+              <form id="rejectionForm-<%=item.PostID%>" action="/rejectPost?postId=<%=item.PostID%>" method="POST" onsubmit="return sendRejectionReason(event)">
+                  <input type="text" id="rejectionReason-<%=item.PostID%>" name="rejectionReason" placeholder="Enter rejection reason...">
+                  <button class="send-button" onclick="sendRejectionReason()" type="submit" style="padding: 10px 20px; margin: 0 10px; cursor: pointer; color: white; background-color: #289e46; margin-left: 30px;">Send</button>  
+              </form>
+          <button id="closeButton2" onclick="closePopup2()">Close</button>
+          </div>
             <% }) %>
 
             <% var buttonId; %>
@@ -107,7 +110,7 @@
             <%  buttonId = 'button_' + item.temp_id; %>
             <tr>
               <td>
-                <h4 style="color: black"><%=clubNames[item]%></h4>
+                <h4 style="color: black"><%=item.clubName%></h4>
               </td>
               <td><h4 style="color: black"><%=item.RequestType%></h4></td>
               <td>
@@ -117,40 +120,72 @@
               <td>
                 <form style="all:initial" action="/approveProfileEdit?temp_id=<%=item.temp_id%>" method="POST">
                   <button class="approve-button">Approve</button>    
-                </form>          
-                  <button class="reject-button" onclick="reject('<%=item.temp_id%>')">Reject</button>
-              
+                </form>                      
+                  <button class="reject-button" onclick="reject('<%=item.temp_id%>')">Reject</button>              
               </td>  
               </td>
-              <td>
-                <button
-                  class="details-button"
-                  onclick="showDetails()"
-                  data-club-id="<%= item.club_id %>"
-                >
-                  <img src="public/images/Details.png" alt="Button Image" />
-                </button>
-              </td>
+              <td>    
+                <button id="<%= buttonId %>" class="details-button" onclick="showPopupedit('<%= buttonId %>')"><img src="/images/images/Details.png" alt="Button Image">Details</button>
+            </td>
             </tr>
+            <div id="reject" class="reject-card1">
+              <form id="rejectionForm-<%=item.temp_id%>" action="/rejectProfileEdit?temp_id=<%=item.temp_id%>" method="POST" onsubmit="return sendRejectionReason(event)">
+                  <input type="text" id="rejectionReason-<%=item.temp_id%>" name="rejectionReason" placeholder="Enter rejection reason...">
+                  <button class="send-button" onclick="sendRejectionReason()" type="submit" style="padding: 10px 20px; margin: 0 10px; cursor: pointer; color: white; background-color: #289e46; margin-left: 30px;">Send</button>  
+              </form>
+          <button id="closeButton2" onclick="closePopup2()">Close</button>
+          </div>
             <% }) %>
 
           </tbody>
         </table>
       </section>
+     
+      <section>
+        <div id="popupedit" class="popup-card" style="display: none;"></div>
+    </section>
 
-   
-      <div id="reject" class="reject-card1">
-        <input
-          type="text"
-          id="rejectionReason"
-          name="rejectionReason"
-          placeholder="Enter rejection reason..."
-        />
-        <button class="send-button" onclick="sendRejectionReason()">
-          Send
-        </button>
-        <button id="closeButton2" onclick="closePopup2()">Close</button>
-      </div>
+    <section>
+      <div id="popupPost" class="popup-card2" style="display: none;"></div>
+  </section>
+  
+  <script>
+    // Function to show the popup card
+    function showPopup() {
+        document.getElementById("popupPost").style.display = "block"      
+    }
+
+    // Function to close the popup card
+    function closePopup() {
+        document.getElementById("popupPost").style.display = "none";
+    }
+
+    // Attach click event listener to the button
+    var buttons = document.querySelectorAll('.details-button');
+         buttons.forEach(function(button)
+            {
+                button.addEventListener('click', showPopup);
+            });
+</script>
+
+
+      <script>
+        function showPopup2() {
+            var popup = document.getElementById("reject");
+            popup.style.display = "block";
+        }
+        
+        function closePopup2() {
+            var popup = document.getElementById("reject");
+            popup.style.display = "none";
+        }
+        
+        var rejectButtons = document.querySelectorAll('.reject-button');
+        
+        rejectButtons.forEach(function(button) {
+            button.addEventListener('click', showPopup2);
+        });
+    </script>
 
       <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -167,51 +202,8 @@
         });
       </script>
 
-      <script>
-        function showDetails(index) {
-          // Retrieve the club ID from the button's data attribute
-          var clubId = document
-            .querySelector(`.details-button[data-club-id="${index}"]`)
-            .getAttribute("data-club-id");
+      
 
-          // Fetch the old picture URL from the club table using AJAX
-          fetch(`/getOldPicture?clubId=${clubId}`)
-            .then((response) => response.json())
-            .then((data) => {
-              // Display the old picture URL in the popup
-              document.getElementById("beforetext").innerText = data.image;
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-
-          // Show the popup
-          document.getElementById("popup").style.display = "block";
-        }
-      </script>
-
-      <script>
-        // Function to show the popup card
-        function showPopup() {
-          document.getElementById("popup").style.display = "block";
-        }
-
-        // Function to close the popup card
-        function closePopup() {
-          document.getElementById("popup").style.display = "none";
-        }
-
-        // Attach click event listener to the button
-        var buttons = document.querySelectorAll(".details-button");
-        buttons.forEach(function (button) {
-          button.addEventListener("click", function (e) {
-            showPopup();
-            // Display the concatenated keys
-          });
-        });
-
-        console.log(beforeText);
-      </script>
     </main>
     <footer>
       <div class="footerContainer">

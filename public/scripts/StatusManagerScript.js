@@ -204,13 +204,44 @@ const downloadFile = function (data, fileType, fileName = '') {
 }
 
 
-let details = document.getElementById("details.button");
-
-details.addEventListener("click", (e) => {
-
-
-
+$(document).ready(function() {
+    // Add click event listener to all buttons with the class 'post-button'
+    $('.details-button').click(function() {
+        // Retrieve the post ID from the button's ID
+        var PostID = parseInt($(this).attr('id').split('_')[1]);
+        console.log('Button clicked for profile edit ID:', PostID);
+        // Perform further actions if needed
+    });
 });
+
+function showPopup(buttonId) {
+    // Make a GET request to fetch the popup content for the given button ID
+    fetch(`/popupPost?buttonId=${buttonId}`)
+    .then(response => response.text())
+    .then(data => {
+        // Insert the fetched popup content into the popup container
+        document.getElementById("popupPost").innerHTML = data;
+        // Display the popup
+        document.getElementById("popupPost").style.display = "block";
+    })
+    .catch(error => console.error('Error fetching popup content:', error));
+}
+
+function showPopupedit(buttonId) {
+    // Make a GET request to fetch the popup content for the given button ID
+    fetch(`/popupContentedit?buttonId=${buttonId}`)
+    .then(response => response.text())
+    .then(data => {
+        // Insert the fetched popup content into the popup container
+        document.getElementById("popupedit").innerHTML = data;
+        // Display the popup
+        document.getElementById("popupedit").style.display = "block";
+    })
+    .catch(error => console.error('Error fetching popup content:', error));
+}
+
+
+/////DONT TOUCH THIS CODE YET/////
 
 /*function approvePost(PostId, temp_id, requestTypeMap) {
     let endpoint = `/approvePost?postId=${PostId}`; // Default endpoint for regular posts
@@ -240,22 +271,22 @@ details.addEventListener("click", (e) => {
 }
 approvePost(PostId, temp_id, requestTypeMap);*/
 
-
-function reject(temp_id) {
+/*function reject(temp_id) {
     window.selectedRequestId = temp_id;
-    showPopup2();
+    showPopup2(temp_id);
 }
 
-function reject(postId) {
-    window.selectedRequestId = postId;
-    showPopup2();
+function reject2(postId) {
+    window.selectedPostID = postId;
+    showPopup2(postId);
 }
+
 
 function sendRejectionReason() {
     const rejectionReason = document.getElementById('rejectionReason').value;
-    const RequestId = window.selectedRequestId;
+    const temp_id = window.selectedRequestId; // Use temp_id for profile edits
     // Send rejection reason to server
-    fetch(`/rejectProfileEdit?temp_id=${RequestId}`, {
+    fetch(`/rejectProfileEdit?temp_id=${temp_id}`, { // Use /rejectProfileEdit endpoint
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -274,7 +305,7 @@ function sendRejectionReason() {
     });
 }
 
-function sendRejectionReason() {
+function sendRejectionReason2() {
     const rejectionReason = document.getElementById('rejectionReason').value;
     const postId = window.selectedPostID;
     // Send rejection reason to server
@@ -300,15 +331,16 @@ function sendRejectionReason() {
 
 
   // Function to display the popup
-  function showPopup2() {
-    var popup = document.getElementById("reject");
+  // Function to display the popup
+function showPopup2(id) {
+    var popup = document.getElementById("reject_" + id);
     popup.style.display = "block";
-  }
+}
 
   // Function to close the popup
   function closePopup2() {
     var popup = document.getElementById("reject");
     popup.style.display = "none";
   }
-
-
+*/
+////////I REPEAT DONT TOUCH THIS CODEE///

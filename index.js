@@ -518,7 +518,7 @@ app.post("/approveEvent", (req, res) => {
                                 console.log("Error deleteing the requst from temp event edit : ", err);
                                 return res.status(500).send("Internal Server Error");
                             }
-                            const notificationType = "Apprpve new Event";
+                            const notificationType = "Approve new Event";
                             connection.query("Select event_name from event where event_id = ?", [eventId], (err, result) => {
                                 if (err) {
                                     console.log("fetching event name");

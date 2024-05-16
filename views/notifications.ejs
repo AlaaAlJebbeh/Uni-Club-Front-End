@@ -19,28 +19,69 @@
             </header>
             <main>
                 <%resultsNotificationsClub.forEach((notification, index) => {%>
-                    <% var notify_id = parseInt(notification.notify_id); %>
-                    <% var divId='button_' + notification.notify_id; %>
+                    
                     <% if(notification.status_notification == 0){ %>
-                        <form id="readNotificationFormClub" action="/changeNotificationStatusClubManager?notify_id=<%= notify_id%>" method="POST">
-                            <div class="notificationCard unread read-notification" id="<%= divId %>">
-                                <img src="../public/images/<%=clubImage%>"/>
-                                 <div class="description">
-                                    <% if(notification.notificationType == "Approve Edit Profile"){%>
-                                        <p>Your Profile edit has been approved</p>  
-                                    <% } else if(notification.notificationType == "Your Post has been approved") {%>   
-                                        <p>Your Profile edit has been approved"</p>  
-                                        <% } else if(notification.notificationType == "Edit Event Approved") {%>
-                                            <p>Your Edit Event Request has been approved</p>  
-                                            <% } else if(notification.notificationType == "Event Rejected"){ %>
-                                            <p>Your event has been rejected. Rejection reason"<%=resultsNotificationsClub.RejectionReason%>"</p>  
-                                            <% }  else if(notification.notificationType == "Reject Edit Event") {%>
-                                                <p>Your edit event has been rejected. Rejection reason"<%=resultsNotificationsClub.RejectionReason%>"</p>  
-                                                <% } %>
+                        <% if(notification.notificationType == "Post Rejected"){ %>
+                            <% var notify_id1 = parseInt(notification.notify_id); %>
+                            <% var divId1='button_' + notification.notify_id; %>
+                            <form id="readNotificationFormClub1" action="/changeNotificationStatusClubManager?notify_id=<%= notify_id1%>" method="POST">
+                                <div class="notificationCard unread1 read-notification" id="<%= notify_id1 %>">
+                                    <img src="../public/images/<%=clubImage%>"/>
+                                    <p>Your Post has been rejected. Rejection reason"<%=notification.RejectionReason%>"</p>  
                                 </div>
-                            </div>
-                        </form>
-                        <% } %>      
+                            </form>
+                        <% } else if(notification.notificationType == "Approve Edit Profile"){ %>
+                            <% var notify_id2 = parseInt(notification.notify_id); %>
+                            <% var divId2='button_' + notification.notify_id; %>
+                            <form id="readNotificationFormClub2" action="/changeNotificationStatusClubManager?notify_id=<%= notify_id2%>" method="POST">
+                                <div class="notificationCard unread2 read-notification" id="<%= notify_id2 %>">
+                                    <img src="../public/images/<%=clubImage%>"/>
+                                    <p>Your Profile edit has been approved</p>  
+                                </div>
+                            </form>
+                            <% } else if(notification.notificationType == "Your Post has been approved"){ %>
+                                <% var notify_id3 = parseInt(notification.notify_id); %>
+                                <% var divId3='button_' + notification.notify_id; %>
+                                <form id="readNotificationFormClub3" action="/changeNotificationStatusClubManager?notify_id=<%= notify_id3%>" method="POST">
+                                    <div class="notificationCard unread3 read-notification" id="<%= notify_id3 %>">
+                                        <img src="../public/images/<%=clubImage%>"/>
+                                        <p>Your Post has been approved</p>  
+                                    </div>
+                                </form>
+                                <% } else if(notification.notificationType == "Edit Event Approved"){%>
+                                    <% var notify_id4 = parseInt(notification.notify_id); %>
+                                    <% var divId4='button_' + notification.notify_id; %>
+                                    <form id="readNotificationFormClub4" action="/changeNotificationStatusClubManager?notify_id=<%= notify_id4%>" method="POST">
+                                        <div class="notificationCard unread4 read-notification" id="<%= notify_id4 %>">
+                                            <img src="../public/images/<%=clubImage%>"/>
+                                            <p>Your Edit Event Request has been approved</p>  
+                                        </div>
+                                    </form>
+                                    <% } else if(notification.notificationType == "Event Rejected"){ %>
+                                        <% var notify_id5 = parseInt(notification.notify_id); %>
+                                        <% var divId5='button_' + notification.notify_id; %>
+                                        <form id="readNotificationFormClub5" action="/changeNotificationStatusClubManager?notify_id=<%= notify_id5%>" method="POST">
+                                            <div class="notificationCard unread5 read-notification" id="<%= notify_id5 %>">
+                                                <img src="../public/images/<%=clubImage%>"/>
+                                                <p>Your event has been rejected. Rejection reason"<%=notification.RejectionReason%>"</p>  
+                                            </div>
+                                        </form>
+                                        <% } else if(notification.notificationType == "Reject Edit Event"){%>
+                                            <% var notify_id6 = parseInt(notification.notify_id); %>
+                                            <% var divId6='button_' + notification.notify_id; %>
+                                            <form id="readNotificationFormClub6" action="/changeNotificationStatusClubManager?notify_id=<%= notify_id6%>" method="POST">
+                                                <div class="notificationCard unread6 read-notification" id="<%= notify_id6 %>">
+                                                    <img src="../public/images/<%=clubImage%>"/>
+                                                    <p>Your edit event has been rejected. Rejection reason"<%=notification.RejectionReason%>"</p>  
+                                                </div>
+                                            </form>
+                                            <% } %>
+                                    
+                        
+
+                            
+                    <% } %>
+                              
                 <%});%>  
             </main>
         </div>

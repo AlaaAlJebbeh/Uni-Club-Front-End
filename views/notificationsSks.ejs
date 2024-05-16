@@ -26,7 +26,7 @@
     
                         <%if(itemNE.status_notification == 0){%>
                             <form id="readNotificationFormNewEvent" action="/changeNotificationStatusSks?notify_id=<%= notify_id%>" method="POST">
-                                <div class="notificationCard unread read-notification" id="<%= divId %>">
+                                <div class="notificationCard unread read-notification" id="<%= notify_id %>">
                                     <img src="../public/images/<%=itemNE.clubImageUrl%>"/>
                                      <div class="description">
                                         <p>Your Have <%=itemNE.notificationType%> From "<%=clubName%>"</p>       

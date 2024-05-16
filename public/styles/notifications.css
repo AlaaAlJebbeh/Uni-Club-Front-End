@@ -100,7 +100,7 @@ main {
     flex: 1; /* Allow the description to expand and fill remaining space */
 }
 
-.unread {
+.unread1 {
     background-color: rgb(242, 183, 194); /* Light red for unread notifications */
 }
 
@@ -109,5 +109,17 @@ main {
 }
 
 .unread3 {
+    background-color: rgb(242, 183, 194); /* Light red for unread notifications */
+}
+
+.unread4 {
+    background-color: rgb(242, 183, 194); /* Light red for unread notifications */
+}
+
+.unread5 {
+    background-color: rgb(242, 183, 194); /* Light red for unread notifications */
+}
+
+.unread6 {
     background-color: rgb(242, 183, 194); /* Light red for unread notifications */
 }

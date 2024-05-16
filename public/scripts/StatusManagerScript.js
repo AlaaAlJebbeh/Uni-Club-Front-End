@@ -282,9 +282,9 @@ function reject2(postId) {
 }
 
 
-function sendRejectionReason() {
+function sendRejectionReason(temp_id) {
     const rejectionReason = document.getElementById('rejectionReason').value;
-    const temp_id = window.selectedRequestId; // Use temp_id for profile edits
+    const temp_id = window.selectedtemp_id; // Use temp_id for profile edits
     // Send rejection reason to server
     fetch(`/rejectProfileEdit?temp_id=${temp_id}`, { // Use /rejectProfileEdit endpoint
         method: 'POST',
@@ -305,7 +305,7 @@ function sendRejectionReason() {
     });
 }
 
-function sendRejectionReason2() {
+function sendRejectionReason2(postId) {
     const rejectionReason = document.getElementById('rejectionReason').value;
     const postId = window.selectedPostID;
     // Send rejection reason to server
@@ -327,12 +327,10 @@ function sendRejectionReason2() {
         // Handle error
     });
 }
-
-
+*/
 
   // Function to display the popup
-  // Function to display the popup
-function showPopup2(id) {
+/*function showPopup2(id) {
     var popup = document.getElementById("reject_" + id);
     popup.style.display = "block";
 }
@@ -341,6 +339,5 @@ function showPopup2(id) {
   function closePopup2() {
     var popup = document.getElementById("reject");
     popup.style.display = "none";
-  }
-*/
+  }*/
 ////////I REPEAT DONT TOUCH THIS CODEE///

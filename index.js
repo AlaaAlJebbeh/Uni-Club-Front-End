@@ -1348,6 +1348,7 @@ app.post("/rejectProfileEdit", (req, res) => {
     res.redirect("/comparing")
 });
 
+
 app.get("/ezz", (req, res) => {
     connection.query("select * from event where clm_id = 1", (err, result) => {
         if (err) {

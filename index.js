@@ -1241,10 +1241,10 @@ app.post("/approveProfileEdit", (req, res) => {
 
 
 app.post("/rejectProfileEdit", (req, res) => {
-    const RequestId = req.query.temp_id;
+    const RequestId = parseInt(req.query.temp_id);
     const rejectionReason = req.body.rejectionReason;
 
-    console.log("Received profile edit rejection for Id:", RequestId);
+    console.log("Received profile edit rejection for Id:", RequestId, "Rejection message: " + rejectionReason);
 
     connection.query('SELECT * FROM tempprofile WHERE temp_id = ?', [RequestId], (err, profileEditResults) => {
         if (err) {
@@ -1273,11 +1273,11 @@ app.post("/rejectProfileEdit", (req, res) => {
                         return res.status(500).send("Internal Server Error");
                     }
                     console.log("Profile edit rejected and removed from tempprofile table");
-
+                    res.redirect("/comparing")
                 });
             });
     });
-    res.redirect("/comparing")
+
 });
 
 

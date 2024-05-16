@@ -326,7 +326,7 @@ app.post("/ToShareEvent", (req, res) => {
             const notes = eventData.notes;
             const category = eventData.category;
             const language = eventData.language;
-            const uploadImage1 = eventData.uploadImage1;
+            const uploadImage1 = eventData.imageUrl;
             const clubMId = eventData.clm_id;
 
             connection.query(`INSERT INTO event (club_id, event_id, event_name, guest_name, date, time, language, location, capacity, description, notes, category,clm_id, imageURL) 
@@ -1820,7 +1820,6 @@ app.get("/album", (req, res) => {
 app.get("/createAlbum", (req, res)=>{
     res.render('createAlbum');
 })
-
 app.post("/createAlbum", async (req, res) => {
     try {
         const { event_id } = req.body;
@@ -1864,6 +1863,7 @@ app.post("/createAlbum", async (req, res) => {
         res.status(500).send('Error uploading files');
     }
 });
+
 //listining to the port 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

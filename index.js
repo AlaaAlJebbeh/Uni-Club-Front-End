@@ -69,6 +69,9 @@ app.get('/', (req, res) => {
             console.log("Error fetching events for homepage: " + err.message);
             return res.status(404).send("Internal Server Error");
         }
+        Events.forEach(item => {
+            item.date = new Date(item.date);
+        });
         if (req.session.loggedIn) {
             if (req.session.role === 'club') {
                 res.render('home', { loggedIn: true, role: "club", email: req.session.email, Events });

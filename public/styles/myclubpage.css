@@ -260,7 +260,7 @@ a:active {
     flex: 1;
     margin-bottom: 20px;
     flex-wrap: wrap;
-    justify-content: space-between;
+    float: left;
 }
 
 .table-container {

@@ -84,8 +84,9 @@
         <i id="left" class="fa-solid fa-angle-left"></i>
         <ul class="carousel">
           <% Events.forEach((event) => { %> 
+            <% event.date.setDate(event.date.getDate() + 1) %>
             <% const currentDate = new Date();
-              if (currentDate.toISOString().split('T')[0] < event.date.toISOString().split('T')[0]) { %>
+              if (currentDate.toISOString().split('T')[0] <= event.date.toISOString().split('T')[0]) { %>
           <li class="card">
             <div class="img">
               <div class="card">
@@ -178,6 +179,33 @@
                   <li class="dropdown-item" onclick="filterEvents('Chemistry')">
                     Chemistry
                   </li>
+                  <li class="dropdown-item" onclick="filterEvents('Cook')">
+                    Cook
+                  </li>
+                  <li class="dropdown-item" onclick="filterEvents('Health')">
+                    Health
+                  </li>
+                  <li class="dropdown-item" onclick="filterEvents('Sport')">
+                    Sport
+                  </li>
+                  <li class="dropdown-item" onclick="filterEvents('Dance')">
+                    Dance
+                  </li>
+                  <li class="dropdown-item" onclick="filterEvents('Game')">
+                    Game
+                  </li>
+                  <li class="dropdown-item" onclick="filterEvents('Seminar')">
+                    Seminar
+                  </li>
+                  <li class="dropdown-item" onclick="filterEvents('Movie')">
+                    Movie
+                  </li>
+                  <li class="dropdown-item" onclick="filterEvents('Books')">
+                    Books
+                  </li>
+                  <li class="dropdown-item" onclick="filterEvents('WorkShop')">
+                    WorkShop
+                  </li>
                   <li class="dropdown-item" onclick="filterEvents('all')">
                     All
                   </li>
@@ -253,6 +281,7 @@
                   <h6>
                     <div class="date">
                       Date:
+                      
                       <span id="dateSpan"><%= event.date.toISOString().split('T')[0] %></span>
                     </div>
                   </h6>

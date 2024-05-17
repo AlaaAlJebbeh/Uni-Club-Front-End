@@ -14,9 +14,6 @@ html, body {
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: #beece9; /* Set your desired background color */
 }
 

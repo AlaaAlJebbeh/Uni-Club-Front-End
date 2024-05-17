@@ -546,6 +546,9 @@ app.get("/popupContentedit", (req, res) => {
         }
         console.log("NEW EVENT:");
         console.log(newEvent);
+        newEvent.forEach(item => {
+            item.date = new Date(item.date);
+        });
         connection.query("Select * from event where event_id = ?", [eventId], (err, oldEvent) => {
             if (err) {
                 console.log('error fetching new event ', err);
@@ -553,6 +556,9 @@ app.get("/popupContentedit", (req, res) => {
             }
             console.log("OLD EVENT:");
             console.log(oldEvent);
+            oldEvent.forEach(item => {
+                item.date = new Date(item.date);
+            });
             res.render('popupContentedit.ejs', { newEvent, oldEvent });
         });
 
@@ -793,10 +799,6 @@ app.post('/updateEvent', (req, res) => {
     }else {
         console.log("didnt update the image" + clubImage);
          imgName = clubImage.split('images/')[1];
-    }
-
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(eventDate)) {
-        return res.status(400).send('Invalid date format');
     }
 
     const queryString = `INSERT INTO tempeventedits (event_id, club_name, event_name, date, time, location, language, guest_name, description, capacity, notes, imageUrl, clm_id, status, request_type, category)
@@ -1491,9 +1493,13 @@ app.get("/popupPost" , (req, res) => {
 });
 
 app.get("/notificationsClub", (req, res) => {
+    if(!req.session.loggedIn){
+        return res.redirect("/");
+    }
+
     const email = req.session.email;
     const clubImage = req.session.ImageURL;
-
+    
     connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
         if(err){
             console.log("Error fetching club id notification");
@@ -1503,7 +1509,7 @@ app.get("/notificationsClub", (req, res) => {
                 if(err){
                     console.log("Error fetching notifications club manager" + err.message);
                 } else{
-                    res.render("notifications.ejs", {resultsNotificationsClub, loggedIn: true, role: "club", email: email, clubImage: clubImage });
+                    res.render("notifications.ejs", {resultsNotificationsClub, loggedIn: req.session.loggedIn, role: req.session.role, email: email, clubImage: clubImage });
                 }
             });
         }
@@ -1679,13 +1685,16 @@ app.post('/singleclubpage', (req, res) => {
 });
 
 app.get("/notificationsSks", (req, res) => {
+    if(!req.session.loggedIn){
+        return res.redirect("/");
+    }
     const email = req.session.email;
 
     connection.query("SELECT n.notificationType, n.club_name, n.notify_id, n.club_id, n.status_notification,c.clubImageUrl FROM notifications_sks n JOIN club c ON n.club_id = c.club_id", (err, resultNotiNewEvent) => {
         if (err) {
             console.log("error with join");
         } else {
-            res.render("notificationsSks.ejs", { loggedIn: true, role: "sks", email: email, resultNotiNewEvent });
+            res.render("notificationsSks.ejs", { loggedIn: req.session.loggedIn, role: req.session.role, email: email, resultNotiNewEvent });
         }
     });
 });

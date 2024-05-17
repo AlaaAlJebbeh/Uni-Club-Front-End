@@ -8,15 +8,25 @@
     <link rel="stylesheet" href="../public/styles/notifications.css">
 </head>
 <body>
+    <header>
+        <% if (!loggedIn) { %> 
+            <%- include("partials/header.ejs"); %> 
+          <% } else if (role === 'club') { %> 
+            <%- include("partials/club_header.ejs"); %> 
+          <% } else if (role === 'sks') { %> 
+            <%- include("partials/sks_header.ejs"); %> 
+          <% } %>
+    </header>
     <div class="container">
         <div class="notificationContainer">
-            <header>
+            
+            <section>
                 <div class="notificationHeader">
                     <h1>Notification</h1>
                     <span id="num-of-notif"></span>
                 </div>
                 <p id="mark-as-read">Mark as All Read</p>
-            </header>
+            </section>
             <main>
                 <%resultsNotificationsClub.forEach((notification, index) => {%>
                     
@@ -110,6 +120,8 @@
             </main>
         </div>
     </div>
+    <footer><%- include("partials/footer.ejs") %></footer>
+
     <script src="../public/scripts/notifications.js"></script>
 </body>
 </html>

@@ -997,7 +997,7 @@ app.post('/rejectEventEdit', (req, res) => {
             }
 
             connection.query("INSERT INTO history_eventEdits (event_id, language, date, time, guest_name, description, event_name, notes, location, capacity, category, imageUrl,  status, comment, notificationstatus, club_name, club_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-                [eventID, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl,  0, message, 0, eventInfo[0].club_name, clubInfo[0].club_id], (err, result) => {
+                                                        [eventID, eventInfo[0].language, eventInfo[0].date, eventInfo[0].time, eventInfo[0].guest_name, eventInfo[0].description, eventInfo[0].event_name, eventInfo[0].notes, eventInfo[0].location, eventInfo[0].capacity, eventInfo[0].category, eventInfo[0].imageUrl,  0, message, 0, eventInfo[0].club_name, clubInfo[0].club_id], (err, result) => {
                 if (err) {
                     console.log("Error Inserting into history_event ", err);
                     return res.status(500).send("Internal Server Error");
@@ -1010,7 +1010,7 @@ app.post('/rejectEventEdit', (req, res) => {
                     return res.status(500).send("Internal Server Error");
                 }
                 const notificationType = "Reject Edit Event";
-                connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id, RejectionReason) VALUES (?, ?, ?, ?)", [notificationType, eventInfo[0].event_name, clubInfo[0].club_id, message ], (err) => {
+                connection.query("INSERT INTO notifications_clm (notificationType, event_name, club_id, RejectionReason) VALUES (?, ?, ?, ?)", [notificationType, eventInfo[0].event_name, eventInfo[0].club_id, message ], (err) => {
                     if (err) {
                         console.log("error inseting to notifications approve event : " + err.message);
                     } else {

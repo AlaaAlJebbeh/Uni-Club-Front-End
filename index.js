@@ -201,7 +201,12 @@ app.get("/myclubpage", (req, res) => {
         res.render('home.ejs', { loggedIn: false, role: null, email: null });
         return; // Make sure to return after sending the response
     }
-
+    let loggedInValue;
+    if (req.session.loggedIn) {
+        loggedInValue = req.session.loggedIn;
+    } else {
+        loggedInValue = false;
+    }
     let email = req.session.email;
 
     connection.query("SELECT club_id from club_manager where email = ?", [email], (err, result) => {
@@ -260,9 +265,9 @@ app.get("/myclubpage", (req, res) => {
                                     res.render("myclubpage.ejs", {
                                         clubInformation,
                                         clubManager,
-                                        role: 'club',
+                                        role: req.session.role,
                                         email: req.session.email,
-                                        loggedIn: req.session.loggedIn,
+                                        loggedIn: loggedInValue,
                                         event,
                                         resultsTemp,
                                         resultsHistory,
@@ -1351,6 +1356,12 @@ app.get("/tryID", (req, res) => {
 
 app.post('/singleclubpage', (req, res) => {
     const clubID = req.query.club_id;
+    let loggedInValue;
+    if (req.session.loggedIn) {
+        loggedInValue = req.session.loggedIn;
+    } else {
+        loggedInValue = false;
+    }
 
     connection.query("SELECT * FROM club WHERE club_id = ?", clubID, (err, clubInformation) => {
         if (err) {
@@ -1394,7 +1405,7 @@ app.post('/singleclubpage', (req, res) => {
                                     console.log("Error fetching posts: " + err.message);
                                     return res.status(404).send("Internal Server Error");
                                 }
-                                res.render("myclubpage.ejs", { clubInformation, clubManager, role: 'club', email: req.session.email, loggedIn: req.session.loggedIn, event, resultsTemp, resultsHistory, resultsToShare, Posts });
+                                res.render("myclubpage.ejs", { clubInformation, clubManager, role: 'club', email: req.session.email, loggedIn: loggedInValue, event, resultsTemp, resultsHistory, resultsToShare, Posts });
                             });
                         });
                     });
